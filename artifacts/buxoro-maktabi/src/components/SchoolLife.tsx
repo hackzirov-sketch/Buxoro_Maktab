@@ -3,6 +3,8 @@ import { useRef, useState } from "react";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 import schoolGate from "@assets/image_1778575966057.png";
 
+const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
+
 function VideoCard({ src, title, description, delay }: { src: string; title: string; description: string; delay: number }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -26,23 +28,21 @@ function VideoCard({ src, title, description, delay }: { src: string; title: str
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.7, delay }}
+      initial={{ opacity: 0, y: 48, scale: 0.94, filter: "blur(6px)" }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.85, ease: EASE_OUT_EXPO, delay }}
       className="flex flex-col items-center"
     >
-      {/* Phone frame wrapper */}
       <div className="relative w-full max-w-[300px] mx-auto">
-        {/* Glow behind card */}
         <div className="absolute -inset-4 bg-primary/10 blur-2xl rounded-[3rem] pointer-events-none"></div>
 
-        {/* Card */}
-        <div className="relative rounded-[2.5rem] overflow-hidden border border-white/15 bg-black/50 shadow-[0_0_40px_rgba(0,0,0,0.5)] group">
-          {/* Top notch decoration */}
+        <motion.div
+          whileHover={{ scale: 1.02, transition: { type: "spring", stiffness: 280, damping: 22 } }}
+          className="relative rounded-[2.5rem] overflow-hidden border border-white/15 bg-black/50 shadow-[0_0_50px_rgba(0,0,0,0.5)] group"
+        >
           <div className="absolute top-3 left-1/2 -translate-x-1/2 w-20 h-1.5 bg-white/20 rounded-full z-20"></div>
 
-          {/* Portrait video */}
           <div className="aspect-[9/16] w-full relative">
             <video
               ref={videoRef}
@@ -53,24 +53,24 @@ function VideoCard({ src, title, description, delay }: { src: string; title: str
               className="w-full h-full object-cover"
               onEnded={() => setPlaying(false)}
             />
-            {/* Gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
 
-            {/* Play button — always visible, fades on hover */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <button
+              <motion.button
                 onClick={togglePlay}
                 data-testid="button-video-play"
-                className="w-16 h-16 rounded-full bg-white/15 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-primary/50 hover:border-primary/60 hover:scale-110 transition-all duration-300 shadow-[0_0_20px_rgba(74,222,128,0.3)]"
+                whileHover={{ scale: 1.12 }}
+                whileTap={{ scale: 0.92 }}
+                transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                className="w-16 h-16 rounded-full bg-white/15 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-primary/50 hover:border-primary/60 transition-colors duration-300 shadow-[0_0_24px_rgba(74,222,128,0.35)]"
               >
                 {playing
                   ? <Pause className="w-6 h-6 text-white" />
                   : <Play className="w-6 h-6 text-white ml-1" />
                 }
-              </button>
+              </motion.button>
             </div>
 
-            {/* Mute toggle */}
             <button
               onClick={toggleMute}
               data-testid="button-video-mute"
@@ -79,13 +79,12 @@ function VideoCard({ src, title, description, delay }: { src: string; title: str
               {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
             </button>
 
-            {/* Bottom text */}
             <div className="absolute bottom-0 left-0 right-0 p-5">
               <h4 className="text-white font-semibold text-base mb-1">{title}</h4>
               <p className="text-white/60 text-xs leading-relaxed">{description}</p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </motion.div>
   );
@@ -99,19 +98,19 @@ export default function SchoolLife() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.75, ease: EASE_OUT_EXPO }}
             className="text-4xl md:text-5xl font-bold font-poppins text-white mb-6"
           >
             Maktab <span className="text-primary drop-shadow-[0_0_10px_rgba(74,222,128,0.3)]">hayoti</span>
           </motion.h2>
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.7, ease: EASE_OUT_EXPO, delay: 0.12 }}
             className="text-base md:text-lg text-white/85 max-w-2xl mx-auto font-normal leading-[1.8]"
           >
             Zamonaviy infratuzilma, qulay sinfxonalar va xavfsiz muhit. O'quvchilarimiz uchun eng yaxshi sharoitlarni yaratganmiz.
@@ -120,31 +119,36 @@ export default function SchoolLife() {
 
         {/* Wide banner image */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, scale: 0.97, y: 24 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.9, ease: EASE_OUT_EXPO }}
           className="relative rounded-[2.5rem] overflow-hidden group border border-white/10 mb-16"
         >
           <div className="aspect-[21/9] md:aspect-[21/8] w-full">
             <img
               src={schoolGate}
               alt="Buxoro Maktabi Darvozasi"
-              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
           </div>
-          <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: EASE_OUT_EXPO, delay: 0.3 }}
+            className="absolute bottom-0 left-0 right-0 p-8 md:p-12"
+          >
             <div className="max-w-3xl">
               <h3 className="text-2xl font-bold text-white mb-2">Xavfsiz va shinam hudud</h3>
               <p className="text-white/80">
                 Maktabimiz eng zamonaviy xavfsizlik tizimlari bilan jihozlangan. Keng va yashil maydon o'quvchilarning darsdan bo'sh vaqtlarini mazmunli o'tkazishlari uchun xizmat qiladi.
               </p>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
 
-        {/* Portrait videos — centered, side by side */}
         <div className="flex flex-col sm:flex-row justify-center gap-8 md:gap-12">
           <VideoCard
             src="/video1.mov"
@@ -156,7 +160,7 @@ export default function SchoolLife() {
             src="/video2.mov"
             title="Ta'lim jarayoni"
             description="Zamonaviy usullar bilan qurilgan dars mashg'ulotlari"
-            delay={0.15}
+            delay={0.14}
           />
         </div>
       </div>

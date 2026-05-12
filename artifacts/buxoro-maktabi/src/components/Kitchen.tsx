@@ -2,6 +2,8 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { ChevronLeft, ChevronRight, Clock } from "lucide-react";
 
+const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
+
 const chapters = [
   {
     id: "nonushta",
@@ -104,9 +106,8 @@ export default function Kitchen() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
-  // Trigger book open when section enters view
   if (isInView && !isOpen) {
-    setTimeout(() => setIsOpen(true), 400);
+    setTimeout(() => setIsOpen(true), 350);
   }
 
   const chapter = chapters[currentChapter];
@@ -120,53 +121,58 @@ export default function Kitchen() {
 
   const pageVariants = {
     enter: (d: number) => ({
-      x: d > 0 ? 80 : -80,
+      x: d > 0 ? 70 : -70,
       opacity: 0,
-      rotateY: d > 0 ? 20 : -20,
+      filter: "blur(4px)",
+      rotateY: d > 0 ? 16 : -16,
     }),
-    center: { x: 0, opacity: 1, rotateY: 0 },
+    center: {
+      x: 0,
+      opacity: 1,
+      filter: "blur(0px)",
+      rotateY: 0,
+      transition: { duration: 0.5, ease: EASE_OUT_EXPO },
+    },
     exit: (d: number) => ({
-      x: d > 0 ? -80 : 80,
+      x: d > 0 ? -70 : 70,
       opacity: 0,
-      rotateY: d > 0 ? -20 : 20,
+      filter: "blur(4px)",
+      rotateY: d > 0 ? -16 : 16,
+      transition: { duration: 0.35, ease: [0.4, 0, 1, 1] },
     }),
   };
 
   return (
     <section id="oshxona" className="py-24 relative overflow-hidden" ref={sectionRef}>
-      {/* Ambient glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/5 rounded-full blur-[150px] pointer-events-none"></div>
 
       <div className="container mx-auto px-4 md:px-6">
-        {/* Section header */}
         <div className="text-center mb-14">
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.75, ease: EASE_OUT_EXPO }}
             className="text-4xl md:text-5xl font-bold font-poppins text-white mb-5"
           >
             Bizning <span className="text-primary drop-shadow-[0_0_10px_rgba(74,222,128,0.3)]">Oshxonamiz</span>
           </motion.h2>
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.7, ease: EASE_OUT_EXPO, delay: 0.12 }}
             className="text-base md:text-lg text-white/85 max-w-2xl mx-auto font-normal leading-[1.8]"
           >
             Sog'lom va mazali taomlar — o'quvchilarimizning energiyasi va diqqat-e'tibori garovi. Kuniga 3 mahal issiq ovqat va desert.
           </motion.p>
         </div>
 
-        {/* Book wrapper */}
         <div className="flex flex-col items-center" style={{ perspective: "1400px" }}>
-          {/* Book label */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.5, ease: EASE_OUT_EXPO, delay: 0.2 }}
             className="mb-4 flex items-center gap-3"
           >
             <div className="h-px w-12 bg-white/20"></div>
@@ -174,35 +180,31 @@ export default function Kitchen() {
             <div className="h-px w-12 bg-white/20"></div>
           </motion.div>
 
-          {/* The Book */}
           <motion.div
-            initial={{ scale: 0.85, opacity: 0, rotateX: 8 }}
-            animate={isOpen ? { scale: 1, opacity: 1, rotateX: 0 } : { scale: 0.85, opacity: 0, rotateX: 8 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ scale: 0.88, opacity: 0, rotateX: 10, filter: "blur(8px)" }}
+            animate={isOpen
+              ? { scale: 1, opacity: 1, rotateX: 0, filter: "blur(0px)" }
+              : { scale: 0.88, opacity: 0, rotateX: 10, filter: "blur(8px)" }
+            }
+            transition={{ duration: 0.9, ease: EASE_OUT_EXPO }}
             className="w-full max-w-4xl"
           >
-            {/* Outer book cover shadow */}
             <div className="relative">
-              {/* Book shadow layers (depth illusion) */}
               <div className="absolute inset-0 translate-y-3 translate-x-1 rounded-2xl bg-black/40 blur-xl"></div>
               <div className="absolute inset-0 translate-y-1.5 rounded-2xl bg-black/30"></div>
 
-              {/* Book body */}
               <div className="relative rounded-2xl overflow-hidden border border-white/15 bg-gradient-to-br from-[#0d2b1e] to-[#071a10] shadow-[0_0_80px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.12)]">
 
-                {/* Animated accent bar at top */}
                 <motion.div
                   key={currentChapter}
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
-                  transition={{ duration: 0.5 }}
+                  transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
                   className={`h-1 w-full origin-left ${chapter.barClass}`}
                 />
 
-                {/* Book inner pages area */}
                 <div className="relative grid md:grid-cols-2 min-h-[400px]" style={{ perspective: "800px" }}>
 
-                  {/* Book spine */}
                   <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-white/15 via-white/8 to-transparent z-20 -translate-x-1/2">
                     <div className="absolute inset-0 blur-[3px] bg-white/10"></div>
                   </div>
@@ -215,12 +217,10 @@ export default function Kitchen() {
                       initial="enter"
                       animate="center"
                       exit="exit"
-                      transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
                       className="contents"
                     >
-                      {/* LEFT PAGE — Chapter identity */}
+                      {/* LEFT PAGE */}
                       <div className={`p-8 md:p-10 flex flex-col justify-between bg-gradient-to-br ${chapter.bgClass} border-b md:border-b-0 md:border-r border-white/8`}>
-                        {/* Top ornament */}
                         <div className="flex flex-col gap-1.5 mb-6">
                           <div className={`w-10 h-0.5 ${chapter.dotClass} opacity-70 rounded-full`}></div>
                           <div className={`w-6 h-0.5 ${chapter.dotClass} opacity-40 rounded-full`}></div>
@@ -238,7 +238,6 @@ export default function Kitchen() {
                             />
                           </div>
 
-                          {/* Chapter name */}
                           <div>
                             <p className="text-white/40 text-xs uppercase tracking-widest mb-1 font-semibold">Ovqat vaqti</p>
                             <h3 className={`text-3xl md:text-4xl font-bold font-poppins ${chapter.accentClass} leading-tight`}>
@@ -246,7 +245,6 @@ export default function Kitchen() {
                             </h3>
                           </div>
 
-                          {/* Time badge */}
                           <div className={`inline-flex items-center gap-2 self-start px-4 py-2 rounded-full bg-black/40 border ${chapter.borderClass} backdrop-blur-md`}>
                             <Clock className={`w-3.5 h-3.5 ${chapter.accentClass}`} />
                             <span className={`text-sm font-bold ${chapter.accentClass} tracking-wide`}>
@@ -254,7 +252,6 @@ export default function Kitchen() {
                             </span>
                           </div>
 
-                          {/* Tushlik uchun desert vaqti tushuntirish */}
                           {chapter.id === "desert" && (
                             <p className="text-white/35 text-xs leading-relaxed max-w-[200px]">
                               Tushlikdan 3 soat o'tgach, o'quvchilarga xush ta'm desert taqdim etiladi.
@@ -262,7 +259,6 @@ export default function Kitchen() {
                           )}
                         </div>
 
-                        {/* Bottom ornament + page num */}
                         <div className="flex flex-col gap-1.5 mt-6">
                           <span className="text-white/20 text-xs font-mono mb-1">
                             {String(currentChapter + 1).padStart(2, "0")} / {String(chapters.length).padStart(2, "0")}
@@ -272,7 +268,7 @@ export default function Kitchen() {
                         </div>
                       </div>
 
-                      {/* RIGHT PAGE — Food items with images */}
+                      {/* RIGHT PAGE */}
                       <div className="p-8 md:p-10 flex flex-col gap-4 bg-gradient-to-bl from-white/3 to-transparent">
                         <p className="text-white/35 text-xs uppercase tracking-widest font-semibold mb-1">Taomlar</p>
 
@@ -280,12 +276,12 @@ export default function Kitchen() {
                           {chapter.items.map((item, idx) => (
                             <motion.div
                               key={`${currentChapter}-${idx}`}
-                              initial={{ opacity: 0, x: 20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: 0.1 + idx * 0.07, duration: 0.35 }}
-                              className={`flex items-center gap-4 p-3 rounded-xl bg-white/4 border border-white/8 hover:bg-white/8 hover:border-white/15 transition-all duration-300 group`}
+                              initial={{ opacity: 0, x: 24, filter: "blur(3px)" }}
+                              animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                              transition={{ delay: 0.08 + idx * 0.07, duration: 0.45, ease: EASE_OUT_EXPO }}
+                              whileHover={{ x: 4, transition: { type: "spring", stiffness: 400, damping: 25 } }}
+                              className="flex items-center gap-4 p-3 rounded-xl bg-white/4 border border-white/8 hover:bg-white/8 hover:border-white/15 transition-colors duration-250 group cursor-default"
                             >
-                              {/* Dish photo */}
                               <div className="shrink-0 w-14 h-14 rounded-lg overflow-hidden border border-white/10">
                                 <img
                                   src={item.img}
@@ -295,19 +291,16 @@ export default function Kitchen() {
                                 />
                               </div>
 
-                              {/* Text */}
                               <div className="flex-1 min-w-0">
                                 <h4 className="text-white font-semibold text-sm leading-tight mb-0.5">{item.name}</h4>
                                 <p className="text-white/45 text-xs leading-relaxed truncate">{item.desc}</p>
                               </div>
 
-                              {/* Accent dot */}
                               <div className={`shrink-0 w-1.5 h-1.5 rounded-full ${chapter.dotClass} opacity-60`}></div>
                             </motion.div>
                           ))}
                         </div>
 
-                        {/* Bottom right ornament */}
                         <div className="flex justify-end gap-1.5 mt-auto pt-4">
                           <div className={`w-10 h-0.5 ${chapter.dotClass} opacity-30 rounded-full`}></div>
                           <div className={`w-6 h-0.5 ${chapter.dotClass} opacity-20 rounded-full`}></div>
@@ -319,51 +312,57 @@ export default function Kitchen() {
 
                 {/* Navigation footer */}
                 <div className="flex items-center justify-between px-8 py-5 border-t border-white/8 bg-black/25">
-                  <button
+                  <motion.button
                     onClick={() => navigate(-1)}
                     disabled={currentChapter === 0}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-200 text-xs font-semibold"
+                    whileHover={{ scale: 1.05, transition: { type: "spring", stiffness: 400, damping: 20 } }}
+                    whileTap={{ scale: 0.95 }}
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 disabled:opacity-20 disabled:cursor-not-allowed transition-colors duration-200 text-xs font-semibold"
                   >
                     <ChevronLeft className="w-4 h-4" />
                     Oldingi
-                  </button>
+                  </motion.button>
 
-                  {/* Chapter dots */}
                   <div className="flex items-center gap-2">
                     {chapters.map((ch, idx) => (
-                      <button
+                      <motion.button
                         key={ch.id}
                         onClick={() => { setDirection(idx > currentChapter ? 1 : -1); setCurrentChapter(idx); }}
+                        whileHover={{ scale: 1.2 }}
+                        whileTap={{ scale: 0.9 }}
                         className={`rounded-full transition-all duration-300 ${idx === currentChapter ? `w-7 h-2.5 ${ch.dotClass}` : "w-2.5 h-2.5 bg-white/20 hover:bg-white/40"}`}
                         title={ch.label}
                       />
                     ))}
                   </div>
 
-                  <button
+                  <motion.button
                     onClick={() => navigate(1)}
                     disabled={currentChapter === chapters.length - 1}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-200 text-xs font-semibold"
+                    whileHover={{ scale: 1.05, transition: { type: "spring", stiffness: 400, damping: 20 } }}
+                    whileTap={{ scale: 0.95 }}
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 disabled:opacity-20 disabled:cursor-not-allowed transition-colors duration-200 text-xs font-semibold"
                   >
                     Keyingi
                     <ChevronRight className="w-4 h-4" />
-                  </button>
+                  </motion.button>
                 </div>
               </div>
             </div>
           </motion.div>
 
-          {/* Chapter shortcut tabs below book */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={isOpen ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.6 }}
+            transition={{ duration: 0.55, ease: EASE_OUT_EXPO, delay: 0.55 }}
             className="flex flex-wrap justify-center gap-2 mt-8"
           >
             {chapters.map((ch, idx) => (
-              <button
+              <motion.button
                 key={ch.id}
                 onClick={() => { setDirection(idx > currentChapter ? 1 : -1); setCurrentChapter(idx); }}
+                whileHover={{ scale: 1.05, transition: { type: "spring", stiffness: 380, damping: 22 } }}
+                whileTap={{ scale: 0.96 }}
                 className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 border ${
                   idx === currentChapter
                     ? `${ch.accentClass} border-current bg-white/8 shadow-[0_0_16px_rgba(0,0,0,0.3)]`
@@ -371,7 +370,7 @@ export default function Kitchen() {
                 }`}
               >
                 {ch.icon} {ch.label}
-              </button>
+              </motion.button>
             ))}
           </motion.div>
         </div>
