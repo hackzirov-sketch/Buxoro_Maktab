@@ -30,7 +30,7 @@ export default function Kitchen() {
   ] as const;
 
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section id="oshxona" className="py-24 relative overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
           <motion.h2 

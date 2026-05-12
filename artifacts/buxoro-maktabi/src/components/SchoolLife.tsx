@@ -93,7 +93,7 @@ function VideoCard({ src, title, description, delay }: { src: string; title: str
 
 export default function SchoolLife() {
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section id="maktab-hayoti" className="py-24 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none"></div>
 
       <div className="container mx-auto px-4 md:px-6">

@@ -87,7 +87,7 @@ function TeacherCard({ teacher, index }: { teacher: any; index: number }) {
 
 export default function Teachers() {
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section id="oqituvchilar" className="py-24 relative overflow-hidden">
       <div className="absolute right-0 top-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[200px] pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
       
       <div className="container mx-auto px-4 md:px-6 relative z-10">

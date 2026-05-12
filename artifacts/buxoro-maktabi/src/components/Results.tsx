@@ -47,7 +47,7 @@ export default function Results() {
   ];
 
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section id="natijalar" className="py-24 relative overflow-hidden">
       <div className="absolute top-1/3 -left-64 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
       
       <div className="container mx-auto px-4 md:px-6">

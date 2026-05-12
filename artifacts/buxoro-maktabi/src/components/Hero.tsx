@@ -1,6 +1,13 @@
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, BookOpen, Utensils, Award, Users } from "lucide-react";
 import logoImg from "@assets/image_1778575455248.png";
+
+const stats = [
+  { icon: BookOpen, label: "Sinflarimiz", href: "#maktab-hayoti" },
+  { icon: Utensils, label: "Oshxonamiz", href: "#oshxona" },
+  { icon: Award, label: "Natijalarimiz", href: "#natijalar" },
+  { icon: Users, label: "O'qituvchilarimiz", href: "#oqituvchilar" },
+];
 
 export default function Hero() {
   return (
@@ -60,6 +67,30 @@ export default function Hero() {
               />
             </div>
           </motion.div>
+        </div>
+      </div>
+
+      {/* Stats Row */}
+      <div className="w-full pb-10 px-4 md:px-6">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {stats.map((stat, i) => (
+              <motion.a
+                key={stat.label}
+                href={stat.href}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
+                className="flex flex-col items-center justify-center gap-3 p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl hover:bg-white/10 hover:border-primary/50 hover:shadow-[0_0_20px_rgba(74,222,128,0.15)] transition-all duration-300 group cursor-pointer"
+                data-testid={`link-stat-${stat.label}`}
+              >
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 group-hover:shadow-[0_0_20px_rgba(74,222,128,0.4)] transition-all duration-300">
+                  <stat.icon className="w-6 h-6 text-primary" />
+                </div>
+                <span className="text-sm font-medium text-white/70 group-hover:text-white transition-colors text-center">{stat.label}</span>
+              </motion.a>
+            ))}
+          </div>
         </div>
       </div>
 
