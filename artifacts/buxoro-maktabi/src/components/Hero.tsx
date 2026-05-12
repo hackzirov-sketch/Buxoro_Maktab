@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { ArrowRight, BookOpen, Utensils, Award, Users } from "lucide-react";
-import heroRef from "@assets/image_1778575966057.png";
 import logoImg from "@assets/image_1778575455248.png";
 
 export default function Hero() {
@@ -13,12 +12,6 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden pt-20">
-      {/* Background Image & Overlay */}
-      <div className="absolute inset-0 z-0">
-        <img src={heroRef} alt="Hero Background" className="w-full h-full object-cover opacity-30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/50 to-transparent"></div>
-      </div>
 
 
       <div className="container mx-auto px-4 md:px-6 relative z-10 flex-1 flex flex-col justify-center pb-32">
