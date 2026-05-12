@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, BookOpen, Utensils, Award, Users } from "lucide-react";
+import { BookOpen, Utensils, Award, Users } from "lucide-react";
 import logoImg from "@assets/image_1778575455248.png";
 
 const stats = [
@@ -35,21 +35,6 @@ export default function Hero() {
               Buxorodagi eng ilg'or va ishonchli ta'lim muhitini yaratayotgan maktab. Kelajak yetakchilarini bugun tarbiyalaymiz.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button 
-                className="px-8 py-4 rounded-full bg-primary text-black font-semibold hover:bg-primary/90 hover:scale-105 hover:shadow-[0_0_30px_rgba(74,222,128,0.6)] transition-all duration-300 flex items-center justify-center gap-2 group"
-                data-testid="button-free-consultation"
-              >
-                Bepul konsultatsiya olish
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button 
-                className="px-8 py-4 rounded-full bg-white/5 border border-white/20 text-white font-medium hover:bg-white/10 backdrop-blur-md transition-all duration-300 flex items-center justify-center"
-                data-testid="button-register"
-              >
-                Ro'yxatdan o'tish
-              </button>
-            </div>
           </motion.div>
 
           <motion.div
