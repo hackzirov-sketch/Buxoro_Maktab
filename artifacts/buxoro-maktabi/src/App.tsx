@@ -12,6 +12,7 @@ import Results from "@/components/Results";
 import Teachers from "@/components/Teachers";
 import ApplicationForm from "@/components/ApplicationForm";
 import Footer from "@/components/Footer";
+import ChatBot from "@/components/ChatBot";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,7 @@ function LandingPage() {
         <ApplicationForm />
       </main>
       <Footer />
+      <ChatBot />
     </div>
   );
 }

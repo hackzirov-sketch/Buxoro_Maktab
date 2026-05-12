@@ -17,21 +17,9 @@ const chapters = [
     dotClass: "bg-amber-400",
     barClass: "bg-gradient-to-r from-amber-400 to-orange-400",
     items: [
-      {
-        name: "Sutli Bo'tqa",
-        desc: "Sariq yog' va mavsumiy mevalar",
-        img: "https://images.unsplash.com/photo-1517673408408-6b8de3bb7234?w=120&q=80",
-      },
-      {
-        name: "Tuxum va Sosiska",
-        desc: "Pishloq, qaynatilgan tuxum",
-        img: "https://images.unsplash.com/photo-1510693206972-df098062cb71?w=120&q=80",
-      },
-      {
-        name: "Kruassan va Choy",
-        desc: "Issiq tandir noni, yashil choy",
-        img: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=120&q=80",
-      },
+      { name: "Sutli Bo'tqa", desc: "Sariq yog' va mavsumiy mevalar", img: "https://images.unsplash.com/photo-1517673408408-6b8de3bb7234?w=120&q=80" },
+      { name: "Tuxum va Sosiska", desc: "Pishloq, qaynatilgan tuxum", img: "https://images.unsplash.com/photo-1510693206972-df098062cb71?w=120&q=80" },
+      { name: "Kruassan va Choy", desc: "Issiq tandir noni, yashil choy", img: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=120&q=80" },
     ],
   },
   {
@@ -46,21 +34,9 @@ const chapters = [
     dotClass: "bg-primary",
     barClass: "bg-gradient-to-r from-primary to-emerald-400",
     items: [
-      {
-        name: "Osh (Palov)",
-        desc: "Haqiqiy Buxoro oshi, go'sht va sabzavot",
-        img: "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=120&q=80",
-      },
-      {
-        name: "Mastava",
-        desc: "Guruchli qaynatma sho'rva",
-        img: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=120&q=80",
-      },
-      {
-        name: "Mavsumiy Salat",
-        desc: "Vitaminli yangi sabzavotlar",
-        img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=120&q=80",
-      },
+      { name: "Osh (Palov)", desc: "Haqiqiy Buxoro oshi, go'sht va sabzavot", img: "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=120&q=80" },
+      { name: "Mastava", desc: "Guruchli qaynatma sho'rva", img: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=120&q=80" },
+      { name: "Mavsumiy Salat", desc: "Vitaminli yangi sabzavotlar", img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=120&q=80" },
     ],
   },
   {
@@ -75,26 +51,10 @@ const chapters = [
     dotClass: "bg-pink-400",
     barClass: "bg-gradient-to-r from-pink-400 to-rose-400",
     items: [
-      {
-        name: "Tort va Pirojnoe",
-        desc: "Shirinlik, krem va meva bilan",
-        img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=120&q=80",
-      },
-      {
-        name: "Muzqaymoq",
-        desc: "Tabiiy mevali muzqaymoq",
-        img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=120&q=80",
-      },
-      {
-        name: "Meva Salatı",
-        desc: "Toza mavsumiy mevalar",
-        img: "https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=120&q=80",
-      },
-      {
-        name: "Shokoladli Keks",
-        desc: "Qo'lda pishirilgan shokolad keksi",
-        img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=120&q=80",
-      },
+      { name: "Tort va Pirojnoe", desc: "Shirinlik, krem va meva bilan", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=120&q=80" },
+      { name: "Muzqaymoq", desc: "Tabiiy mevali muzqaymoq", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=120&q=80" },
+      { name: "Meva Salatı", desc: "Toza mavsumiy mevalar", img: "https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=120&q=80" },
+      { name: "Shokoladli Keks", desc: "Qo'lda pishirilgan shokolad keksi", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=120&q=80" },
     ],
   },
 ];
@@ -119,26 +79,42 @@ export default function Kitchen() {
     setCurrentChapter(next);
   };
 
+  // Real book page-turn easing — starts quick (lift), slows as it settles (like paper)
+  const PAGE_TURN_EASE = [0.25, 0.46, 0.45, 0.94] as const;
+  const PAGE_EXIT_EASE  = [0.55, 0.06, 0.68, 0.19] as const;
+
   const pageVariants = {
     enter: (d: number) => ({
-      x: d > 0 ? 70 : -70,
+      rotateY: d > 0 ? 75 : -75,
       opacity: 0,
-      filter: "blur(4px)",
-      rotateY: d > 0 ? 16 : -16,
+      filter: "blur(3px)",
+      scale: 0.96,
+      transformOrigin: d > 0 ? "left center" : "right center",
     }),
     center: {
-      x: 0,
+      rotateY: 0,
       opacity: 1,
       filter: "blur(0px)",
-      rotateY: 0,
-      transition: { duration: 0.5, ease: EASE_OUT_EXPO },
+      scale: 1,
+      transition: {
+        rotateY: { duration: 0.85, ease: PAGE_TURN_EASE },
+        opacity:  { duration: 0.5,  ease: "easeOut" },
+        filter:   { duration: 0.55, ease: "easeOut" },
+        scale:    { duration: 0.75, ease: PAGE_TURN_EASE },
+      },
     },
     exit: (d: number) => ({
-      x: d > 0 ? -70 : 70,
+      rotateY: d > 0 ? -75 : 75,
       opacity: 0,
-      filter: "blur(4px)",
-      rotateY: d > 0 ? -16 : 16,
-      transition: { duration: 0.35, ease: [0.4, 0, 1, 1] },
+      filter: "blur(3px)",
+      scale: 0.96,
+      transformOrigin: d > 0 ? "right center" : "left center",
+      transition: {
+        rotateY: { duration: 0.6, ease: PAGE_EXIT_EASE },
+        opacity:  { duration: 0.35, ease: "easeIn" },
+        filter:   { duration: 0.4,  ease: "easeIn" },
+        scale:    { duration: 0.5,  ease: PAGE_EXIT_EASE },
+      },
     }),
   };
 
@@ -168,7 +144,7 @@ export default function Kitchen() {
           </motion.p>
         </div>
 
-        <div className="flex flex-col items-center" style={{ perspective: "1400px" }}>
+        <div className="flex flex-col items-center" style={{ perspective: "2000px" }}>
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -180,17 +156,24 @@ export default function Kitchen() {
             <div className="h-px w-12 bg-white/20"></div>
           </motion.div>
 
+          {/* Book opening: starts closed (scaleX 0.15 + rotateX 20), opens like a real book cover */}
           <motion.div
-            initial={{ scale: 0.88, opacity: 0, rotateX: 10, filter: "blur(8px)" }}
+            initial={{ scale: 0.82, opacity: 0, rotateX: 18, filter: "blur(10px)" }}
             animate={isOpen
               ? { scale: 1, opacity: 1, rotateX: 0, filter: "blur(0px)" }
-              : { scale: 0.88, opacity: 0, rotateX: 10, filter: "blur(8px)" }
+              : { scale: 0.82, opacity: 0, rotateX: 18, filter: "blur(10px)" }
             }
-            transition={{ duration: 0.9, ease: EASE_OUT_EXPO }}
+            transition={{
+              scale:    { duration: 1.1, ease: [0.34, 1.56, 0.64, 1] },
+              opacity:  { duration: 0.7, ease: "easeOut" },
+              rotateX:  { duration: 1.05, ease: [0.25, 0.46, 0.45, 0.94] },
+              filter:   { duration: 0.7,  ease: "easeOut" },
+            }}
             className="w-full max-w-4xl"
           >
             <div className="relative">
-              <div className="absolute inset-0 translate-y-3 translate-x-1 rounded-2xl bg-black/40 blur-xl"></div>
+              {/* Book shadow layers */}
+              <div className="absolute inset-0 translate-y-4 translate-x-1.5 rounded-2xl bg-black/50 blur-2xl"></div>
               <div className="absolute inset-0 translate-y-1.5 rounded-2xl bg-black/30"></div>
 
               <div className="relative rounded-2xl overflow-hidden border border-white/15 bg-gradient-to-br from-[#0d2b1e] to-[#071a10] shadow-[0_0_80px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.12)]">
@@ -199,14 +182,16 @@ export default function Kitchen() {
                   key={currentChapter}
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
-                  transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
+                  transition={{ duration: 0.65, ease: EASE_OUT_EXPO }}
                   className={`h-1 w-full origin-left ${chapter.barClass}`}
                 />
 
-                <div className="relative grid md:grid-cols-2 min-h-[400px]" style={{ perspective: "800px" }}>
+                {/* Pages area with perspective for 3D flip */}
+                <div className="relative grid md:grid-cols-2 min-h-[420px]" style={{ perspective: "1200px", transformStyle: "preserve-3d" }}>
 
-                  <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-white/15 via-white/8 to-transparent z-20 -translate-x-1/2">
-                    <div className="absolute inset-0 blur-[3px] bg-white/10"></div>
+                  {/* Book spine */}
+                  <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-white/20 via-white/8 to-transparent z-20 -translate-x-1/2">
+                    <div className="absolute inset-0 blur-[3px] bg-white/12"></div>
                   </div>
 
                   <AnimatePresence mode="wait" custom={direction}>
@@ -217,6 +202,7 @@ export default function Kitchen() {
                       initial="enter"
                       animate="center"
                       exit="exit"
+                      style={{ transformStyle: "preserve-3d" }}
                       className="contents"
                     >
                       {/* LEFT PAGE */}
@@ -227,8 +213,8 @@ export default function Kitchen() {
                         </div>
 
                         <div className="flex-1 flex flex-col justify-center gap-4">
-                          {/* Lottie animation */}
-                          <div className="w-24 h-24 -ml-2">
+                          {/* Lottie — 25% larger: was w-24 h-24 (96px) → now w-[7.5rem] h-[7.5rem] (120px) */}
+                          <div className="w-[7.5rem] h-[7.5rem] -ml-2">
                             <iframe
                               key={chapter.id}
                               src={chapter.lottie}
@@ -247,9 +233,7 @@ export default function Kitchen() {
 
                           <div className={`inline-flex items-center gap-2 self-start px-4 py-2 rounded-full bg-black/40 border ${chapter.borderClass} backdrop-blur-md`}>
                             <Clock className={`w-3.5 h-3.5 ${chapter.accentClass}`} />
-                            <span className={`text-sm font-bold ${chapter.accentClass} tracking-wide`}>
-                              {chapter.time}
-                            </span>
+                            <span className={`text-sm font-bold ${chapter.accentClass} tracking-wide`}>{chapter.time}</span>
                           </div>
 
                           {chapter.id === "desert" && (
@@ -276,26 +260,19 @@ export default function Kitchen() {
                           {chapter.items.map((item, idx) => (
                             <motion.div
                               key={`${currentChapter}-${idx}`}
-                              initial={{ opacity: 0, x: 24, filter: "blur(3px)" }}
+                              initial={{ opacity: 0, x: 28, filter: "blur(3px)" }}
                               animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                              transition={{ delay: 0.08 + idx * 0.07, duration: 0.45, ease: EASE_OUT_EXPO }}
+                              transition={{ delay: 0.2 + idx * 0.09, duration: 0.55, ease: EASE_OUT_EXPO }}
                               whileHover={{ x: 4, transition: { type: "spring", stiffness: 400, damping: 25 } }}
                               className="flex items-center gap-4 p-3 rounded-xl bg-white/4 border border-white/8 hover:bg-white/8 hover:border-white/15 transition-colors duration-250 group cursor-default"
                             >
                               <div className="shrink-0 w-14 h-14 rounded-lg overflow-hidden border border-white/10">
-                                <img
-                                  src={item.img}
-                                  alt={item.name}
-                                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                  loading="lazy"
-                                />
+                                <img src={item.img} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
                               </div>
-
                               <div className="flex-1 min-w-0">
                                 <h4 className="text-white font-semibold text-sm leading-tight mb-0.5">{item.name}</h4>
                                 <p className="text-white/45 text-xs leading-relaxed truncate">{item.desc}</p>
                               </div>
-
                               <div className={`shrink-0 w-1.5 h-1.5 rounded-full ${chapter.dotClass} opacity-60`}></div>
                             </motion.div>
                           ))}
@@ -354,7 +331,7 @@ export default function Kitchen() {
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={isOpen ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.55, ease: EASE_OUT_EXPO, delay: 0.55 }}
+            transition={{ duration: 0.55, ease: EASE_OUT_EXPO, delay: 0.65 }}
             className="flex flex-wrap justify-center gap-2 mt-8"
           >
             {chapters.map((ch, idx) => (
