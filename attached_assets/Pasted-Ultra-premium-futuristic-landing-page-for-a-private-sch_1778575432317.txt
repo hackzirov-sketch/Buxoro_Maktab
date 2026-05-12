@@ -1,0 +1,220 @@
+Ultra-premium futuristic landing page for a private school brand called “Buxoro Maktabi”, designed in Apple-level UI/UX style with cinematic quality and interactive storytelling sections.
+
+🌌 Visual Style
+Ultra-minimalist luxury UI
+Soft gradient background: deep forest green → mint green → white glow fade
+Glassmorphism everywhere (blur 20–30px, translucent panels)
+Floating 3D abstract glass shapes with slow animation
+Subtle glowing particles moving in depth (parallax effect)
+Smooth scroll-based animations (Framer Motion style)
+Lighting: cinematic global illumination, soft neon green accents
+Typography: Inter / Poppins, modern Uzbek-friendly spacing
+8K Figma-grade UI mockup, futuristic but trustworthy education vibe
+🧭 Navigation (Glass Navbar)
+
+Transparent sticky navbar with blur glass effect:
+
+Menu:
+
+Bosh sahifa
+Biz haqimizda
+Ta’lim
+Sinflar
+Natijalar
+Yangiliklar
+Aloqa
+
+Right side:
+
+CTA button with phone number: +998 XX XXX XX XX
+Soft green glow hover animation
+🧠 HERO SECTION
+
+Centered bold typography:
+
+“Farzandingiz uchun zamonaviy va sifatli ta’lim markazi”
+
+Subtext:
+“Buxorodagi eng ilg‘or va ishonchli ta’lim muhitini yaratayotgan maktab”
+
+CTA Buttons:
+
+Primary: “Bepul konsultatsiya olish” (solid mint green, soft shadow, hover pulse)
+Secondary: “Ro‘yxatdan o‘tish” (glassmorphism outline button)
+
+Background includes subtle floating video frames.
+
+🎥 INTERACTIVE STORY SECTIONS
+1. 📹 “Maktab hayoti”
+Full-width video background section
+Auto-play muted loop
+Overlay glass text card
+Scroll parallax effect
+Play/pause interaction on hover
+2. 💬 “Mijozlar fikri”
+Horizontal testimonial carousel
+Each card contains:
+Student/parent video testimonial (embedded playable mini video)
+Name + short feedback text
+Smooth swipe animation (mobile-first)
+3. 🍽 “Oshxonamiz”
+
+Interactive menu book system:
+
+UI looks like a real opening book
+Click animation:
+Book opens with page flip physics
+Inside:
+Food menu categories:
+Nonushta
+Tushlik
+Kechki ovqat
+Each item shows image + description + calories
+Book can be closed back with reverse animation
+4. 📊 “Natijalarimiz”
+Animated stats cards:
+IELTS 7.5+
+SAT 1400+
+Progress bars with glowing green animation
+Timeline of achievements
+5. 👩‍🏫 “O‘qituvchilarimiz”
+Grid layout
+Teacher avatars (modern professional style)
+Hover reveals:
+Experience
+Subject
+Achievements
+📝 APPLICATION FORM (ARIZA TOPSHIRISH)
+
+Glassmorphism form card with smooth validation:
+
+Fields:
+
+📞 Telefon raqam: (+998 input mask)
+📍 Joylashuv (dropdown):
+Bekobod shahar
+Shirin shahar
+Juma
+Xos
+Zafar
+🎓 Farzand sinfi:
+0
+1 dan 11 gacha
+
+CTA:
+
+“Yuborish” button (animated loading state, success checkmark)
+
+Form UX:
+
+Instant validation
+Soft shake animation on error
+Success modal after submit
+⚡ MOTION DESIGN
+Framer Motion style transitions
+Parallax scrolling
+Hover depth lift (3D tilt)
+Soft neon glow interactions
+Smooth easing (0.6, 0.2, 0.2, 1)
+🎯 OUTPUT GOAL
+
+A futuristic education landing page that feels:
+
+Premium like Apple
+Trustworthy like Harvard UI
+Emotional like a documentary website
+Interactive like a modern SaaS product
+💻 TYPESCRIPT (FRONTEND STRUCTURE — REACT)
+
+Mana senga real build skeleton:
+
+// App.tsx
+import Hero from "./sections/Hero";
+import Navbar from "./components/Navbar";
+import SchoolLife from "./sections/SchoolLife";
+import Testimonials from "./sections/Testimonials";
+import KitchenMenu from "./sections/KitchenMenu";
+import Results from "./sections/Results";
+import Teachers from "./sections/Teachers";
+import ApplicationForm from "./sections/ApplicationForm";
+
+export default function App() {
+  return (
+    <div className="bg-gradient-to-b from-emerald-950 via-emerald-900 to-white min-h-screen">
+      <Navbar />
+      <Hero />
+      <SchoolLife />
+      <Testimonials />
+      <KitchenMenu />
+      <Results />
+      <Teachers />
+      <ApplicationForm />
+    </div>
+  );
+}
+🧭 Navbar (Glassmorphism)
+export default function Navbar() {
+  return (
+    <div className="fixed top-0 w-full backdrop-blur-xl bg-white/10 flex justify-between px-8 py-4 text-white z-50">
+      <div className="flex gap-6">
+        {["Bosh sahifa","Biz haqimizda","Ta'lim","Sinflar","Natijalar","Yangiliklar","Aloqa"].map(i => (
+          <span key={i} className="hover:text-emerald-300 cursor-pointer">{i}</span>
+        ))}
+      </div>
+
+      <button className="px-4 py-2 bg-emerald-400/80 rounded-xl shadow-lg hover:scale-105 transition">
+        +998 XX XXX XX XX
+      </button>
+    </div>
+  );
+}
+📝 Application Form (Core UX)
+import { useState } from "react";
+
+export default function ApplicationForm() {
+  const [form, setForm] = useState({
+    phone: "",
+    location: "",
+    grade: ""
+  });
+
+  return (
+    <div className="p-10">
+      <div className="backdrop-blur-xl bg-white/20 p-8 rounded-2xl max-w-xl mx-auto">
+        
+        <input
+          placeholder="+998 telefon raqam"
+          className="w-full p-3 rounded-lg mb-3"
+          onChange={(e) => setForm({...form, phone: e.target.value})}
+        />
+
+        <select
+          className="w-full p-3 rounded-lg mb-3"
+          onChange={(e) => setForm({...form, location: e.target.value})}
+        >
+          <option>Joylashuv tanlang</option>
+          <option>Bekobod shahar</option>
+          <option>Shirin shahar</option>
+          <option>Juma</option>
+          <option>Xos</option>
+          <option>Zafar</option>
+        </select>
+
+        <select
+          className="w-full p-3 rounded-lg mb-3"
+          onChange={(e) => setForm({...form, grade: e.target.value})}
+        >
+          <option>Sinf</option>
+          {Array.from({length: 12}, (_, i) => (
+            <option key={i}>{i}</option>
+          ))}
+        </select>
+
+        <button className="w-full bg-emerald-500 text-white p-3 rounded-lg hover:scale-105 transition">
+          Yuborish
+        </button>
+
+      </div>
+    </div>
+  );
+}

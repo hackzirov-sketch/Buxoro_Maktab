@@ -1,45 +1,48 @@
-# [Project name]
+# Buxoro Maktabi
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Ultra-premium futuristic landing page for Buxoro Maktabi, an elite private school in Bukhara, Uzbekistan.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/buxoro-maktabi run dev` — run the frontend (preview at `/`)
 - `pnpm run typecheck` — full typecheck across all packages
-- `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
 
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
-- DB: PostgreSQL + Drizzle ORM
-- Validation: Zod (`zod/v4`), `drizzle-zod`
-- API codegen: Orval (from OpenAPI spec)
-- Build: esbuild (CJS bundle)
+- React + Vite (frontend only, no backend)
+- Framer Motion for animations
+- Tailwind CSS v4 + glassmorphism design
+- shadcn/ui components
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/buxoro-maktabi/src/` — full landing page source
+  - `App.tsx` — root component, renders all sections
+  - `src/sections/` — Navbar, Hero, SchoolLife, Testimonials, Kitchen, Results, Teachers, ApplicationForm, Footer
+  - `src/index.css` — theme (deep forest green palette, Google Fonts import)
+- `attached_assets/` — brand images (logo, school gate, kitchen, hero reference)
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Single-page app with scroll navigation — no routing needed
+- Glassmorphism design with backdrop-blur and translucent overlays
+- Framer Motion scroll-triggered animations using `useInView`
+- Animated counters in Results section that trigger on scroll
+- All content in Uzbek language
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+A cinematic landing page for Buxoro Maktabi with: glassmorphism navbar, animated hero section, school life showcase, testimonials carousel, interactive kitchen menu, animated results stats, teacher grid with 3D hover effects, and a glassmorphism application form with validation.
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- All UI text in Uzbek language
+- Deep forest green + neon mint green color palette
+- Glassmorphism design language throughout
+- Phone: +998 90 123 45 45
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
-
-## Pointers
-
-- See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details
+- Google Fonts @import must be FIRST line in index.css (before @import "tailwindcss")
+- Assets imported via @assets/ alias pointing to attached_assets/

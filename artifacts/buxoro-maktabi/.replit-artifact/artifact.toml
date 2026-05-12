@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Buxoro Maktabi"
+version = "1.0.0"
+id = "artifacts/buxoro-maktabi"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24635
+
+[services.development]
+run = "pnpm --filter @workspace/buxoro-maktabi run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/buxoro-maktabi", "run", "build" ]
+publicDir = "artifacts/buxoro-maktabi/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24635"
+BASE_PATH = "/"
