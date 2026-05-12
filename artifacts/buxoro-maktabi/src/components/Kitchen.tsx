@@ -8,6 +8,7 @@ const chapters = [
     label: "Nonushta",
     time: "07:30 – 08:30",
     icon: "🌅",
+    lottie: "https://lottie.host/embed/dc5b4ab3-0ac6-4968-8abc-b49dc975510d/PNiyUxEVLN.lottie",
     accentClass: "text-amber-300",
     borderClass: "border-amber-400/30",
     bgClass: "from-amber-500/15 to-orange-500/5",
@@ -36,6 +37,7 @@ const chapters = [
     label: "Tushlik",
     time: "12:30 – 13:30",
     icon: "☀️",
+    lottie: "https://lottie.host/embed/8bd09d6b-efee-4afd-9be0-8f5e7b56844e/XUREsAUi11.lottie",
     accentClass: "text-primary",
     borderClass: "border-primary/30",
     bgClass: "from-primary/15 to-emerald-600/5",
@@ -61,9 +63,10 @@ const chapters = [
   },
   {
     id: "desert",
-    label: "Desert",
+    label: "Tushlidan keyingi tamaddi",
     time: "15:30 – 16:00",
     icon: "🍰",
+    lottie: "https://lottie.host/embed/60082d9a-6177-4fd4-bc6e-fc1408e0d72f/5kgOIgvPU4.lottie",
     accentClass: "text-pink-300",
     borderClass: "border-pink-400/30",
     bgClass: "from-pink-500/15 to-rose-500/5",
@@ -224,8 +227,16 @@ export default function Kitchen() {
                         </div>
 
                         <div className="flex-1 flex flex-col justify-center gap-4">
-                          {/* Big emoji */}
-                          <span className="text-5xl">{chapter.icon}</span>
+                          {/* Lottie animation */}
+                          <div className="w-24 h-24 -ml-2">
+                            <iframe
+                              key={chapter.id}
+                              src={chapter.lottie}
+                              className="w-full h-full border-none"
+                              allow="autoplay"
+                              title={chapter.label}
+                            />
+                          </div>
 
                           {/* Chapter name */}
                           <div>
