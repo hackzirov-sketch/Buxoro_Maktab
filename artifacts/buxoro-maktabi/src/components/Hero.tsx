@@ -73,7 +73,7 @@ export default function Hero() {
               <img 
                 src={logoImg} 
                 alt="Big Logo" 
-                className="w-64 h-64 object-contain relative z-10 animate-float drop-shadow-[0_0_30px_rgba(74,222,128,0.5)]" 
+                className="w-64 h-64 object-cover relative z-10 animate-float drop-shadow-[0_0_30px_rgba(74,222,128,0.5)] rounded-full" 
               />
             </div>
           </motion.div>

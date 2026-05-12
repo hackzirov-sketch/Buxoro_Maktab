@@ -37,7 +37,7 @@ export default function Navbar() {
         <a href="#" className="flex items-center gap-3 group" data-testid="link-home">
           <div className="relative">
             <div className="absolute inset-0 bg-primary/50 blur-md rounded-full group-hover:bg-primary/80 transition-all duration-500"></div>
-            <img src={logoImg} alt="Buxoro Maktabi Logo" className="w-10 h-10 object-contain relative z-10" />
+            <img src={logoImg} alt="Buxoro Maktabi Logo" className="w-10 h-10 object-cover relative z-10 rounded-full" />
           </div>
           <span className="font-poppins font-bold text-xl tracking-tight text-white group-hover:text-primary transition-colors">
             Buxoro Maktabi
