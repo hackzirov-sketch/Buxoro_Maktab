@@ -51,7 +51,7 @@ export default function Hero() {
               va sifatli ta'lim markazi
             </h1>
 
-            <p className="text-base md:text-lg text-white/60 max-w-xl font-light leading-[1.8] tracking-wide">
+            <p className="text-base md:text-lg text-white/85 max-w-xl font-normal leading-[1.8]">
               Buxorodagi eng ilg'or va ishonchli ta'lim muhitini yaratayotgan maktab. Kelajak yetakchilarini bugun tarbiyalaymiz.
             </p>
           </motion.div>
