@@ -1,4 +1,4 @@
-import { motion, useInView, useSpring, useTransform, animate } from "framer-motion";
+import { motion, useInView, animate } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { GraduationCap, Award, Globe, Users } from "lucide-react";
 
@@ -30,25 +30,23 @@ function Counter({ end, label, icon: Icon, suffix = "", duration = 2 }: {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+      initial={{ opacity: 0, y: 28, scale: 0.94 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
+      transition={{ duration: 0.68, ease: EASE_OUT_EXPO }}
       whileHover={{ scale: 1.03, transition: { type: "spring", stiffness: 350, damping: 22 } }}
-      className="flex flex-col items-center justify-center p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md relative overflow-hidden group cursor-default"
+      className="flex flex-col items-center justify-center p-6 md:p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md relative overflow-hidden group cursor-default"
     >
-      <motion.div
-        className="absolute inset-0 bg-primary/0 group-hover:bg-primary/6 transition-colors duration-500 rounded-3xl"
-      />
+      <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/6 transition-colors duration-500 rounded-3xl" />
       <div className="absolute -inset-1 rounded-[2rem] bg-primary/10 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 -z-10" />
 
-      <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-400">
-        <Icon className="w-8 h-8 text-primary" />
+      <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-300">
+        <Icon className="w-6 h-6 md:w-8 md:h-8 text-primary" />
       </div>
-      <div className="text-5xl font-bold text-white mb-2 font-poppins tabular-nums">
+      <div className="text-3xl md:text-5xl font-bold text-white mb-1.5 md:mb-2 font-poppins tabular-nums">
         {display}{suffix}
       </div>
-      <p className="text-white/70 font-medium uppercase tracking-wider text-sm">{label}</p>
+      <p className="text-white/65 font-medium uppercase tracking-wider text-xs md:text-sm text-center">{label}</p>
     </motion.div>
   );
 }
@@ -62,17 +60,17 @@ export default function Results() {
   ];
 
   return (
-    <section id="natijalar" className="py-24 relative overflow-hidden">
-      <div className="absolute top-1/3 -left-64 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <section id="natijalar" className="py-16 md:py-24 relative overflow-hidden">
+      <div className="absolute top-1/3 -left-64 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="text-center mb-16">
+      <div className="w-full px-4 sm:px-6 md:px-8 max-w-7xl mx-auto">
+        <div className="text-center mb-12 md:mb-16">
           <motion.h2
             initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
             whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true }}
             transition={{ duration: 0.75, ease: EASE_OUT_EXPO }}
-            className="text-4xl md:text-5xl font-bold font-poppins text-white mb-6"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold font-poppins text-white mb-4 md:mb-6"
           >
             Bizning <span className="text-primary drop-shadow-[0_0_10px_rgba(74,222,128,0.3)]">Natijalarimiz</span>
           </motion.h2>
@@ -81,26 +79,28 @@ export default function Results() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: EASE_OUT_EXPO, delay: 0.12 }}
-            className="text-base md:text-lg text-white/85 max-w-2xl mx-auto font-normal leading-[1.8]"
+            className="text-sm sm:text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-[1.85]"
           >
             Raqamlar gapirganda so'zlarga hojat yo'q. O'quvchilarimiz erishayotgan yutuqlar bizning asosiy g'ururimizdir.
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
+        {/* Counter grid — 2 cols on mobile, 4 on desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-16 md:mb-24">
           <Counter end={7.5} label="O'rtacha IELTS" icon={Globe} suffix="+" duration={1.6} />
           <Counter end={1400} label="O'rtacha SAT" icon={Award} suffix="+" duration={1.9} />
           <Counter end={95} label="OTMga qabul" icon={GraduationCap} suffix="%" duration={1.7} />
           <Counter end={500} label="O'quvchilar" icon={Users} suffix="+" duration={2.1} />
         </div>
 
+        {/* Timeline */}
         <div className="max-w-4xl mx-auto">
           <motion.h3
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
-            className="text-2xl md:text-3xl font-bold text-center text-white mb-12"
+            className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-white mb-10 md:mb-12"
           >
             Rivojlanish <span className="text-primary">Yo'li</span>
           </motion.h3>
@@ -111,41 +111,41 @@ export default function Results() {
               whileInView={{ scaleY: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 1.2, ease: EASE_OUT_EXPO, delay: 0.2 }}
-              className="absolute left-[19px] md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/60 via-primary/25 to-transparent transform md:-translate-x-1/2 origin-top"
+              className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/60 via-primary/25 to-transparent transform md:-translate-x-1/2 origin-top"
             />
 
-            <div className="flex flex-col gap-12">
+            <div className="flex flex-col gap-8 md:gap-12">
               {timeline.map((item, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? 40 : -40 }}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? 32 : -32 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-80px" }}
-                  transition={{ duration: 0.75, ease: EASE_OUT_EXPO, delay: index * 0.1 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.72, ease: EASE_OUT_EXPO, delay: index * 0.08 }}
                   className={`flex flex-col md:flex-row relative items-start md:items-center ${index % 2 === 0 ? "md:flex-row-reverse" : ""}`}
                 >
-                  <div className="hidden md:block w-1/2"></div>
+                  <div className="hidden md:block w-1/2" />
 
                   <motion.div
                     initial={{ scale: 0 }}
                     whileInView={{ scale: 1 }}
                     viewport={{ once: true }}
-                    transition={{ type: "spring", stiffness: 300, damping: 18, delay: index * 0.1 + 0.2 }}
-                    className="absolute left-0 md:left-1/2 top-1.5 md:top-auto transform md:-translate-x-1/2 w-10 h-10 rounded-full bg-background border-4 border-primary flex items-center justify-center shadow-[0_0_18px_rgba(74,222,128,0.6)] z-10"
+                    transition={{ type: "spring", stiffness: 280, damping: 18, delay: index * 0.08 + 0.18 }}
+                    className="absolute left-0 md:left-1/2 top-1.5 md:top-auto transform md:-translate-x-1/2 w-8 h-8 md:w-10 md:h-10 rounded-full bg-background border-[3px] md:border-4 border-primary flex items-center justify-center shadow-[0_0_16px_rgba(74,222,128,0.55)] z-10"
                   >
-                    <div className="w-2 h-2 rounded-full bg-white animate-pulse"></div>
+                    <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-white animate-pulse" />
                   </motion.div>
 
-                  <div className={`w-full md:w-1/2 pl-16 md:pl-0 ${index % 2 === 0 ? "md:pr-12 md:text-right" : "md:pl-12"}`}>
+                  <div className={`w-full md:w-1/2 pl-12 md:pl-0 ${index % 2 === 0 ? "md:pr-12 md:text-right" : "md:pl-12"}`}>
                     <motion.div
                       whileHover={{ scale: 1.02, transition: { type: "spring", stiffness: 350, damping: 22 } }}
-                      className="p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/9 hover:border-primary/30 transition-colors duration-300"
+                      className="p-5 md:p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/8 hover:border-primary/30 transition-colors duration-300"
                     >
-                      <span className="inline-block px-3 py-1 rounded-full bg-primary/20 text-primary text-sm font-bold mb-3">
+                      <span className="inline-block px-3 py-1 rounded-full bg-primary/20 text-primary text-xs md:text-sm font-bold mb-2 md:mb-3">
                         {item.year}
                       </span>
-                      <h4 className="text-xl font-bold text-white mb-2">{item.title}</h4>
-                      <p className="text-white/70 text-sm leading-relaxed">{item.desc}</p>
+                      <h4 className="text-base md:text-xl font-bold text-white mb-1.5 md:mb-2">{item.title}</h4>
+                      <p className="text-white/65 text-xs md:text-sm leading-relaxed">{item.desc}</p>
                     </motion.div>
                   </div>
                 </motion.div>
