@@ -66,7 +66,7 @@ export default function Results() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg text-white/70 max-w-2xl mx-auto"
+            className="text-base md:text-lg text-white/55 max-w-2xl mx-auto font-light leading-[1.8] tracking-wide"
           >
             Raqamlar gapirganda so'zlarga hojat yo'q. O'quvchilarimiz erishayotgan yutuqlar bizning asosiy g'ururimizdir.
           </motion.p>
