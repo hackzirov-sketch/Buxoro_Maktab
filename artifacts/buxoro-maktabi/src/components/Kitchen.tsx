@@ -125,24 +125,13 @@ export default function Kitchen() {
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: EASE_OUT_EXPO }}
-          className="mb-10 mx-auto max-w-3xl rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_60px_rgba(0,0,0,0.6)] relative"
-          style={{ height: 220 }}
+          className="mb-10 mx-auto max-w-sm"
         >
           <img
-            src="/school-bg.png"
-            alt="Buxoro Maktabi"
-            className="w-full h-full object-cover"
+            src="/oshxona-logo.png"
+            alt="Buxoro Maktabi Oshxonasi"
+            className="w-full h-auto object-contain drop-shadow-[0_0_40px_rgba(74,222,128,0.35)]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
-          <div className="absolute bottom-4 left-6 right-6 flex items-end justify-between">
-            <div>
-              <p className="text-white/40 text-[11px] uppercase tracking-widest font-semibold mb-1">Maktabimiz</p>
-              <p className="text-white font-bold text-lg font-poppins leading-tight">Buxoro Maktabi Oshxonasi</p>
-            </div>
-            <div className="px-3 py-1.5 rounded-full bg-primary/20 border border-primary/40 backdrop-blur-md">
-              <span className="text-primary text-xs font-bold">Kunlik 3 mahal</span>
-            </div>
-          </div>
         </motion.div>
 
         <div className="text-center mb-14">
