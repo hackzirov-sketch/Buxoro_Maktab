@@ -79,50 +79,72 @@ export default function Kitchen() {
     setCurrentChapter(next);
   };
 
-  // Real book page-turn easing — starts quick (lift), slows as it settles (like paper)
-  const PAGE_TURN_EASE = [0.25, 0.46, 0.45, 0.94] as const;
-  const PAGE_EXIT_EASE  = [0.55, 0.06, 0.68, 0.19] as const;
-
+  // True 3D page-turn: pages sweep from the spine, like a real book
   const pageVariants = {
     enter: (d: number) => ({
-      rotateY: d > 0 ? 75 : -75,
+      rotateY: d > 0 ? 90 : -90,
       opacity: 0,
-      filter: "blur(3px)",
-      scale: 0.96,
-      transformOrigin: d > 0 ? "left center" : "right center",
+      x: d > 0 ? "4%" : "-4%",
     }),
     center: {
       rotateY: 0,
       opacity: 1,
-      filter: "blur(0px)",
-      scale: 1,
+      x: "0%",
       transition: {
-        rotateY: { duration: 0.85, ease: PAGE_TURN_EASE },
-        opacity:  { duration: 0.5,  ease: "easeOut" },
-        filter:   { duration: 0.55, ease: "easeOut" },
-        scale:    { duration: 0.75, ease: PAGE_TURN_EASE },
+        rotateY: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+        opacity:  { duration: 0.25, ease: "easeOut" },
+        x:        { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
       },
     },
     exit: (d: number) => ({
-      rotateY: d > 0 ? -75 : 75,
+      rotateY: d > 0 ? -90 : 90,
       opacity: 0,
-      filter: "blur(3px)",
-      scale: 0.96,
-      transformOrigin: d > 0 ? "right center" : "left center",
+      x: d > 0 ? "-4%" : "4%",
       transition: {
-        rotateY: { duration: 0.6, ease: PAGE_EXIT_EASE },
-        opacity:  { duration: 0.35, ease: "easeIn" },
-        filter:   { duration: 0.4,  ease: "easeIn" },
-        scale:    { duration: 0.5,  ease: PAGE_EXIT_EASE },
+        rotateY: { duration: 0.5, ease: [0.55, 0, 1, 0.45] },
+        opacity:  { duration: 0.2, ease: "easeIn", delay: 0.15 },
+        x:        { duration: 0.5, ease: [0.55, 0, 1, 0.45] },
       },
     }),
   };
 
   return (
     <section id="oshxona" className="py-24 relative overflow-hidden" ref={sectionRef}>
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/5 rounded-full blur-[150px] pointer-events-none"></div>
+      {/* Background image */}
+      <div
+        className="absolute inset-0 opacity-[0.055] bg-cover bg-center pointer-events-none"
+        style={{ backgroundImage: "url('/school-bg.png')" }}
+      />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/5 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="container mx-auto px-4 md:px-6">
+
+        {/* School image card above heading */}
+        <motion.div
+          initial={{ opacity: 0, y: 28, filter: "blur(8px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: EASE_OUT_EXPO }}
+          className="mb-10 mx-auto max-w-3xl rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_60px_rgba(0,0,0,0.6)] relative"
+          style={{ height: 220 }}
+        >
+          <img
+            src="/school-bg.png"
+            alt="Buxoro Maktabi"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+          <div className="absolute bottom-4 left-6 right-6 flex items-end justify-between">
+            <div>
+              <p className="text-white/40 text-[11px] uppercase tracking-widest font-semibold mb-1">Maktabimiz</p>
+              <p className="text-white font-bold text-lg font-poppins leading-tight">Buxoro Maktabi Oshxonasi</p>
+            </div>
+            <div className="px-3 py-1.5 rounded-full bg-primary/20 border border-primary/40 backdrop-blur-md">
+              <span className="text-primary text-xs font-bold">Kunlik 3 mahal</span>
+            </div>
+          </div>
+        </motion.div>
+
         <div className="text-center mb-14">
           <motion.h2
             initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
@@ -151,12 +173,11 @@ export default function Kitchen() {
             transition={{ duration: 0.5, ease: EASE_OUT_EXPO, delay: 0.2 }}
             className="mb-4 flex items-center gap-3"
           >
-            <div className="h-px w-12 bg-white/20"></div>
+            <div className="h-px w-12 bg-white/20" />
             <span className="text-xs uppercase tracking-[0.25em] text-white/40 font-semibold">Kunlik Menyu Kitobi</span>
-            <div className="h-px w-12 bg-white/20"></div>
+            <div className="h-px w-12 bg-white/20" />
           </motion.div>
 
-          {/* Book opening: starts closed (scaleX 0.15 + rotateX 20), opens like a real book cover */}
           <motion.div
             initial={{ scale: 0.82, opacity: 0, rotateX: 18, filter: "blur(10px)" }}
             animate={isOpen
@@ -164,17 +185,17 @@ export default function Kitchen() {
               : { scale: 0.82, opacity: 0, rotateX: 18, filter: "blur(10px)" }
             }
             transition={{
-              scale:    { duration: 1.1, ease: [0.34, 1.56, 0.64, 1] },
-              opacity:  { duration: 0.7, ease: "easeOut" },
-              rotateX:  { duration: 1.05, ease: [0.25, 0.46, 0.45, 0.94] },
-              filter:   { duration: 0.7,  ease: "easeOut" },
+              scale:   { duration: 1.1, ease: [0.34, 1.56, 0.64, 1] },
+              opacity: { duration: 0.7, ease: "easeOut" },
+              rotateX: { duration: 1.05, ease: [0.25, 0.46, 0.45, 0.94] },
+              filter:  { duration: 0.7, ease: "easeOut" },
             }}
             className="w-full max-w-4xl"
           >
             <div className="relative">
-              {/* Book shadow layers */}
-              <div className="absolute inset-0 translate-y-4 translate-x-1.5 rounded-2xl bg-black/50 blur-2xl"></div>
-              <div className="absolute inset-0 translate-y-1.5 rounded-2xl bg-black/30"></div>
+              {/* Book shadow */}
+              <div className="absolute inset-0 translate-y-4 translate-x-1.5 rounded-2xl bg-black/50 blur-2xl" />
+              <div className="absolute inset-0 translate-y-1.5 rounded-2xl bg-black/30" />
 
               <div className="relative rounded-2xl overflow-hidden border border-white/15 bg-gradient-to-br from-[#0d2b1e] to-[#071a10] shadow-[0_0_80px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.12)]">
 
@@ -186,12 +207,14 @@ export default function Kitchen() {
                   className={`h-1 w-full origin-left ${chapter.barClass}`}
                 />
 
-                {/* Pages area with perspective for 3D flip */}
-                <div className="relative grid md:grid-cols-2 min-h-[420px]" style={{ perspective: "1200px", transformStyle: "preserve-3d" }}>
-
+                {/* Pages area — relative so absolute children position correctly */}
+                <div
+                  className="relative min-h-[420px]"
+                  style={{ perspective: "1200px" }}
+                >
                   {/* Book spine */}
                   <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-white/20 via-white/8 to-transparent z-20 -translate-x-1/2">
-                    <div className="absolute inset-0 blur-[3px] bg-white/12"></div>
+                    <div className="absolute inset-0 blur-[3px] bg-white/12" />
                   </div>
 
                   <AnimatePresence mode="wait" custom={direction}>
@@ -202,18 +225,17 @@ export default function Kitchen() {
                       initial="enter"
                       animate="center"
                       exit="exit"
-                      style={{ transformStyle: "preserve-3d" }}
-                      className="contents"
+                      style={{ transformStyle: "preserve-3d", transformOrigin: "center center", backfaceVisibility: "hidden" }}
+                      className="absolute inset-0 grid md:grid-cols-2"
                     >
                       {/* LEFT PAGE */}
                       <div className={`p-8 md:p-10 flex flex-col justify-between bg-gradient-to-br ${chapter.bgClass} border-b md:border-b-0 md:border-r border-white/8`}>
                         <div className="flex flex-col gap-1.5 mb-6">
-                          <div className={`w-10 h-0.5 ${chapter.dotClass} opacity-70 rounded-full`}></div>
-                          <div className={`w-6 h-0.5 ${chapter.dotClass} opacity-40 rounded-full`}></div>
+                          <div className={`w-10 h-0.5 ${chapter.dotClass} opacity-70 rounded-full`} />
+                          <div className={`w-6 h-0.5 ${chapter.dotClass} opacity-40 rounded-full`} />
                         </div>
 
                         <div className="flex-1 flex flex-col justify-center gap-4">
-                          {/* Lottie — 25% larger: was w-24 h-24 (96px) → now w-[7.5rem] h-[7.5rem] (120px) */}
                           <div className="w-[7.5rem] h-[7.5rem] -ml-2">
                             <iframe
                               key={chapter.id}
@@ -247,8 +269,8 @@ export default function Kitchen() {
                           <span className="text-white/20 text-xs font-mono mb-1">
                             {String(currentChapter + 1).padStart(2, "0")} / {String(chapters.length).padStart(2, "0")}
                           </span>
-                          <div className={`w-6 h-0.5 ${chapter.dotClass} opacity-40 rounded-full`}></div>
-                          <div className={`w-10 h-0.5 ${chapter.dotClass} opacity-70 rounded-full`}></div>
+                          <div className={`w-6 h-0.5 ${chapter.dotClass} opacity-40 rounded-full`} />
+                          <div className={`w-10 h-0.5 ${chapter.dotClass} opacity-70 rounded-full`} />
                         </div>
                       </div>
 
@@ -262,7 +284,7 @@ export default function Kitchen() {
                               key={`${currentChapter}-${idx}`}
                               initial={{ opacity: 0, x: 28, filter: "blur(3px)" }}
                               animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                              transition={{ delay: 0.2 + idx * 0.09, duration: 0.55, ease: EASE_OUT_EXPO }}
+                              transition={{ delay: 0.25 + idx * 0.09, duration: 0.55, ease: EASE_OUT_EXPO }}
                               whileHover={{ x: 4, transition: { type: "spring", stiffness: 400, damping: 25 } }}
                               className="flex items-center gap-4 p-3 rounded-xl bg-white/4 border border-white/8 hover:bg-white/8 hover:border-white/15 transition-colors duration-250 group cursor-default"
                             >
@@ -273,14 +295,14 @@ export default function Kitchen() {
                                 <h4 className="text-white font-semibold text-sm leading-tight mb-0.5">{item.name}</h4>
                                 <p className="text-white/45 text-xs leading-relaxed truncate">{item.desc}</p>
                               </div>
-                              <div className={`shrink-0 w-1.5 h-1.5 rounded-full ${chapter.dotClass} opacity-60`}></div>
+                              <div className={`shrink-0 w-1.5 h-1.5 rounded-full ${chapter.dotClass} opacity-60`} />
                             </motion.div>
                           ))}
                         </div>
 
                         <div className="flex justify-end gap-1.5 mt-auto pt-4">
-                          <div className={`w-10 h-0.5 ${chapter.dotClass} opacity-30 rounded-full`}></div>
-                          <div className={`w-6 h-0.5 ${chapter.dotClass} opacity-20 rounded-full`}></div>
+                          <div className={`w-10 h-0.5 ${chapter.dotClass} opacity-30 rounded-full`} />
+                          <div className={`w-6 h-0.5 ${chapter.dotClass} opacity-20 rounded-full`} />
                         </div>
                       </div>
                     </motion.div>
