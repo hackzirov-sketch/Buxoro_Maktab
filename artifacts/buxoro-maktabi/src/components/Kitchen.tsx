@@ -130,7 +130,7 @@ export default function Kitchen() {
           <img
             src="/oshxona-logo.png"
             alt="Buxoro Maktabi Oshxonasi"
-            className="w-full h-auto object-contain drop-shadow-[0_0_40px_rgba(74,222,128,0.35)]"
+            className="w-full h-auto object-contain drop-shadow-[0_0_40px_rgba(74,222,128,0.35)] rounded-tl-[110px] rounded-tr-[110px] rounded-br-[110px] rounded-bl-[110px]"
           />
         </motion.div>
 
