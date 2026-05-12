@@ -69,7 +69,7 @@ export default function Hero() {
             className="hidden lg:flex justify-center items-center relative"
           >
             <div className="relative w-80 h-80 flex items-center justify-center">
-              <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full animate-pulse-slow"></div>
+              <div className="absolute -inset-16 bg-primary/25 blur-[80px] rounded-full animate-pulse-slow"></div>
               <img 
                 src={logoImg} 
                 alt="Big Logo" 

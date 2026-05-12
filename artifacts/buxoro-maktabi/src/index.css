@@ -74,19 +74,19 @@
 }
 
 :root {
-  --background: 162 100% 5%;
+  --background: 162 80% 7%;
   --foreground: 0 0% 100%;
-  --border: 162 50% 20%;
-  --input: 162 50% 20%;
+  --border: 162 50% 25%;
+  --input: 162 50% 25%;
   --ring: 152 76% 55%;
 
-  --card: 162 80% 8%;
+  --card: 162 70% 10%;
   --card-foreground: 0 0% 100%;
-  --card-border: 162 50% 20%;
+  --card-border: 162 50% 25%;
 
-  --popover: 162 80% 8%;
+  --popover: 162 70% 10%;
   --popover-foreground: 0 0% 100%;
-  --popover-border: 162 50% 20%;
+  --popover-border: 162 50% 25%;
 
   --primary: 152 76% 55%;
   --primary-foreground: 162 100% 5%;
@@ -124,19 +124,19 @@
 }
 
 .dark {
-  --background: 162 100% 5%;
+  --background: 162 80% 7%;
   --foreground: 0 0% 100%;
-  --border: 162 50% 20%;
-  --input: 162 50% 20%;
+  --border: 162 50% 25%;
+  --input: 162 50% 25%;
   --ring: 152 76% 55%;
 
-  --card: 162 80% 8%;
+  --card: 162 70% 10%;
   --card-foreground: 0 0% 100%;
-  --card-border: 162 50% 20%;
+  --card-border: 162 50% 25%;
 
-  --popover: 162 80% 8%;
+  --popover: 162 70% 10%;
   --popover-foreground: 0 0% 100%;
-  --popover-border: 162 50% 20%;
+  --popover-border: 162 50% 25%;
 
   --primary: 152 76% 55%;
   --primary-foreground: 162 100% 5%;
