@@ -17,7 +17,7 @@ const chapters = [
     dotClass: "bg-amber-400",
     barClass: "bg-gradient-to-r from-amber-400 to-orange-400",
     items: [
-      { name: "Sutli Bo'tqa", desc: "Sariq yog' va mavsumiy mevalar", img: "https://images.unsplash.com/photo-1517673408408-6b8de3bb7234?w=120&q=80" },
+      { name: "Sutli Bo'tqa", desc: "Sariq yog' va mavsumiy mevalar", img: "/sutli-botqa.png" },
       { name: "Tuxum va Sosiska", desc: "Pishloq, qaynatilgan tuxum", img: "https://images.unsplash.com/photo-1510693206972-df098062cb71?w=120&q=80" },
       { name: "Kruassan va Choy", desc: "Issiq tandir noni, yashil choy", img: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=120&q=80" },
     ],
