@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { BookOpen, Utensils, Award, Users } from "lucide-react";
-import logoImg from "@assets/image_1778575455248.png";
+const logoImg = "/logo.png";
 
 const stats = [
   { icon: BookOpen, label: "Sinflarimiz", href: "#maktab-hayoti" },

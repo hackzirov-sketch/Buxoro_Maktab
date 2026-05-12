@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: buxoro-maktabi
+    runtime: node
+    buildCommand: npm install -g pnpm && pnpm install && pnpm --filter @workspace/buxoro-maktabi run build
+    staticPublishPath: artifacts/buxoro-maktabi/dist
+    pullRequestPreviewsEnabled: true
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

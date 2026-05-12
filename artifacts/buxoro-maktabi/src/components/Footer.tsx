@@ -1,4 +1,4 @@
-import logoImg from "@assets/image_1778575455248.png";
+const logoImg = "/logo.png";
 import { Phone, MapPin, Mail } from "lucide-react";
 import { FaTelegram, FaInstagram } from "react-icons/fa";
 

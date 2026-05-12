@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
-import schoolGate from "@assets/image_1778575966057.png";
+const schoolGate = "/school-gate.png";
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 

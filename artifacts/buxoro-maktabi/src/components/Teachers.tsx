@@ -1,6 +1,6 @@
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import React, { useRef } from "react";
-import teacherRefImg from "@assets/image_1778575440873.png";
+const teacherRefImg = "/teacher-ref.png";
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 

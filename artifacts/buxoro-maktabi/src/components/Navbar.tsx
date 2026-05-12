@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Phone, Menu, X } from "lucide-react";
-import logoImg from "@assets/image_1778575455248.png";
+const logoImg = "/logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
