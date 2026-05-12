@@ -1,15 +1,8 @@
 import { motion } from "framer-motion";
-import { ArrowRight, BookOpen, Utensils, Award, Users } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import logoImg from "@assets/image_1778575455248.png";
 
 export default function Hero() {
-  const stats = [
-    { icon: BookOpen, label: "Sinflarimiz" },
-    { icon: Utensils, label: "Oshxonamiz" },
-    { icon: Award, label: "Natijalarimiz" },
-    { icon: Users, label: "O'qituvchilarimiz" },
-  ];
-
   return (
     <section className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden pt-20">
 
@@ -70,27 +63,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Bottom Stats Row */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-20 pb-8 z-20">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {stats.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
-                className="flex flex-col items-center justify-center gap-3 p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl hover:bg-white/10 hover:border-primary/50 transition-all duration-300 group cursor-pointer"
-              >
-                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 group-hover:shadow-[0_0_20px_rgba(74,222,128,0.4)] transition-all">
-                  <stat.icon className="w-7 h-7 text-primary" />
-                </div>
-                <span className="text-base font-medium text-white/80 group-hover:text-white">{stat.label}</span>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </div>
     </section>
   );
 }
