@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, BookOpen, Utensils, Award, Users } from "lucide-react";
-import heroRef from "@assets/image_1778575478193.png";
+import heroRef from "@assets/image_1778575966057.png";
 import logoImg from "@assets/image_1778575455248.png";
 
 export default function Hero() {
