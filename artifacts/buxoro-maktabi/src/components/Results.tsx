@@ -34,10 +34,10 @@ function Counter({ end, label, icon: Icon, suffix = "", duration = 2 }: {
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.68, ease: EASE_OUT_EXPO }}
-      whileHover={{ scale: 1.03, transition: { type: "spring", stiffness: 350, damping: 22 } }}
-      className="flex flex-col items-center justify-center p-6 md:p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md relative overflow-hidden group cursor-default"
+      whileHover={{ y: -4, transition: { type: "spring", stiffness: 300, damping: 22 } }}
+      className="flex flex-col items-center justify-center p-6 md:p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md relative overflow-hidden group cursor-default will-change-transform"
     >
-      <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/6 transition-colors duration-500 rounded-3xl" />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-transparent group-hover:from-primary/6 transition-all duration-500 rounded-3xl" />
       <div className="absolute -inset-1 rounded-[2rem] bg-primary/10 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 -z-10" />
 
       <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-300">
@@ -46,7 +46,7 @@ function Counter({ end, label, icon: Icon, suffix = "", duration = 2 }: {
       <div className="text-3xl md:text-5xl font-bold text-white mb-1.5 md:mb-2 font-poppins tabular-nums">
         {display}{suffix}
       </div>
-      <p className="text-white/65 font-medium uppercase tracking-wider text-xs md:text-sm text-center">{label}</p>
+      <p className="text-white/65 font-medium uppercase tracking-wider text-xs md:text-sm text-center leading-tight">{label}</p>
     </motion.div>
   );
 }
@@ -138,8 +138,8 @@ export default function Results() {
 
                   <div className={`w-full md:w-1/2 pl-12 md:pl-0 ${index % 2 === 0 ? "md:pr-12 md:text-right" : "md:pl-12"}`}>
                     <motion.div
-                      whileHover={{ scale: 1.02, transition: { type: "spring", stiffness: 350, damping: 22 } }}
-                      className="p-5 md:p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/8 hover:border-primary/30 transition-colors duration-300"
+                      whileHover={{ y: -2, transition: { type: "spring", stiffness: 300, damping: 22 } }}
+                      className="p-5 md:p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/8 hover:border-primary/30 transition-all duration-300"
                     >
                       <span className="inline-block px-3 py-1 rounded-full bg-primary/20 text-primary text-xs md:text-sm font-bold mb-2 md:mb-3">
                         {item.year}

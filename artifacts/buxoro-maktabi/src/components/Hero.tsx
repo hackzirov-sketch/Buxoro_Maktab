@@ -6,7 +6,7 @@ const stats = [
   { icon: BookOpen, label: "Sinflarimiz", href: "#maktab-hayoti" },
   { icon: Utensils, label: "Oshxonamiz", href: "#oshxona" },
   { icon: Award, label: "Natijalarimiz", href: "#natijalar" },
-  { icon: Users, label: "O'qituvchilar", href: "#oqituvchilar" },
+  { icon: Users, label: "O'qituvchilar", href: "#jamoa" },
 ];
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
@@ -29,6 +29,7 @@ const lineVariants = {
 };
 
 export default function Hero() {
+
   return (
     <section className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden pt-16 md:pt-20">
 
@@ -82,6 +83,7 @@ export default function Hero() {
             >
               Buxorodagi eng ilg'or va ishonchli ta'lim muhitini yaratayotgan maktab. Kelajak yetakchilarini bugun tarbiyalaymiz.
             </motion.p>
+
           </motion.div>
 
           {/* Logo — desktop */}

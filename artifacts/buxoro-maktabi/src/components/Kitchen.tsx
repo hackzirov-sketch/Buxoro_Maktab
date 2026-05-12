@@ -1,6 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { ChevronLeft, ChevronRight, Clock } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 
@@ -65,10 +66,13 @@ export default function Kitchen() {
   const [isOpen, setIsOpen] = useState(false);
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const isMobile = useIsMobile();
 
-  if (isInView && !isOpen) {
-    setTimeout(() => setIsOpen(true), 350);
-  }
+  useEffect(() => {
+    if (!isInView || isOpen) return;
+    const timer = setTimeout(() => setIsOpen(true), 350);
+    return () => clearTimeout(timer);
+  }, [isInView, isOpen]);
 
   const chapter = chapters[currentChapter];
 
@@ -79,37 +83,46 @@ export default function Kitchen() {
     setCurrentChapter(next);
   };
 
-  // True 3D page-turn: pages sweep from the spine, like a real book
-  const pageVariants = {
+  const desktopVariants = {
     enter: (d: number) => ({
-      rotateY: d > 0 ? 90 : -90,
-      opacity: 0,
-      x: d > 0 ? "4%" : "-4%",
+      rotateY: d > 0 ? 90 : -90, opacity: 0, x: d > 0 ? "4%" : "-4%",
     }),
     center: {
-      rotateY: 0,
-      opacity: 1,
-      x: "0%",
+      rotateY: 0, opacity: 1, x: "0%",
       transition: {
-        rotateY: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-        opacity:  { duration: 0.25, ease: "easeOut" },
-        x:        { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+        rotateY: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+        opacity:  { duration: 0.25, ease: "easeOut" as const },
+        x:        { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
       },
     },
     exit: (d: number) => ({
-      rotateY: d > 0 ? -90 : 90,
-      opacity: 0,
-      x: d > 0 ? "-4%" : "4%",
+      rotateY: d > 0 ? -90 : 90, opacity: 0, x: d > 0 ? "-4%" : "4%",
       transition: {
-        rotateY: { duration: 0.5, ease: [0.55, 0, 1, 0.45] },
-        opacity:  { duration: 0.2, ease: "easeIn", delay: 0.15 },
-        x:        { duration: 0.5, ease: [0.55, 0, 1, 0.45] },
+        rotateY: { duration: 0.5, ease: [0.55, 0, 1, 0.45] as const },
+        opacity:  { duration: 0.2, ease: "easeIn" as const, delay: 0.15 },
+        x:        { duration: 0.5, ease: [0.55, 0, 1, 0.45] as const },
       },
     }),
   };
 
+  const mobileVariants = {
+    enter: (d: number) => ({
+      rotateY: 0, opacity: 0, x: "6%",
+    }),
+    center: {
+      rotateY: 0, opacity: 1, x: "0%",
+      transition: { duration: 0.35, ease: "easeOut" as const },
+    },
+    exit: (d: number) => ({
+      rotateY: 0, opacity: 0, x: "-6%",
+      transition: { duration: 0.25, ease: "easeIn" as const },
+    }),
+  };
+
+  const pageVariants = isMobile ? mobileVariants : desktopVariants;
+
   return (
-    <section id="oshxona" className="py-24 relative overflow-hidden" ref={sectionRef}>
+    <section id="oshxona" className="py-16 md:py-24 relative overflow-hidden" ref={sectionRef}>
       {/* Background image */}
       <div
         className="absolute inset-0 opacity-[0.055] bg-cover bg-center pointer-events-none"
@@ -125,7 +138,7 @@ export default function Kitchen() {
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: EASE_OUT_EXPO }}
-          className="mb-10 mx-auto max-w-sm"
+          className="mb-6 md:mb-10 mx-auto max-w-[200px] sm:max-w-sm"
         >
           <img
             src="/oshxona-logo.png"
@@ -134,7 +147,7 @@ export default function Kitchen() {
           />
         </motion.div>
 
-        <div className="text-center mb-14">
+        <div className="text-center mb-10 md:mb-14">
           <motion.h2
             initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
             whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -196,12 +209,9 @@ export default function Kitchen() {
                   className={`h-1 w-full origin-left ${chapter.barClass}`}
                 />
 
-                {/* Pages area — relative so absolute children position correctly */}
-                <div
-                  className="relative min-h-[420px]"
-                  style={{ perspective: "1200px" }}
-                >
-                  {/* Book spine */}
+                {/* Pages area */}
+                <div className="relative md:min-h-[480px]">
+                  {/* Book spine — hidden on mobile */}
                   <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-white/20 via-white/8 to-transparent z-20 -translate-x-1/2">
                     <div className="absolute inset-0 blur-[3px] bg-white/12" />
                   </div>
@@ -214,18 +224,17 @@ export default function Kitchen() {
                       initial="enter"
                       animate="center"
                       exit="exit"
-                      style={{ transformStyle: "preserve-3d", transformOrigin: "center center", backfaceVisibility: "hidden" }}
-                      className="absolute inset-0 grid md:grid-cols-2"
+                      className="grid md:absolute md:inset-0 md:grid-cols-2 gap-4 md:gap-0 md:[transform-style:preserve-3d] md:[transform-origin:center_center] md:[backface-visibility:hidden]"
                     >
                       {/* LEFT PAGE */}
-                      <div className={`p-8 md:p-10 flex flex-col justify-between bg-gradient-to-br ${chapter.bgClass} border-b md:border-b-0 md:border-r border-white/8`}>
-                        <div className="flex flex-col gap-1.5 mb-6">
-                          <div className={`w-10 h-0.5 ${chapter.dotClass} opacity-70 rounded-full`} />
-                          <div className={`w-6 h-0.5 ${chapter.dotClass} opacity-40 rounded-full`} />
+                      <div className={`p-5 sm:p-6 md:p-10 flex flex-col justify-between bg-gradient-to-br ${chapter.bgClass} border-b md:border-b-0 md:border-r border-white/8 rounded-xl md:rounded-none`}>
+                        <div className="flex flex-col gap-1.5 mb-4 md:mb-6">
+                          <div className={`w-8 md:w-10 h-0.5 ${chapter.dotClass} opacity-70 rounded-full`} />
+                          <div className={`w-5 md:w-6 h-0.5 ${chapter.dotClass} opacity-40 rounded-full`} />
                         </div>
 
-                        <div className="flex-1 flex flex-col justify-center gap-4">
-                          <div className="w-[7.5rem] h-[7.5rem] -ml-2">
+                        <div className="flex-1 flex flex-col justify-center gap-3 md:gap-4">
+                          <div className="w-16 sm:w-20 md:w-[7.5rem] h-16 sm:h-20 md:h-[7.5rem] -ml-1 sm:-ml-2">
                             <iframe
                               key={chapter.id}
                               src={chapter.lottie}
@@ -236,38 +245,38 @@ export default function Kitchen() {
                           </div>
 
                           <div>
-                            <p className="text-white/40 text-xs uppercase tracking-widest mb-1 font-semibold">Ovqat vaqti</p>
-                            <h3 className={`text-3xl md:text-4xl font-bold font-poppins ${chapter.accentClass} leading-tight`}>
+                            <p className="text-white/40 text-[10px] sm:text-xs uppercase tracking-widest mb-1 font-semibold">Ovqat vaqti</p>
+                            <h3 className={`text-2xl sm:text-3xl md:text-4xl font-bold font-poppins ${chapter.accentClass} leading-tight`}>
                               {chapter.label}
                             </h3>
                           </div>
 
-                          <div className={`inline-flex items-center gap-2 self-start px-4 py-2 rounded-full bg-black/40 border ${chapter.borderClass} backdrop-blur-md`}>
-                            <Clock className={`w-3.5 h-3.5 ${chapter.accentClass}`} />
-                            <span className={`text-sm font-bold ${chapter.accentClass} tracking-wide`}>{chapter.time}</span>
+                          <div className={`inline-flex items-center gap-2 self-start px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-black/40 border ${chapter.borderClass} backdrop-blur-md`}>
+                            <Clock className={`w-3 sm:w-3.5 h-3 sm:h-3.5 ${chapter.accentClass}`} />
+                            <span className={`text-[11px] sm:text-sm font-bold ${chapter.accentClass} tracking-wide`}>{chapter.time}</span>
                           </div>
 
                           {chapter.id === "desert" && (
-                            <p className="text-white/35 text-xs leading-relaxed max-w-[200px]">
+                            <p className="text-white/35 text-[11px] sm:text-xs leading-relaxed max-w-[180px] sm:max-w-[200px]">
                               Tushlikdan 3 soat o'tgach, o'quvchilarga xush ta'm desert taqdim etiladi.
                             </p>
                           )}
                         </div>
 
-                        <div className="flex flex-col gap-1.5 mt-6">
+                        <div className="flex flex-col gap-1.5 mt-4 md:mt-6">
                           <span className="text-white/20 text-xs font-mono mb-1">
                             {String(currentChapter + 1).padStart(2, "0")} / {String(chapters.length).padStart(2, "0")}
                           </span>
-                          <div className={`w-6 h-0.5 ${chapter.dotClass} opacity-40 rounded-full`} />
-                          <div className={`w-10 h-0.5 ${chapter.dotClass} opacity-70 rounded-full`} />
+                          <div className={`w-5 md:w-6 h-0.5 ${chapter.dotClass} opacity-40 rounded-full`} />
+                          <div className={`w-8 md:w-10 h-0.5 ${chapter.dotClass} opacity-70 rounded-full`} />
                         </div>
                       </div>
 
                       {/* RIGHT PAGE */}
-                      <div className="p-8 md:p-10 flex flex-col gap-4 bg-gradient-to-bl from-white/3 to-transparent">
-                        <p className="text-white/35 text-xs uppercase tracking-widest font-semibold mb-1">Taomlar</p>
+                      <div className="p-5 sm:p-6 md:p-10 flex flex-col gap-3 md:gap-4 bg-gradient-to-bl from-white/3 to-transparent rounded-xl md:rounded-none">
+                        <p className="text-white/35 text-[10px] sm:text-xs uppercase tracking-widest font-semibold mb-1">Taomlar</p>
 
-                        <div className="flex flex-col gap-3">
+                        <div className="flex flex-col gap-2 md:gap-3">
                           {chapter.items.map((item, idx) => (
                             <motion.div
                               key={`${currentChapter}-${idx}`}
@@ -275,23 +284,23 @@ export default function Kitchen() {
                               animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
                               transition={{ delay: 0.25 + idx * 0.09, duration: 0.55, ease: EASE_OUT_EXPO }}
                               whileHover={{ x: 4, transition: { type: "spring", stiffness: 400, damping: 25 } }}
-                              className="flex items-center gap-4 p-3 rounded-xl bg-white/4 border border-white/8 hover:bg-white/8 hover:border-white/15 transition-colors duration-250 group cursor-default"
+                              className="flex items-center gap-3 md:gap-4 p-2 sm:p-2.5 md:p-3 rounded-xl bg-white/4 border border-white/8 hover:bg-white/8 hover:border-white/15 transition-colors duration-250 group cursor-default"
                             >
-                              <div className="shrink-0 w-14 h-14 rounded-lg overflow-hidden border border-white/10">
+                              <div className="shrink-0 w-12 sm:w-14 h-12 sm:h-14 rounded-lg overflow-hidden border border-white/10">
                                 <img src={item.img} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
                               </div>
                               <div className="flex-1 min-w-0">
-                                <h4 className="text-white font-semibold text-sm leading-tight mb-0.5">{item.name}</h4>
-                                <p className="text-white/45 text-xs leading-relaxed truncate">{item.desc}</p>
+                                <h4 className="text-white font-semibold text-xs sm:text-sm leading-tight mb-0.5">{item.name}</h4>
+                                <p className="text-white/45 text-[11px] sm:text-xs leading-relaxed truncate">{item.desc}</p>
                               </div>
                               <div className={`shrink-0 w-1.5 h-1.5 rounded-full ${chapter.dotClass} opacity-60`} />
                             </motion.div>
                           ))}
                         </div>
 
-                        <div className="flex justify-end gap-1.5 mt-auto pt-4">
-                          <div className={`w-10 h-0.5 ${chapter.dotClass} opacity-30 rounded-full`} />
-                          <div className={`w-6 h-0.5 ${chapter.dotClass} opacity-20 rounded-full`} />
+                        <div className="flex justify-end gap-1.5 mt-auto pt-3 md:pt-4">
+                          <div className={`w-8 md:w-10 h-0.5 ${chapter.dotClass} opacity-30 rounded-full`} />
+                          <div className={`w-5 md:w-6 h-0.5 ${chapter.dotClass} opacity-20 rounded-full`} />
                         </div>
                       </div>
                     </motion.div>
@@ -299,26 +308,26 @@ export default function Kitchen() {
                 </div>
 
                 {/* Navigation footer */}
-                <div className="flex items-center justify-between px-8 py-5 border-t border-white/8 bg-black/25">
+                <div className="flex items-center justify-between px-4 sm:px-8 py-3 sm:py-5 border-t border-white/8 bg-black/25">
                   <motion.button
                     onClick={() => navigate(-1)}
                     disabled={currentChapter === 0}
                     whileHover={{ scale: 1.05, transition: { type: "spring", stiffness: 400, damping: 20 } }}
                     whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 disabled:opacity-20 disabled:cursor-not-allowed transition-colors duration-200 text-xs font-semibold"
+                    className="flex items-center gap-1 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 disabled:opacity-20 disabled:cursor-not-allowed transition-colors duration-200 text-xs font-semibold"
                   >
                     <ChevronLeft className="w-4 h-4" />
-                    Oldingi
+                    <span className="hidden sm:inline">Oldingi</span>
                   </motion.button>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
                     {chapters.map((ch, idx) => (
                       <motion.button
                         key={ch.id}
                         onClick={() => { setDirection(idx > currentChapter ? 1 : -1); setCurrentChapter(idx); }}
                         whileHover={{ scale: 1.2 }}
                         whileTap={{ scale: 0.9 }}
-                        className={`rounded-full transition-all duration-300 ${idx === currentChapter ? `w-7 h-2.5 ${ch.dotClass}` : "w-2.5 h-2.5 bg-white/20 hover:bg-white/40"}`}
+                        className={`rounded-full transition-all duration-300 ${idx === currentChapter ? `w-5 sm:w-7 h-2 sm:h-2.5 ${ch.dotClass}` : "w-2 sm:w-2.5 h-2 sm:h-2.5 bg-white/20 hover:bg-white/40"}`}
                         title={ch.label}
                       />
                     ))}
@@ -329,9 +338,9 @@ export default function Kitchen() {
                     disabled={currentChapter === chapters.length - 1}
                     whileHover={{ scale: 1.05, transition: { type: "spring", stiffness: 400, damping: 20 } }}
                     whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 disabled:opacity-20 disabled:cursor-not-allowed transition-colors duration-200 text-xs font-semibold"
+                    className="flex items-center gap-1 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 disabled:opacity-20 disabled:cursor-not-allowed transition-colors duration-200 text-xs font-semibold"
                   >
-                    Keyingi
+                    <span className="hidden sm:inline">Keyingi</span>
                     <ChevronRight className="w-4 h-4" />
                   </motion.button>
                 </div>
@@ -343,7 +352,7 @@ export default function Kitchen() {
             initial={{ opacity: 0, y: 12 }}
             animate={isOpen ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.55, ease: EASE_OUT_EXPO, delay: 0.65 }}
-            className="flex flex-wrap justify-center gap-2 mt-8"
+            className="flex flex-wrap justify-center gap-2 mt-6 md:mt-8"
           >
             {chapters.map((ch, idx) => (
               <motion.button
@@ -351,7 +360,7 @@ export default function Kitchen() {
                 onClick={() => { setDirection(idx > currentChapter ? 1 : -1); setCurrentChapter(idx); }}
                 whileHover={{ scale: 1.05, transition: { type: "spring", stiffness: 380, damping: 22 } }}
                 whileTap={{ scale: 0.96 }}
-                className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 border ${
+                className={`px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 border ${
                   idx === currentChapter
                     ? `${ch.accentClass} border-current bg-white/8 shadow-[0_0_16px_rgba(0,0,0,0.3)]`
                     : "text-white/40 border-white/10 hover:text-white/70 hover:border-white/25"

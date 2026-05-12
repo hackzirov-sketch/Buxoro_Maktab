@@ -7,9 +7,10 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import SchoolLife from "@/components/SchoolLife";
 import Testimonials from "@/components/Testimonials";
+import Classrooms from "@/components/Classrooms";
 import Kitchen from "@/components/Kitchen";
+import Team from "@/components/Team";
 import Results from "@/components/Results";
-import Teachers from "@/components/Teachers";
 import ApplicationForm from "@/components/ApplicationForm";
 import Footer from "@/components/Footer";
 import ChatBot from "@/components/ChatBot";
@@ -40,9 +41,10 @@ function LandingPage() {
         <Hero />
         <SchoolLife />
         <Testimonials />
+        <Classrooms />
         <Kitchen />
+        <Team />
         <Results />
-        <Teachers />
         <ApplicationForm />
       </main>
       <Footer />

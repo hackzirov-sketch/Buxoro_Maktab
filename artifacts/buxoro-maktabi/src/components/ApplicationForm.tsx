@@ -4,7 +4,7 @@ import { Phone, MapPin, GraduationCap, Send, CheckCircle2, AlertCircle } from "l
 import { z } from "zod";
 
 const formSchema = z.object({
-  phone: z.string().min(12, "Telefon raqam to'liq emas"), // simplistic validation
+  phone: z.string().min(12, "Telefon raqam to'liq emas"),
   location: z.string().min(1, "Manzilni tanlang"),
   grade: z.string().min(1, "Sinfni tanlang")
 });
@@ -28,7 +28,6 @@ export default function ApplicationForm() {
     if (!val.startsWith("+998")) {
       val = "+998";
     }
-    // simple digits only mask
     const cleaned = val.replace(/[^\d+]/g, '');
     if (cleaned.length <= 13) {
       setFormData(prev => ({ ...prev, phone: cleaned }));
@@ -44,13 +43,11 @@ export default function ApplicationForm() {
       setErrors({});
       setIsSubmitting(true);
       
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       setIsSubmitting(false);
       setIsSuccess(true);
       
-      // Reset after 3s
       setTimeout(() => {
         setIsSuccess(false);
         setFormData({ phone: "+998", location: "", grade: "" });
@@ -70,7 +67,10 @@ export default function ApplicationForm() {
   };
 
   return (
-    <section className="py-32 relative overflow-hidden" id="ariza">
+    <section className="py-28 md:py-32 relative overflow-hidden" id="ariza">
+      <div className="absolute top-1/3 -right-48 w-96 h-96 bg-primary/10 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-1/3 -left-48 w-80 h-80 bg-emerald-500/8 rounded-full blur-[120px] pointer-events-none" />
+
       <div className="container mx-auto px-4 md:px-6">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -87,16 +87,16 @@ export default function ApplicationForm() {
               <h2 className="text-3xl md:text-4xl font-bold font-poppins text-white mb-4">
                 Ariza <span className="text-primary drop-shadow-[0_0_10px_rgba(74,222,128,0.3)]">Topshirish</span>
               </h2>
-              <p className="text-white/70">
+              <p className="text-white/70 text-sm md:text-base leading-relaxed">
                 Farzandingiz kelajagi uchun ilk qadamni tashlang. Ma'lumotlaringizni qoldiring, biz siz bilan bog'lanamiz.
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+            <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-white/80 ml-1">Telefon raqam</label>
                 <div className="relative">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none">
                     <Phone className="w-5 h-5" />
                   </div>
                   <motion.input
@@ -105,18 +105,18 @@ export default function ApplicationForm() {
                     type="tel"
                     value={formData.phone}
                     onChange={handlePhoneChange}
-                    className={`w-full bg-black/40 border ${errors.phone ? "border-red-500" : "border-white/10 focus:border-primary/50"} rounded-xl py-4 pl-12 pr-4 text-white outline-none focus:ring-1 focus:ring-primary/50 transition-all`}
+                    className={`w-full bg-black/40 border ${errors.phone ? "border-red-500/70" : "border-white/10 focus:border-primary/50"} rounded-xl py-4 pl-12 pr-4 text-white outline-none focus:ring-2 focus:ring-primary/20 transition-all`}
                     placeholder="+998 90 123 45 67"
                     data-testid="input-phone"
                   />
                 </div>
-                {errors.phone && <p className="text-red-400 text-sm ml-1 flex items-center gap-1"><AlertCircle className="w-4 h-4"/> {errors.phone}</p>}
+                {errors.phone && <p className="text-red-400 text-sm ml-1 flex items-center gap-1"><AlertCircle className="w-4 h-4 shrink-0"/> {errors.phone}</p>}
               </div>
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-white/80 ml-1">Manzil</label>
                 <div className="relative">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <motion.select
@@ -127,7 +127,7 @@ export default function ApplicationForm() {
                       setFormData(prev => ({ ...prev, location: e.target.value }));
                       setErrors(prev => ({ ...prev, location: "" }));
                     }}
-                    className={`w-full bg-black/40 border ${errors.location ? "border-red-500" : "border-white/10 focus:border-primary/50"} rounded-xl py-4 pl-12 pr-4 text-white outline-none focus:ring-1 focus:ring-primary/50 transition-all appearance-none cursor-pointer`}
+                    className={`w-full bg-black/40 border ${errors.location ? "border-red-500/70" : "border-white/10 focus:border-primary/50"} rounded-xl py-4 pl-12 pr-4 text-white outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none cursor-pointer`}
                     data-testid="select-location"
                   >
                     <option value="" disabled className="text-gray-500">Hududni tanlang</option>
@@ -136,13 +136,13 @@ export default function ApplicationForm() {
                     ))}
                   </motion.select>
                 </div>
-                {errors.location && <p className="text-red-400 text-sm ml-1 flex items-center gap-1"><AlertCircle className="w-4 h-4"/> {errors.location}</p>}
+                {errors.location && <p className="text-red-400 text-sm ml-1 flex items-center gap-1"><AlertCircle className="w-4 h-4 shrink-0"/> {errors.location}</p>}
               </div>
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-white/80 ml-1">Farzandingiz sinfi</label>
                 <div className="relative">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none">
                     <GraduationCap className="w-5 h-5" />
                   </div>
                   <motion.select
@@ -153,7 +153,7 @@ export default function ApplicationForm() {
                       setFormData(prev => ({ ...prev, grade: e.target.value }));
                       setErrors(prev => ({ ...prev, grade: "" }));
                     }}
-                    className={`w-full bg-black/40 border ${errors.grade ? "border-red-500" : "border-white/10 focus:border-primary/50"} rounded-xl py-4 pl-12 pr-4 text-white outline-none focus:ring-1 focus:ring-primary/50 transition-all appearance-none cursor-pointer`}
+                    className={`w-full bg-black/40 border ${errors.grade ? "border-red-500/70" : "border-white/10 focus:border-primary/50"} rounded-xl py-4 pl-12 pr-4 text-white outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none cursor-pointer`}
                     data-testid="select-grade"
                   >
                     <option value="" disabled className="text-gray-500">Sinfni tanlang</option>
@@ -162,24 +162,26 @@ export default function ApplicationForm() {
                     ))}
                   </motion.select>
                 </div>
-                {errors.grade && <p className="text-red-400 text-sm ml-1 flex items-center gap-1"><AlertCircle className="w-4 h-4"/> {errors.grade}</p>}
+                {errors.grade && <p className="text-red-400 text-sm ml-1 flex items-center gap-1"><AlertCircle className="w-4 h-4 shrink-0"/> {errors.grade}</p>}
               </div>
 
-              <button
+              <motion.button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full mt-4 bg-primary text-black font-bold text-lg py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-primary/90 hover:shadow-[0_0_30px_rgba(74,222,128,0.5)] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed group relative overflow-hidden"
+                whileHover={{ scale: 1.02, boxShadow: "0 0 30px rgba(74,222,128,0.25)" }}
+                whileTap={{ scale: 0.97 }}
+                className="w-full mt-6 bg-primary text-black font-bold text-base md:text-lg py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-primary/90 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed group relative overflow-hidden focus-visible:outline-2 focus-visible:outline-primary/60"
                 data-testid="button-submit-form"
               >
-                <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+                <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-[1.2s] ease-out" />
                 {isSubmitting ? (
-                  <div className="w-6 h-6 border-2 border-black/20 border-t-black rounded-full animate-spin"></div>
+                  <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
                 ) : (
                   <>
-                    Yuborish <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    Yuborish <Send className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                   </>
                 )}
-              </button>
+              </motion.button>
             </form>
 
             <AnimatePresence>
@@ -193,13 +195,13 @@ export default function ApplicationForm() {
                   <motion.div 
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    transition={{ type: "spring", delay: 0.2 }}
+                    transition={{ type: "spring", delay: 0.2, stiffness: 200, damping: 18 }}
                     className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mb-6"
                   >
                     <CheckCircle2 className="w-10 h-10 text-primary" />
                   </motion.div>
                   <h3 className="text-2xl font-bold text-white mb-2">Arizangiz qabul qilindi!</h3>
-                  <p className="text-white/70">Operatorlarimiz tez orada siz bilan bog'lanishadi.</p>
+                  <p className="text-white/70 text-sm">Operatorlarimiz tez orada siz bilan bog'lanishadi.</p>
                 </motion.div>
               )}
             </AnimatePresence>

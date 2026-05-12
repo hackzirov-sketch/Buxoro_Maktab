@@ -34,7 +34,7 @@ export default function Footer() {
                 Buxoro Maktabi
               </span>
             </a>
-            <p className="text-white/55 text-sm leading-relaxed">
+            <p className="text-white/55 text-sm leading-relaxed max-w-xs">
               Zamonaviy texnologiyalar va ilg'or metodikalar asosida ta'lim beruvchi Buxorodagi yetakchi xususiy maktab.
             </p>
             <div className="flex items-center gap-3">
@@ -42,7 +42,8 @@ export default function Footer() {
                 href="https://www.instagram.com/buxoro_maktabi_bekobod/"
                 target="_blank" rel="noopener noreferrer"
                 whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.94 }}
-                className="w-10 h-10 rounded-full bg-white/6 flex items-center justify-center text-white/70 hover:bg-pink-500 hover:text-white transition-all duration-300"
+                className="w-10 h-10 rounded-full bg-white/6 flex items-center justify-center text-white/70 hover:bg-pink-500 hover:text-white transition-all duration-300 focus-visible:outline-2 focus-visible:outline-primary/60"
+                aria-label="Instagram"
               >
                 <FaInstagram className="w-5 h-5" />
               </motion.a>
@@ -50,7 +51,8 @@ export default function Footer() {
                 href="https://t.me/BM_Bekobod"
                 target="_blank" rel="noopener noreferrer"
                 whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.94 }}
-                className="w-10 h-10 rounded-full bg-white/6 flex items-center justify-center text-white/70 hover:bg-sky-500 hover:text-white transition-all duration-300"
+                className="w-10 h-10 rounded-full bg-white/6 flex items-center justify-center text-white/70 hover:bg-sky-500 hover:text-white transition-all duration-300 focus-visible:outline-2 focus-visible:outline-primary/60"
+                aria-label="Telegram"
               >
                 <FaTelegram className="w-5 h-5" />
               </motion.a>
@@ -60,10 +62,10 @@ export default function Footer() {
           {/* Quick links */}
           <motion.div custom={1} variants={colVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <h4 className="text-white font-semibold text-base md:text-lg mb-5 md:mb-6">Tezkor havolalar</h4>
-            <ul className="space-y-2.5">
+            <ul className="space-y-3">
               {["Bosh sahifa", "Biz haqimizda", "Ta'lim dasturlari", "To'garaklar", "Oshxona menyusi", "Bo'sh ish o'rinlari"].map((item) => (
                 <li key={item}>
-                  <a href="#" className="text-white/55 hover:text-primary transition-colors text-sm flex items-center gap-2 group">
+                  <a href="#" className="text-white/55 hover:text-primary transition-colors text-sm flex items-center gap-2 group focus-visible:outline-2 focus-visible:outline-primary/60 rounded">
                     <span className="w-1.5 h-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-colors duration-300 shrink-0" />
                     {item}
                   </a>
@@ -75,7 +77,7 @@ export default function Footer() {
           {/* Contact */}
           <motion.div custom={2} variants={colVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <h4 className="text-white font-semibold text-base md:text-lg mb-5 md:mb-6">Bog'lanish</h4>
-            <ul className="space-y-3.5">
+            <ul className="space-y-4">
               <li className="flex items-start gap-3 text-white/55 text-sm">
                 <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                 <span>Buxoro viloyati, Bekobod shahri</span>
@@ -103,18 +105,20 @@ export default function Footer() {
           <motion.div custom={3} variants={colVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <h4 className="text-white font-semibold text-base md:text-lg mb-5 md:mb-6">Xabarnomaga obuna</h4>
             <p className="text-white/55 text-sm mb-4 leading-relaxed">Eng so'nggi yangiliklardan xabardor bo'ling.</p>
-            <form className="flex flex-col gap-2.5">
+            <form className="flex flex-col gap-3">
               <input
                 type="email"
                 placeholder="Email manzilingiz"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/30 focus:outline-none focus:border-primary/50 focus:bg-white/8 transition-all duration-300"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-300"
               />
-              <button
+              <motion.button
                 type="button"
-                className="w-full bg-primary text-black px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-primary/90 active:scale-[0.98] transition-all duration-200"
+                whileHover={{ scale: 1.02, boxShadow: "0 0 20px rgba(74,222,128,0.2)" }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full bg-primary text-black px-4 py-3 rounded-xl text-sm font-semibold hover:bg-primary/90 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-primary/60"
               >
                 Obuna bo'lish
-              </button>
+              </motion.button>
             </form>
           </motion.div>
 
@@ -131,9 +135,9 @@ export default function Footer() {
             &copy; {currentYear} Buxoro Maktabi. Barcha huquqlar himoyalangan.
           </p>
           <div className="flex items-center gap-4 text-xs md:text-sm text-white/35">
-            <a href="#" className="hover:text-white/70 transition-colors">Maxfiylik siyosati</a>
-            <span>|</span>
-            <a href="#" className="hover:text-white/70 transition-colors">Foydalanish shartlari</a>
+            <a href="#" className="hover:text-white/70 transition-colors focus-visible:outline-2 focus-visible:outline-primary/60 rounded">Maxfiylik siyosati</a>
+            <span className="opacity-50">|</span>
+            <a href="#" className="hover:text-white/70 transition-colors focus-visible:outline-2 focus-visible:outline-primary/60 rounded">Foydalanish shartlari</a>
           </div>
         </motion.div>
       </div>
