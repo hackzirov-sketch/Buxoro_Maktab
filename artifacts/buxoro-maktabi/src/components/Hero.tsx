@@ -20,9 +20,6 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/50 to-transparent"></div>
       </div>
 
-      {/* Floating Orbs */}
-      <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-primary/20 rounded-full blur-[100px] animate-pulse-slow"></div>
-      <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[120px] animate-float"></div>
 
       <div className="container mx-auto px-4 md:px-6 relative z-10 flex-1 flex flex-col justify-center pb-32">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
