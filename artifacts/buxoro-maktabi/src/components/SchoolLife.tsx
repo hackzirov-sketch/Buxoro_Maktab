@@ -26,46 +26,66 @@ function VideoCard({ src, title, description, delay }: { src: string; title: str
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7, delay }}
-      className="relative rounded-3xl overflow-hidden border border-white/10 group bg-black/30"
+      className="flex flex-col items-center"
     >
-      <div className="aspect-[9/16] sm:aspect-video w-full relative">
-        <video
-          ref={videoRef}
-          src={src}
-          muted
-          loop
-          playsInline
-          className="w-full h-full object-cover"
-          onEnded={() => setPlaying(false)}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+      {/* Phone frame wrapper */}
+      <div className="relative w-full max-w-[300px] mx-auto">
+        {/* Glow behind card */}
+        <div className="absolute -inset-4 bg-primary/10 blur-2xl rounded-[3rem] pointer-events-none"></div>
 
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button
-            onClick={togglePlay}
-            data-testid="button-video-play"
-            className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-primary/40 hover:border-primary/50 transition-all duration-300 hover:scale-110"
-          >
-            {playing ? <Pause className="w-7 h-7 text-white" /> : <Play className="w-7 h-7 text-white ml-1" />}
-          </button>
+        {/* Card */}
+        <div className="relative rounded-[2.5rem] overflow-hidden border border-white/15 bg-black/50 shadow-[0_0_40px_rgba(0,0,0,0.5)] group">
+          {/* Top notch decoration */}
+          <div className="absolute top-3 left-1/2 -translate-x-1/2 w-20 h-1.5 bg-white/20 rounded-full z-20"></div>
+
+          {/* Portrait video */}
+          <div className="aspect-[9/16] w-full relative">
+            <video
+              ref={videoRef}
+              src={src}
+              muted
+              loop
+              playsInline
+              className="w-full h-full object-cover"
+              onEnded={() => setPlaying(false)}
+            />
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
+
+            {/* Play button — always visible, fades on hover */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <button
+                onClick={togglePlay}
+                data-testid="button-video-play"
+                className="w-16 h-16 rounded-full bg-white/15 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-primary/50 hover:border-primary/60 hover:scale-110 transition-all duration-300 shadow-[0_0_20px_rgba(74,222,128,0.3)]"
+              >
+                {playing
+                  ? <Pause className="w-6 h-6 text-white" />
+                  : <Play className="w-6 h-6 text-white ml-1" />
+                }
+              </button>
+            </div>
+
+            {/* Mute toggle */}
+            <button
+              onClick={toggleMute}
+              data-testid="button-video-mute"
+              className="absolute top-6 right-4 w-9 h-9 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white/80 hover:text-primary transition-colors border border-white/10"
+            >
+              {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+            </button>
+
+            {/* Bottom text */}
+            <div className="absolute bottom-0 left-0 right-0 p-5">
+              <h4 className="text-white font-semibold text-base mb-1">{title}</h4>
+              <p className="text-white/60 text-xs leading-relaxed">{description}</p>
+            </div>
+          </div>
         </div>
-
-        <button
-          onClick={toggleMute}
-          data-testid="button-video-mute"
-          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white/80 hover:text-white transition-colors"
-        >
-          {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-        </button>
-      </div>
-
-      <div className="absolute bottom-0 left-0 right-0 p-5">
-        <h4 className="text-white font-semibold text-lg mb-1">{title}</h4>
-        <p className="text-white/70 text-sm">{description}</p>
       </div>
     </motion.div>
   );
@@ -98,12 +118,13 @@ export default function SchoolLife() {
           </motion.p>
         </div>
 
+        {/* Wide banner image */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="relative rounded-[2.5rem] overflow-hidden group border border-white/10 mb-12"
+          className="relative rounded-[2.5rem] overflow-hidden group border border-white/10 mb-16"
         >
           <div className="aspect-[21/9] md:aspect-[21/8] w-full">
             <img
@@ -113,7 +134,6 @@ export default function SchoolLife() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
           </div>
-
           <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
             <div className="max-w-3xl">
               <h3 className="text-2xl font-bold text-white mb-2">Xavfsiz va shinam hudud</h3>
@@ -124,7 +144,8 @@ export default function SchoolLife() {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Portrait videos — centered, side by side */}
+        <div className="flex flex-col sm:flex-row justify-center gap-8 md:gap-12">
           <VideoCard
             src="/video1.mov"
             title="Maktab muhiti"
