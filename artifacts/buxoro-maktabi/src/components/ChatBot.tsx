@@ -38,7 +38,7 @@ export default function ChatBot() {
         {
           id: Date.now() + 1,
           from: "bot",
-          text: "Rahmat! Operatorlarimiz tez orada siz bilan bog'lanadi. Qo'shimcha savollar uchun quyidagi raqamga murojaat qiling: +998 90 123 45 45",
+          text: "Rahmat! Operatorlarimiz tez orada siz bilan bog'lanadi. Qo'shimcha savollar uchun quyidagi raqamga murojaat qiling: +998 94 835 66 66",
         },
       ]);
     }, 1500);

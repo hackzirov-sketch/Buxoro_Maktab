@@ -63,7 +63,7 @@ export default function Hero() {
           >
             <motion.div variants={lineVariants} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-6 backdrop-blur-md">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-              <span className="text-xs font-medium text-white/80 uppercase tracking-widest">Qabul 2024-2025 ochiq</span>
+              <span className="text-xs font-medium text-white/80 uppercase tracking-widest">Qabul 2026-2027 ochiq</span>
             </motion.div>
 
             <motion.h1

@@ -71,7 +71,7 @@ export default function Navbar() {
 
         <div className="hidden lg:flex items-center">
           <motion.a
-            href="tel:+998901234545"
+            href="tel:+998948356666"
             whileHover={{ scale: 1.04, boxShadow: "0 0 24px rgba(74,222,128,0.35)" }}
             whileTap={{ scale: 0.97 }}
             transition={{ type: "spring", stiffness: 350, damping: 22 }}
@@ -79,7 +79,7 @@ export default function Navbar() {
             data-testid="link-phone"
           >
             <Phone className="w-4 h-4 text-primary" />
-            +998 90 123 45 45
+            +998 94 835 66 66
           </motion.a>
         </div>
 
@@ -133,14 +133,14 @@ export default function Navbar() {
                 </motion.a>
               ))}
               <motion.a
-                href="tel:+998901234545"
+                href="tel:+998948356666"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.35, ease: EASE_OUT_EXPO, delay: 0.3 }}
                 className="flex items-center justify-center gap-2 px-5 py-3 mt-4 rounded-full bg-primary/20 border border-primary/50 text-white font-medium"
               >
                 <Phone className="w-4 h-4 text-primary" />
-                +998 90 123 45 45
+                +998 94 835 66 66
               </motion.a>
             </motion.div>
           </motion.div>
