@@ -41,7 +41,7 @@ const chapters = [
   },
   {
     id: "desert",
-    label: "Tushlidan keyingi tamaddi",
+    label: "Tushdan keyin",
     time: "15:30 – 16:00",
     icon: "🍰",
     lottie: "https://lottie.host/embed/60082d9a-6177-4fd4-bc6e-fc1408e0d72f/5kgOIgvPU4.lottie",
