@@ -4,7 +4,7 @@ services:
     runtime: static
     branch: main
     buildCommand: corepack pnpm install --frozen-lockfile && corepack pnpm run typecheck:libs && corepack pnpm --filter @workspace/buxoro-maktabi run typecheck && corepack pnpm --filter @workspace/buxoro-maktabi run build
-    staticPublishPath: artifacts/buxoro-maktabi/dist/public
+    staticPublishPath: artifacts/buxoro-maktabi/dist
     envVars:
       - key: NODE_VERSION
         value: 20.19.0
