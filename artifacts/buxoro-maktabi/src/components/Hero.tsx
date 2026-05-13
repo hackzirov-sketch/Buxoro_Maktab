@@ -1,12 +1,13 @@
 import { motion } from "framer-motion";
-import { BookOpen, Utensils, Award, Users } from "lucide-react";
+import { Link } from "wouter";
+import { ArrowRight, Users, Building2, Utensils, FileText } from "lucide-react";
 const logoImg = "/logo.png";
 
-const stats = [
-  { icon: BookOpen, label: "Sinflarimiz", href: "#maktab-hayoti" },
-  { icon: Utensils, label: "Oshxonamiz", href: "#oshxona" },
-  { icon: Award, label: "Natijalarimiz", href: "#natijalar" },
-  { icon: Users, label: "O'qituvchilar", href: "#jamoa" },
+const previews = [
+  { icon: Users, label: "Jamoa", desc: "Professional o'qituvchilar va rahbarlar jamoasi", href: "/jamoa", gradient: "from-primary to-emerald-400" },
+  { icon: Building2, label: "Sinfxonalar", desc: "Zamonaviy texnologiyalar bilan jihozlangan sinflar", href: "/sinflar", gradient: "from-sky-400 to-blue-400" },
+  { icon: Utensils, label: "Oshxona", desc: "Sog'lom va mazali taomlar, kunlik menyu", href: "/oshxona", gradient: "from-orange-400 to-rose-400" },
+  { icon: FileText, label: "Ariza", desc: "Farzandingizni maktabga ro'yxatdan o'tkazing", href: "/ariza", gradient: "from-primary to-emerald-400" },
 ];
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
@@ -105,11 +106,11 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Stats */}
+      {/* Section Preview Cards */}
       <div className="w-full pb-8 px-4 sm:px-6 md:px-8">
         <div className="max-w-7xl mx-auto">
           <motion.div
-            className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5"
             initial="hidden"
             animate="visible"
             variants={{
@@ -117,23 +118,30 @@ export default function Hero() {
               visible: { transition: { staggerChildren: 0.08, delayChildren: 0.5 } },
             }}
           >
-            {stats.map((stat) => (
-              <motion.a
-                key={stat.label}
-                href={stat.href}
+            {previews.map((item, idx) => (
+              <motion.div
+                key={item.label}
                 variants={{
                   hidden: { opacity: 0, y: 20, scale: 0.94 },
                   visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: EASE_OUT_EXPO } },
                 }}
                 whileHover={{ scale: 1.04, transition: { type: "spring", stiffness: 350, damping: 22 } }}
                 whileTap={{ scale: 0.96 }}
-                className="flex flex-col items-center justify-center gap-2.5 p-4 sm:p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl hover:bg-white/10 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(74,222,128,0.10)] transition-colors duration-300 group min-h-[88px]"
               >
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 group-hover:shadow-[0_0_14px_rgba(74,222,128,0.35)] transition-all duration-300 shrink-0">
-                  <stat.icon className="w-5 h-5 text-primary" />
-                </div>
-                <span className="text-[11px] sm:text-xs font-semibold text-white/60 group-hover:text-white/90 transition-colors text-center tracking-wide uppercase leading-tight">{stat.label}</span>
-              </motion.a>
+                <Link
+                  href={item.href}
+                  className="group block p-5 md:p-6 rounded-2xl bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm hover:bg-white/[0.08] hover:border-white/20 transition-all duration-300 hover:-translate-y-1"
+                >
+                  <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${item.gradient} bg-opacity-20 flex items-center justify-center mb-4`}>
+                    <item.icon className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-white font-semibold text-base md:text-lg mb-1.5 group-hover:text-primary transition-colors duration-300">{item.label}</h3>
+                  <p className="text-white/50 text-sm leading-relaxed mb-3">{item.desc}</p>
+                  <span className="inline-flex items-center gap-1.5 text-primary text-xs font-medium">
+                    Batafsil ko'rish <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </Link>
+              </motion.div>
             ))}
           </motion.div>
         </div>

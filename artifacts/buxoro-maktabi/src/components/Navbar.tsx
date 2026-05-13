@@ -1,23 +1,23 @@
 import { useState, useEffect, useCallback } from "react";
 import { Phone, X } from "lucide-react";
+import { Link, useLocation } from "wouter";
 const logoImg = "/logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 
 const navLinks = [
-  { name: "Biz haqimizda", href: "#" },
-  { name: "Ta'lim", href: "#maktab-hayoti" },
-  { name: "Sinflar", href: "#sinflar" },
-  { name: "Oshxona", href: "#oshxona" },
-  { name: "Jamoa", href: "#jamoa" },
-  { name: "Natijalar", href: "#natijalar" },
-  { name: "Ariza", href: "#ariza" },
+  { name: "Bosh sahifa", href: "/" },
+  { name: "Jamoa", href: "/jamoa" },
+  { name: "Sinflar", href: "/sinflar" },
+  { name: "Oshxona", href: "/oshxona" },
+  { name: "Ariza", href: "/ariza" },
 ];
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [location] = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -25,7 +25,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Scroll lock when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.classList.add("menu-open");
@@ -36,6 +35,11 @@ export default function Navbar() {
   }, [mobileMenuOpen]);
 
   const closeMobile = useCallback(() => setMobileMenuOpen(false), []);
+
+  const isActive = (href: string) => {
+    if (href === "/") return location === "/";
+    return location.startsWith(href);
+  };
 
   return (
     <header
@@ -48,12 +52,7 @@ export default function Navbar() {
       <div className="w-full px-4 md:px-8 flex items-center justify-between h-12 md:h-auto">
 
         {/* Logo */}
-        <motion.a
-          href="#"
-          className="flex items-center gap-2.5 group shrink-0"
-          whileHover={{ scale: 1.02 }}
-          transition={{ type: "spring", stiffness: 400, damping: 25 }}
-        >
+        <Link href="/" className="flex items-center gap-2.5 group shrink-0">
           <div className="relative shrink-0">
             <div className="absolute inset-0 bg-primary/50 blur-md rounded-full group-hover:bg-primary/80 transition-all duration-400" />
             <img src={logoImg} alt="Logo" className="w-9 h-9 md:w-10 md:h-10 object-cover relative z-10 rounded-full" />
@@ -61,45 +60,42 @@ export default function Navbar() {
           <span className="font-poppins font-bold text-lg md:text-xl tracking-tight text-white group-hover:text-primary transition-colors duration-300">
             Buxoro Maktabi
           </span>
-        </motion.a>
+        </Link>
 
         {/* Desktop nav */}
         <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
-          {navLinks.map((link, i) => (
-            <motion.a
+          {navLinks.map((link) => (
+            <Link
               key={link.name}
               href={link.href}
-              className="text-sm font-medium text-white/65 hover:text-white relative group py-1 focus-visible:outline-none focus-visible:text-white"
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: EASE_OUT_EXPO, delay: 0.04 * i }}
+              className={`text-sm font-medium relative group py-1 focus-visible:outline-none focus-visible:text-white transition-colors duration-200 ${
+                isActive(link.href) ? "text-white" : "text-white/65 hover:text-white"
+              }`}
             >
               {link.name}
-              <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-primary group-hover:w-full transition-all duration-300 rounded-full" />
-            </motion.a>
+              <span className={`absolute -bottom-0.5 left-0 h-px bg-primary transition-all duration-300 rounded-full ${
+                isActive(link.href) ? "w-full" : "w-0 group-hover:w-full"
+              }`} />
+            </Link>
           ))}
         </nav>
 
         {/* Phone button — desktop */}
-        <motion.a
+        <a
           href="tel:+998948356666"
-          whileHover={{ scale: 1.04, boxShadow: "0 0 22px rgba(74,222,128,0.3)" }}
-          whileTap={{ scale: 0.97 }}
-          transition={{ type: "spring", stiffness: 350, damping: 22 }}
           className="hidden lg:inline-flex items-center gap-2 px-4 xl:px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-white text-sm font-medium hover:bg-primary/20 hover:border-primary/50 transition-colors duration-300 backdrop-blur-md shrink-0 focus-visible:outline-2 focus-visible:outline-primary/60"
         >
           <Phone className="w-4 h-4 text-primary shrink-0" />
           +998 94 835 66 66
-        </motion.a>
+        </a>
 
-        {/* Hamburger — mobile (animated morph) */}
+        {/* Hamburger — mobile */}
         <button
           className="lg:hidden relative w-9 h-9 flex items-center justify-center focus-visible:outline-2 focus-visible:outline-primary/60 rounded-lg"
           onClick={() => setMobileMenuOpen((v) => !v)}
           aria-label={mobileMenuOpen ? "Menyuni yopish" : "Menyuni ochish"}
           aria-expanded={mobileMenuOpen}
         >
-          <span className="sr-only">{mobileMenuOpen ? "Yopish" : "Menyu"}</span>
           <div className="relative w-5 h-4">
             <motion.span
               animate={mobileMenuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
@@ -149,29 +145,27 @@ export default function Navbar() {
           >
             <div className="py-3 px-4 flex flex-col gap-0.5">
               {navLinks.map((link, i) => (
-                <motion.a
+                <Link
                   key={link.name}
                   href={link.href}
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.28, ease: EASE_OUT_EXPO, delay: i * 0.04 }}
-                  className="text-base font-medium text-white/75 hover:text-primary active:text-primary transition-colors py-3 px-3 rounded-xl hover:bg-white/[0.04] active:bg-white/[0.06]"
+                  className={`text-base font-medium transition-colors py-3 px-3 rounded-xl ${
+                    isActive(link.href)
+                      ? "text-primary bg-white/[0.06]"
+                      : "text-white/75 hover:text-primary hover:bg-white/[0.04]"
+                  }`}
                   onClick={closeMobile}
                 >
                   {link.name}
-                </motion.a>
+                </Link>
               ))}
-              <motion.a
+              <a
                 href="tel:+998948356666"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.32, ease: EASE_OUT_EXPO, delay: 0.25 }}
                 className="flex items-center justify-center gap-2 px-5 py-3 mt-3 rounded-xl bg-primary/15 border border-primary/40 text-white font-medium text-sm active:scale-[0.98] transition-transform hover:bg-primary/20"
                 onClick={closeMobile}
               >
                 <Phone className="w-4 h-4 text-primary shrink-0" />
                 +998 94 835 66 66
-              </motion.a>
+              </a>
             </div>
           </motion.div>
         )}

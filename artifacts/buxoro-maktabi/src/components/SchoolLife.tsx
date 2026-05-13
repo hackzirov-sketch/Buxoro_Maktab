@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -11,6 +12,15 @@ const moments = [
   { src: "https://images.unsplash.com/photo-1562774053-701939374585?w=600&q=80", title: "Laboratoriya", desc: "Ilmiy izlanishlar va amaliy tajribalar" },
 ];
 
+const fallbackColors = [
+  "from-emerald-600/30 to-teal-700/30",
+  "from-sky-600/30 to-blue-700/30",
+  "from-amber-600/30 to-orange-700/30",
+  "from-primary/30 to-emerald-700/30",
+  "from-pink-600/30 to-rose-700/30",
+  "from-purple-600/30 to-violet-700/30",
+];
+
 function MomentCard({ item, index }: { item: typeof moments[0]; index: number }) {
   return (
     <motion.div
@@ -21,17 +31,22 @@ function MomentCard({ item, index }: { item: typeof moments[0]; index: number })
       className="group"
     >
       <div className="relative rounded-2xl overflow-hidden border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)]">
-        <div className="aspect-[4/3] overflow-hidden">
+        <div className="aspect-[4/3] overflow-hidden relative bg-gray-900">
+          {/* Fallback gradient shown while image loads */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${fallbackColors[index % fallbackColors.length]} z-0`} />
+          <div className="absolute inset-0 flex items-center justify-center z-0">
+            <span className="text-4xl font-bold text-white/10 select-none">{item.title.charAt(0)}</span>
+          </div>
           <img
             src={item.src}
             alt={item.title}
             loading="lazy"
-            className="w-full h-full object-cover transition-all duration-500 group-hover:brightness-110 group-hover:scale-105"
+            className="relative w-full h-full object-cover transition-all duration-500 group-hover:brightness-110 group-hover:scale-105 z-[1]"
           />
         </div>
-        <div className="p-4">
-          <h3 className="text-white font-semibold text-sm md:text-base mb-1">{item.title}</h3>
-          <p className="text-white/50 text-xs md:text-sm leading-relaxed line-clamp-1">{item.desc}</p>
+        <div className="p-3 md:p-4">
+          <h3 className="text-white font-semibold text-xs md:text-base mb-0.5 md:mb-1 truncate">{item.title}</h3>
+          <p className="text-white/50 text-[10px] md:text-sm leading-relaxed line-clamp-1">{item.desc}</p>
         </div>
       </div>
     </motion.div>
@@ -65,12 +80,18 @@ export default function SchoolLife() {
           </motion.p>
         </div>
 
-        {/* Static Grid — no carousel, no scroll */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-          {moments.map((item, idx) => (
-            <MomentCard key={idx} item={item} index={idx} />
-          ))}
-        </div>
+        {/* Carousel — 4 cards per view on lg, responsive down */}
+        <Carousel opts={{ align: "start", loop: false }} className="w-full">
+          <CarouselContent>
+            {moments.map((item, idx) => (
+              <CarouselItem key={idx} className="basis-1/2 sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
+                <MomentCard item={item} index={idx} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="-left-3 sm:-left-5 h-10 w-10 sm:h-12 sm:w-12 bg-background/90 backdrop-blur-2xl border-2 border-primary/50 shadow-xl shadow-black/40 text-primary hover:bg-primary hover:text-black hover:border-primary hover:scale-110 hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 ease-out animate-glow-btn z-10" />
+          <CarouselNext className="-right-3 sm:-right-5 h-10 w-10 sm:h-12 sm:w-12 bg-background/90 backdrop-blur-2xl border-2 border-primary/50 shadow-xl shadow-black/40 text-primary hover:bg-primary hover:text-black hover:border-primary hover:scale-110 hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 ease-out animate-glow-btn z-10" />
+        </Carousel>
       </div>
     </section>
   );

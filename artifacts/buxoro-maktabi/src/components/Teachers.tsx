@@ -1,5 +1,6 @@
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import React, { useRef } from "react";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 const teacherRefImg = "/teacher-ref.png";
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
@@ -52,14 +53,14 @@ function TeacherCard({ teacher, index }: { teacher: any; index: number }) {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-          className="relative p-6 sm:p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl flex flex-col items-center justify-center cursor-pointer group h-full"
+          className="relative p-4 sm:p-8 rounded-2xl sm:rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl flex flex-col items-center justify-center cursor-pointer group h-full"
       >
         <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-primary/0 group-hover:from-primary/10 group-hover:to-transparent rounded-3xl transition-colors duration-400 z-0"></div>
         <div className="absolute -inset-1 rounded-[2rem] bg-primary/20 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 -z-10"></div>
 
         <div
           style={{ transform: "translateZ(40px)" }}
-          className="w-32 h-32 rounded-full mb-6 relative z-10 p-1 bg-gradient-to-br from-white/20 to-white/5 group-hover:from-primary/50 group-hover:to-primary/10 transition-colors duration-400"
+          className="w-20 sm:w-28 lg:w-32 h-20 sm:h-28 lg:h-32 rounded-full mb-3 sm:mb-6 relative z-10 p-1 bg-gradient-to-br from-white/20 to-white/5 group-hover:from-primary/50 group-hover:to-primary/10 transition-colors duration-400"
         >
           <div className="w-full h-full rounded-full bg-gradient-to-br from-gray-800 to-black overflow-hidden flex items-center justify-center">
             <div className="w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-700 via-gray-900 to-black"></div>
@@ -68,9 +69,9 @@ function TeacherCard({ teacher, index }: { teacher: any; index: number }) {
         </div>
 
         <div style={{ transform: "translateZ(24px)" }} className="text-center z-10">
-          <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors duration-300">{teacher.name}</h3>
-          <p className="text-primary/80 font-medium mb-1">{teacher.subject}</p>
-          <p className="text-white/50 text-sm">{teacher.exp}</p>
+          <h3 className="text-sm sm:text-xl font-bold text-white mb-1 sm:mb-2 group-hover:text-primary transition-colors duration-300 truncate max-w-full">{teacher.name}</h3>
+          <p className="text-primary/80 font-medium text-[10px] sm:text-sm mb-0.5 sm:mb-1">{teacher.subject}</p>
+          <p className="text-white/50 text-[10px] sm:text-sm">{teacher.exp}</p>
         </div>
       </motion.div>
     </motion.div>
@@ -108,11 +109,17 @@ export default function Teachers() {
           <img src={teacherRefImg} alt="Reference" />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {teachers.map((t, idx) => (
-            <TeacherCard key={idx} teacher={t} index={idx} />
-          ))}
-        </div>
+        <Carousel opts={{ align: "start", loop: false }} className="w-full">
+          <CarouselContent>
+            {teachers.map((t, idx) => (
+              <CarouselItem key={idx} className="basis-1/2 sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
+                <TeacherCard teacher={t} index={idx} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="-left-3 sm:-left-5 h-10 w-10 sm:h-12 sm:w-12 bg-background/90 backdrop-blur-2xl border-2 border-primary/50 shadow-xl shadow-black/40 text-primary hover:bg-primary hover:text-black hover:border-primary hover:scale-110 hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 ease-out animate-glow-btn z-10" />
+          <CarouselNext className="-right-3 sm:-right-5 h-10 w-10 sm:h-12 sm:w-12 bg-background/90 backdrop-blur-2xl border-2 border-primary/50 shadow-xl shadow-black/40 text-primary hover:bg-primary hover:text-black hover:border-primary hover:scale-110 hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 ease-out animate-glow-btn z-10" />
+        </Carousel>
       </div>
     </section>
   );
