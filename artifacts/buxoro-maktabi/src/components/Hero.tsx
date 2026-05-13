@@ -47,7 +47,7 @@ export default function Hero() {
             <img
               src={logoImg}
               alt="Buxoro Maktabi Logo"
-              className="w-32 h-32 sm:w-40 sm:h-40 object-cover relative z-10 animate-float drop-shadow-[0_0_28px_rgba(74,222,128,0.5)] rounded-full"
+              className="w-44 h-44 sm:w-48 sm:h-48 object-cover relative z-10 animate-float drop-shadow-[0_0_28px_rgba(74,222,128,0.5)] rounded-full"
             />
           </div>
         </motion.div>
