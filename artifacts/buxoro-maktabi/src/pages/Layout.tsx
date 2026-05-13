@@ -9,7 +9,7 @@ export function PageHeader({ title, subtitle }: { title: React.ReactNode; subtit
         initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.75, ease: EASE }}
-        className="text-4xl md:text-5xl font-bold font-poppins text-white mb-4"
+        className="text-4xl md:text-5xl font-bold font-poppins text-foreground mb-4"
       >
         {title}
       </motion.h2>
@@ -18,7 +18,7 @@ export function PageHeader({ title, subtitle }: { title: React.ReactNode; subtit
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: EASE, delay: 0.12 }}
-          className="text-base md:text-lg text-white/70 max-w-xl mx-auto font-normal leading-[1.8]"
+          className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto font-normal leading-[1.8]"
         >
           {subtitle}
         </motion.p>

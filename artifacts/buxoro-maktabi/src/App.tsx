@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeProvider } from "next-themes";
 import { Route, Switch } from "wouter";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -28,27 +29,29 @@ function PageShell({ children }: { children: React.ReactNode }) {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Switch>
-          <Route path="/" component={HomePage} />
-          <Route path="/jamoa">
-            <PageShell><TeamPage /></PageShell>
-          </Route>
-          <Route path="/sinflar">
-            <PageShell><ClassroomsPage /></PageShell>
-          </Route>
-          <Route path="/oshxona">
-            <PageShell><KitchenPage /></PageShell>
-          </Route>
-          <Route path="/natijalar">
-            <PageShell><ResultsPage /></PageShell>
-          </Route>
-          <Route path="/ariza">
-            <PageShell><ArizaPage /></PageShell>
-          </Route>
-        </Switch>
-        <Toaster />
-      </TooltipProvider>
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+        <TooltipProvider>
+          <Switch>
+            <Route path="/" component={HomePage} />
+            <Route path="/jamoa">
+              <PageShell><TeamPage /></PageShell>
+            </Route>
+            <Route path="/sinflar">
+              <PageShell><ClassroomsPage /></PageShell>
+            </Route>
+            <Route path="/oshxona">
+              <PageShell><KitchenPage /></PageShell>
+            </Route>
+            <Route path="/natijalar">
+              <PageShell><ResultsPage /></PageShell>
+            </Route>
+            <Route path="/ariza">
+              <PageShell><ArizaPage /></PageShell>
+            </Route>
+          </Switch>
+          <Toaster />
+        </TooltipProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

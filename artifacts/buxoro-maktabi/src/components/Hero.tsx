@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { ArrowRight, Users, Building2, Utensils, FileText } from "lucide-react";
+import { useRef, useEffect } from "react";
 const logoImg = "/logo.png";
 
 const previews = [
@@ -30,9 +31,38 @@ const lineVariants = {
 };
 
 export default function Hero() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    const play = () => v.play().catch(() => {});
+    const canPlayHandler = () => play();
+    v.addEventListener("canplay", canPlayHandler, { once: true });
+    v.addEventListener("loadedmetadata", () => play(), { once: true });
+    v.load();
+    return () => {
+      v.removeEventListener("canplay", canPlayHandler);
+    };
+  }, []);
 
   return (
     <section className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden pt-16 md:pt-20">
+
+      {/* Background video — laptop only */}
+      <div className="hidden lg:block absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <video
+          ref={videoRef}
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="w-full h-full object-cover"
+        >
+          <source src="/hero-bg.mp4" type="video/mp4" />
+          <source src="/hero-bg.MOV" type="video/quicktime" />
+        </video>
+      </div>
 
       <div className="w-full px-4 sm:px-6 md:px-8 relative z-10 flex-1 flex flex-col justify-center pb-6">
 
@@ -44,11 +74,11 @@ export default function Hero() {
           className="flex justify-center items-center mb-8 lg:hidden"
         >
           <div className="relative flex items-center justify-center">
-            <div className="absolute -inset-12 bg-primary/20 blur-[70px] rounded-full animate-pulse-slow" />
+            <div className="absolute -inset-12 bg-primary/10 blur-[70px] rounded-full animate-pulse-slow" />
             <img
               src={logoImg}
               alt="Buxoro Maktabi Logo"
-              className="w-44 h-44 sm:w-48 sm:h-48 object-cover relative z-10 animate-float drop-shadow-[0_0_28px_rgba(74,222,128,0.5)] rounded-full"
+              className="w-44 h-44 sm:w-48 sm:h-48 object-cover relative z-10 animate-float drop-shadow-[0_0_28px_rgba(34,197,94,0.3)] rounded-full"
             />
           </div>
         </motion.div>
@@ -60,19 +90,19 @@ export default function Hero() {
 
             <motion.div
               variants={lineVariants}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 mb-5 backdrop-blur-md"
+              className="glass-button text-[#065f46] mb-5 inline-flex items-center gap-2 px-3 py-1.5 rounded-full"
             >
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse shrink-0" />
-              <span className="text-xs font-medium text-white/80 uppercase tracking-widest">Qabul 2026-2027 ochiq</span>
+              <span className="text-xs font-medium text-foreground/80 uppercase tracking-widest">Qabul 2026-2027 ochiq</span>
             </motion.div>
 
             <motion.h1
               variants={lineVariants}
-              className="font-bold text-white leading-[1.08] tracking-tight font-poppins mb-5"
+              className="font-bold text-foreground leading-[1.08] tracking-tight font-poppins mb-5"
               style={{ fontSize: "clamp(2.2rem, 6vw, 4.5rem)" }}
             >
               Farzandingiz uchun{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-200 drop-shadow-[0_0_15px_rgba(74,222,128,0.4)]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-200 drop-shadow-[0_0_15px_rgba(34,197,94,0.3)]">
                 zamonaviy
               </span>{" "}
               va sifatli ta'lim markazi
@@ -80,7 +110,7 @@ export default function Hero() {
 
             <motion.p
               variants={lineVariants}
-              className="text-sm sm:text-base md:text-lg text-white/80 max-w-xl font-normal leading-[1.85]"
+              className="text-sm sm:text-base md:text-lg text-foreground/70 max-w-xl font-normal leading-[1.85]"
             >
               Buxorodagi eng ilg'or va ishonchli ta'lim muhitini yaratayotgan maktab. Kelajak yetakchilarini bugun tarbiyalaymiz.
             </motion.p>
@@ -95,11 +125,11 @@ export default function Hero() {
             className="hidden lg:flex justify-center items-center relative"
           >
             <div className="relative w-72 xl:w-80 h-72 xl:h-80 flex items-center justify-center">
-              <div className="absolute -inset-16 bg-primary/22 blur-[80px] rounded-full animate-pulse-slow" />
+              <div className="absolute -inset-16 bg-primary/10 blur-[80px] rounded-full animate-pulse-slow" />
               <img
                 src={logoImg}
                 alt="Buxoro Maktabi"
-                className="w-56 xl:w-64 h-56 xl:h-64 object-cover relative z-10 animate-float drop-shadow-[0_0_30px_rgba(74,222,128,0.5)] rounded-full"
+                className="w-56 xl:w-64 h-56 xl:h-64 object-cover relative z-10 animate-float drop-shadow-[0_0_30px_rgba(34,197,94,0.3)] rounded-full"
               />
             </div>
           </motion.div>
@@ -130,13 +160,13 @@ export default function Hero() {
               >
                 <Link
                   href={item.href}
-                  className="group block p-5 md:p-6 rounded-2xl bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm hover:bg-white/[0.08] hover:border-white/20 transition-all duration-300 hover:-translate-y-1"
+                  className="group block p-5 md:p-6 rounded-2xl glass-card hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
                 >
                   <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${item.gradient} bg-opacity-20 flex items-center justify-center mb-4`}>
                     <item.icon className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="text-white font-semibold text-base md:text-lg mb-1.5 group-hover:text-primary transition-colors duration-300">{item.label}</h3>
-                  <p className="text-white/50 text-sm leading-relaxed mb-3">{item.desc}</p>
+                  <h3 className="text-foreground font-semibold text-base md:text-lg mb-1.5 group-hover:text-primary transition-colors duration-300">{item.label}</h3>
+                  <p className="text-foreground/50 text-sm leading-relaxed mb-3">{item.desc}</p>
                   <span className="inline-flex items-center gap-1.5 text-primary text-xs font-medium">
                     Batafsil ko'rish <ArrowRight className="w-3.5 h-3.5" />
                   </span>

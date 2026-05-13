@@ -30,9 +30,8 @@ function MomentCard({ item, index }: { item: typeof moments[0]; index: number })
       transition={{ duration: 0.5, ease: EASE, delay: index * 0.06 }}
       className="group"
     >
-      <div className="relative rounded-2xl overflow-hidden border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)]">
-        <div className="aspect-[4/3] overflow-hidden relative bg-gray-900">
-          {/* Fallback gradient shown while image loads */}
+      <div className="relative rounded-2xl overflow-hidden glass-card hover:shadow-lg transition-all duration-300 group">
+        <div className="aspect-[4/3] overflow-hidden relative bg-white/10">
           <div className={`absolute inset-0 bg-gradient-to-br ${fallbackColors[index % fallbackColors.length]} z-0`} />
           <div className="absolute inset-0 flex items-center justify-center z-0">
             <span className="text-4xl font-bold text-white/10 select-none">{item.title.charAt(0)}</span>
@@ -45,8 +44,8 @@ function MomentCard({ item, index }: { item: typeof moments[0]; index: number })
           />
         </div>
         <div className="p-3 md:p-4">
-          <h3 className="text-white font-semibold text-xs md:text-base mb-0.5 md:mb-1 truncate">{item.title}</h3>
-          <p className="text-white/50 text-[10px] md:text-sm leading-relaxed line-clamp-1">{item.desc}</p>
+          <h3 className="text-foreground font-semibold text-xs md:text-base mb-0.5 md:mb-1 truncate">{item.title}</h3>
+          <p className="text-foreground/50 text-[10px] md:text-sm leading-relaxed line-clamp-1">{item.desc}</p>
         </div>
       </div>
     </motion.div>
@@ -56,7 +55,7 @@ function MomentCard({ item, index }: { item: typeof moments[0]; index: number })
 export default function SchoolLife() {
   return (
     <section id="maktab-hayoti" className="py-24 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.03] to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-transparent pointer-events-none" />
 
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-14">
@@ -65,22 +64,21 @@ export default function SchoolLife() {
             whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true }}
             transition={{ duration: 0.75, ease: EASE }}
-            className="text-4xl md:text-5xl font-bold font-poppins text-white mb-4"
+            className="text-4xl md:text-5xl font-bold font-poppins text-foreground mb-4"
           >
-            Maktab <span className="text-primary drop-shadow-[0_0_10px_rgba(74,222,128,0.3)]">hayotidan parchalar</span>
+            Maktab <span className="text-primary drop-shadow-[0_0_10px_rgba(34,197,94,0.25)]">hayotidan parchalar</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: EASE, delay: 0.12 }}
-            className="text-base md:text-lg text-white/70 max-w-xl mx-auto font-normal leading-[1.8]"
+            className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto font-normal leading-[1.8]"
           >
             Kunlik hayotimizdan eng yorqin lahzalarni jamlagan xotira devori
           </motion.p>
         </div>
 
-        {/* Carousel — 4 cards per view on lg, responsive down */}
         <Carousel opts={{ align: "start", loop: false }} className="w-full">
           <CarouselContent>
             {moments.map((item, idx) => (
@@ -89,8 +87,8 @@ export default function SchoolLife() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="-left-3 sm:-left-5 h-10 w-10 sm:h-12 sm:w-12 bg-background/90 backdrop-blur-2xl border-2 border-primary/50 shadow-xl shadow-black/40 text-primary hover:bg-primary hover:text-black hover:border-primary hover:scale-110 hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 ease-out animate-glow-btn z-10" />
-          <CarouselNext className="-right-3 sm:-right-5 h-10 w-10 sm:h-12 sm:w-12 bg-background/90 backdrop-blur-2xl border-2 border-primary/50 shadow-xl shadow-black/40 text-primary hover:bg-primary hover:text-black hover:border-primary hover:scale-110 hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 ease-out animate-glow-btn z-10" />
+          <CarouselPrevious className="glass-button -left-3 sm:-left-5 h-10 w-10 sm:h-12 sm:w-12 flex items-center justify-center text-[#065f46] hover:bg-primary/20 z-10" />
+          <CarouselNext className="glass-button -right-3 sm:-right-5 h-10 w-10 sm:h-12 sm:w-12 flex items-center justify-center text-[#065f46] hover:bg-primary/20 z-10" />
         </Carousel>
       </div>
     </section>

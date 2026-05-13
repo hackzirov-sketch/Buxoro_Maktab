@@ -11,7 +11,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 function ScrollProgress() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 28, restDelta: 0.001 });
-  return <motion.div style={{ scaleX }} className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-emerald-300 to-primary origin-left z-[9999] shadow-[0_0_8px_rgba(74,222,128,0.8)]" />;
+  return <motion.div style={{ scaleX }} className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-emerald-300 to-primary origin-left z-[9999] shadow-[0_0_8px_rgba(34,197,94,0.6)] dark:shadow-[0_0_8px_rgba(74,222,128,0.8)]" />;
 }
 
 export default function HomePage() {
