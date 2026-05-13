@@ -1,4 +1,5 @@
 import { PageWrapper, PageHeader } from "./Layout";
+import SectionNav from "@/components/SectionNav";
 import { motion } from "framer-motion";
 import { Monitor, Wind, Presentation, Wifi, Maximize2 } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
@@ -60,6 +61,7 @@ export default function ClassroomsPage() {
           </Carousel>
         </div>
       </section>
+      <SectionNav />
     </PageWrapper>
   );
 }

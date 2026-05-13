@@ -52,7 +52,7 @@ function TeamCard({ member, index, expanded, onToggle }: {
       <motion.div
         animate={{ scale: expanded ? 1.03 : 1, y: expanded ? -4 : 0 }}
         transition={{ duration: 0.35, ease: EASE }}
-        className="relative rounded-2xl bg-white/[0.05] border border-white/[0.08] backdrop-blur-sm md:backdrop-blur-xl overflow-hidden will-change-transform"
+        className="relative rounded-2xl bg-white/60 backdrop-blur-sm md:backdrop-blur-xl border border-emerald-100/50 shadow-sm overflow-hidden will-change-transform"
       >
         <motion.div
           animate={{ opacity: expanded ? 1 : 0 }}
@@ -71,15 +71,15 @@ function TeamCard({ member, index, expanded, onToggle }: {
             <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-background/95 to-transparent" />
           </div>
         </div>
-        <div className="p-3 md:p-5 relative z-[2] bg-gradient-to-t from-background/60 to-transparent">
-          <h3 className="text-white font-bold text-xs md:text-base leading-tight mb-0.5 truncate">{member.name}</h3>
+        <div className="p-3 md:p-5 relative z-[2] bg-gradient-to-t from-white/80 to-white/20">
+          <h3 className="text-foreground font-bold text-xs md:text-base leading-tight mb-0.5 truncate">{member.name}</h3>
           <span className={`inline-block text-[9px] md:text-[10px] font-semibold uppercase tracking-wider mb-1 md:mb-2 bg-clip-text text-transparent bg-gradient-to-r ${gradient}`}>
             {member.role}
           </span>
-          <p className="text-white/50 text-[10px] md:text-xs leading-relaxed line-clamp-1">{member.shortDesc}</p>
+          <p className="text-foreground/50 text-[10px] md:text-xs leading-relaxed line-clamp-1">{member.shortDesc}</p>
           <div className="flex items-center gap-1 mt-1.5">
-            <span className="text-white/20 text-[9px] font-medium uppercase tracking-wider">Batafsil</span>
-            <ChevronRight className="w-2.5 h-2.5 text-white/20" />
+            <span className="text-foreground/20 text-[9px] font-medium uppercase tracking-wider">Batafsil</span>
+            <ChevronRight className="w-2.5 h-2.5 text-foreground/20" />
           </div>
         </div>
       </motion.div>
@@ -92,17 +92,17 @@ function TeamCard({ member, index, expanded, onToggle }: {
             transition={{ duration: 0.25, ease: EASE }}
             className="absolute inset-x-0 bottom-0 z-20 pointer-events-none"
           >
-            <div className="rounded-xl bg-background/95 backdrop-blur-2xl border border-white/[0.1] p-3 shadow-[0_8px_32px_rgba(0,0,0,0.5)] pointer-events-auto mx-2 mb-2">
-              <p className="text-white/70 text-[10px] md:text-xs leading-relaxed mb-2">{member.fullDesc}</p>
-              {member.highlight && <p className="text-[10px] md:text-xs text-primary/90 font-medium mb-2">{member.highlight}</p>}
-              <div className="flex items-center gap-2 pt-1.5 border-t border-white/[0.06]">
+            <div className="rounded-xl bg-white/90 backdrop-blur-2xl border border-emerald-100/50 p-3 shadow-lg pointer-events-auto mx-2 mb-2">
+              <p className="text-foreground/70 text-[10px] md:text-xs leading-relaxed mb-2">{member.fullDesc}</p>
+              {member.highlight && <p className="text-[10px] md:text-xs text-primary font-medium mb-2">{member.highlight}</p>}
+              <div className="flex items-center gap-2 pt-1.5 border-t border-emerald-200/30">
                 {member.telegram && (
-                  <a href={member.telegram} target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-white/[0.06] flex items-center justify-center text-white/40 hover:bg-sky-500/20 hover:text-sky-400 transition-all duration-200" aria-label={`${member.name} Telegram`}>
+                  <a href={member.telegram} target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-emerald-50/80 flex items-center justify-center text-foreground/40 hover:bg-sky-500/20 hover:text-sky-400 transition-all duration-200" aria-label={`${member.name} Telegram`}>
                     <FaTelegram className="w-2.5 h-2.5" />
                   </a>
                 )}
                 {member.instagram && (
-                  <a href={member.instagram} target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-white/[0.06] flex items-center justify-center text-white/40 hover:bg-pink-500/20 hover:text-pink-400 transition-all duration-200" aria-label={`${member.name} Instagram`}>
+                  <a href={member.instagram} target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-emerald-50/80 flex items-center justify-center text-foreground/40 hover:bg-pink-500/20 hover:text-pink-400 transition-all duration-200" aria-label={`${member.name} Instagram`}>
                     <FaInstagram className="w-2.5 h-2.5" />
                   </a>
                 )}
@@ -122,9 +122,9 @@ export default function Team() {
   const [expandedBottom, setExpandedBottom] = useState<number | null>(null);
 
   return (
-    <section id="jamoa" ref={sectionRef} className="py-24 md:py-28 relative overflow-hidden">
-      <div className="absolute left-0 top-1/3 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[200px] pointer-events-none -translate-x-1/2" />
-      <div className="absolute right-0 bottom-1/3 w-[500px] h-[500px] bg-primary/[0.03] rounded-full blur-[150px] pointer-events-none translate-x-1/2" />
+    <section id="jamoa" ref={sectionRef} className="py-24 md:py-28 relative overflow-hidden bg-emerald-50/60 dark:bg-emerald-900/20">
+      <div className="absolute left-0 top-1/3 w-[600px] h-[600px] bg-emerald-200/30 rounded-full blur-[200px] pointer-events-none -translate-x-1/2" />
+      <div className="absolute right-0 bottom-1/3 w-[500px] h-[500px] bg-emerald-100/20 rounded-full blur-[150px] pointer-events-none translate-x-1/2" />
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <motion.div
@@ -133,17 +133,17 @@ export default function Team() {
           transition={{ duration: 0.75, ease: EASE }}
           className="text-center mb-14 md:mb-18"
         >
-          <h2 className="text-4xl md:text-5xl font-bold font-poppins text-white mb-5">
-            Bizning <span className="text-primary drop-shadow-[0_0_10px_rgba(74,222,128,0.3)]">Jamoa</span>
+          <h2 className="text-4xl md:text-5xl font-bold font-poppins text-foreground mb-5">
+            Bizning <span className="text-primary">Jamoa</span>
           </h2>
-          <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto font-normal leading-[1.8]">
+          <p className="text-base md:text-lg text-foreground/60 max-w-2xl mx-auto font-normal leading-[1.8]">
             Tajribali mutaxassislar jamoasi farzandingiz ta'limi va tarbiyasi uchun mas'uldir.
           </p>
         </motion.div>
 
         <div className="space-y-10 md:space-y-14">
           {/* Pedagogic team */}
-          <Carousel opts={{ align: "start", loop: false }} className="w-full">
+          <Carousel opts={{ align: "start", loop: false }} autoPlay autoPlayInterval={4000} className="w-full">
             <CarouselContent>
               {topRowMembers.map((member, idx) => (
                 <CarouselItem key={idx} className="basis-1/2 sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
@@ -161,7 +161,7 @@ export default function Team() {
           </Carousel>
 
           {/* Support team */}
-          <Carousel opts={{ align: "start", loop: false }} className="w-full">
+          <Carousel opts={{ align: "start", loop: false }} autoPlay autoPlayInterval={4000} className="w-full">
             <CarouselContent>
               {bottomRowMembers.map((member, idx) => (
                 <CarouselItem key={idx} className="basis-1/2 sm:basis-1/2 md:basis-1/3 lg:basis-1/4">

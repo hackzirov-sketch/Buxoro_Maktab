@@ -2,6 +2,10 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import SchoolLife from "@/components/SchoolLife";
+import Advantages from "@/components/Advantages";
+import Roadmap from "@/components/Roadmap";
+import FAQ from "@/components/FAQ";
+import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import ChatBot from "@/components/ChatBot";
 import { useScroll, useSpring } from "framer-motion";
@@ -21,7 +25,11 @@ export default function HomePage() {
       <Navbar />
       <main>
         <Hero />
+        <Advantages />
         <SchoolLife />
+        <Roadmap />
+        <FAQ />
+        <CTASection />
 
       </main>
       <Footer />

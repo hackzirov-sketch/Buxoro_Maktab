@@ -48,11 +48,11 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-white/80 dark:bg-black/80 border-b border-black/[0.06] dark:border-white/[0.08] shadow-sm lg:glass-card lg:rounded-none lg:border-0 py-2.5"
+          ? "bg-emerald-100/70 dark:bg-black/70 backdrop-blur-xl border-b border-emerald-200/50 dark:border-white/10 shadow-sm py-2.5"
           : "bg-transparent py-4 md:py-5"
       }`}
     >
-      <div className="w-full px-4 md:px-8 flex items-center justify-between h-12 md:h-auto">
+      <div className="w-full px-4 md:px-8 flex items-center justify-between h-12 md:h-auto border-b border-white/10 dark:border-white/5 backdrop-blur-[2px]">
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group shrink-0">
@@ -60,7 +60,7 @@ export default function Navbar() {
             <div className="absolute inset-0 bg-primary/50 blur-md rounded-full group-hover:bg-primary/80 transition-all duration-400" />
             <img src={logoImg} alt="Logo" className="w-9 h-9 md:w-10 md:h-10 object-cover relative z-10 rounded-full" />
           </div>
-          <span className="font-poppins font-bold text-lg md:text-xl tracking-tight text-foreground group-hover:text-primary transition-colors duration-300">
+          <span className="font-great-vibes text-xl md:text-2xl md:mt-1 text-foreground group-hover:text-primary transition-colors duration-300">
             Buxoro Maktabi
           </span>
         </Link>
@@ -87,14 +87,14 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center gap-2">
           <button
             onClick={() => setTheme(isDark ? "light" : "dark")}
-            className="glass-button text-[#065f46] dark:text-white/80 hover:bg-primary/10 flex items-center justify-center shrink-0 w-10 h-10 focus-visible:outline-2 focus-visible:outline-primary/60"
+            className="glass-button text-[#065f46] dark:text-white/80 hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(34,197,94,0.15)] flex items-center justify-center shrink-0 w-10 h-10 focus-visible:outline-2 focus-visible:outline-primary/60 transition-all duration-300"
             aria-label="Tema almashtirish"
           >
             {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
           <a
             href="tel:+998948356666"
-            className="glass-button text-[#065f46] dark:text-white/80 hover:bg-primary/10 inline-flex items-center gap-2 px-4 xl:px-5 py-2.5 shrink-0 text-sm font-medium focus-visible:outline-2 focus-visible:outline-primary/60"
+            className="glass-button text-[#065f46] dark:text-white/80 hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(34,197,94,0.15)] inline-flex items-center gap-2 px-4 xl:px-5 py-2.5 shrink-0 text-sm font-medium focus-visible:outline-2 focus-visible:outline-primary/60 transition-all duration-300"
           >
             <Phone className="w-4 h-4 text-primary shrink-0" />
             +998 94 835 66 66
@@ -172,14 +172,14 @@ export default function Navbar() {
               ))}
               <button
                 onClick={() => { setTheme(isDark ? "light" : "dark"); closeMobile(); }}
-                className="glass-button text-[#065f46] dark:text-white/80 hover:bg-primary/10 flex items-center justify-center gap-2 px-5 py-3 font-medium text-sm active:scale-[0.98]"
+                className="glass-button text-[#065f46] dark:text-white/80 hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(34,197,94,0.15)] flex items-center justify-center gap-2 px-5 py-3 font-medium text-sm active:scale-[0.98] transition-all duration-300"
               >
                 {isDark ? <Sun className="w-4 h-4 text-primary shrink-0" /> : <Moon className="w-4 h-4 text-primary shrink-0" />}
                 {isDark ? "Yorug' tema" : "Qorong'i tema"}
               </button>
               <a
                 href="tel:+998948356666"
-                className="glass-button text-[#065f46] dark:text-white/80 hover:bg-primary/10 flex items-center justify-center gap-2 px-5 py-3 mt-2 font-medium text-sm active:scale-[0.98]"
+                className="glass-button text-[#065f46] dark:text-white/80 hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(34,197,94,0.15)] flex items-center justify-center gap-2 px-5 py-3 mt-2 font-medium text-sm active:scale-[0.98] transition-all duration-300"
                 onClick={closeMobile}
               >
                 <Phone className="w-4 h-4 text-primary shrink-0" />

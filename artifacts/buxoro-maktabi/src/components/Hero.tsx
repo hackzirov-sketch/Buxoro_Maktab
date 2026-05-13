@@ -37,12 +37,12 @@ export default function Hero() {
     const v = videoRef.current;
     if (!v) return;
     const play = () => v.play().catch(() => {});
-    const canPlayHandler = () => play();
-    v.addEventListener("canplay", canPlayHandler, { once: true });
-    v.addEventListener("loadedmetadata", () => play(), { once: true });
-    v.load();
+    let timeout = setTimeout(() => play(), 3000);
+    const cb = () => { clearTimeout(timeout); play(); };
+    v.addEventListener("canplaythrough", cb, { once: true });
     return () => {
-      v.removeEventListener("canplay", canPlayHandler);
+      v.removeEventListener("canplaythrough", cb);
+      clearTimeout(timeout);
     };
   }, []);
 
@@ -56,11 +56,10 @@ export default function Hero() {
           muted
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
           className="w-full h-full object-cover"
         >
           <source src="/hero-bg.mp4" type="video/mp4" />
-          <source src="/hero-bg.MOV" type="video/quicktime" />
         </video>
       </div>
 
@@ -78,7 +77,7 @@ export default function Hero() {
             <img
               src={logoImg}
               alt="Buxoro Maktabi Logo"
-              className="w-44 h-44 sm:w-48 sm:h-48 object-cover relative z-10 animate-float drop-shadow-[0_0_28px_rgba(34,197,94,0.3)] rounded-full"
+              className="w-44 h-44 sm:w-48 sm:h-48 object-cover relative z-10 animate-float drop-shadow-[0_0_28px_rgba(34,197,94,0.3)] rounded-full opacity-70"
             />
           </div>
         </motion.div>
@@ -110,9 +109,9 @@ export default function Hero() {
 
             <motion.p
               variants={lineVariants}
-              className="text-sm sm:text-base md:text-lg text-foreground/70 max-w-xl font-normal leading-[1.85]"
+              className="text-base sm:text-lg md:text-xl font-['Playfair_Display'] italic font-black text-[#059669] max-w-xl leading-[1.8] animate-neon-pulse"
             >
-              Buxorodagi eng ilg'or va ishonchli ta'lim muhitini yaratayotgan maktab. Kelajak yetakchilarini bugun tarbiyalaymiz.
+              Bekoboddagi eng ilg'or va ishonchli ta'lim muhitini yaratayotgan maktab. Kelajak yetakchilarini bugun tarbiyalaymiz.
             </motion.p>
 
           </motion.div>

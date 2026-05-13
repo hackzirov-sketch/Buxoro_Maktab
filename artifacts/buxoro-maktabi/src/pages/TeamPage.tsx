@@ -1,4 +1,5 @@
 import { PageWrapper, PageHeader } from "./Layout";
+import SectionNav from "@/components/SectionNav";
 import { FaTelegram, FaInstagram } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -74,6 +75,7 @@ export default function TeamPage() {
           </Carousel>
         </div>
       </section>
+      <SectionNav />
     </PageWrapper>
   );
 }

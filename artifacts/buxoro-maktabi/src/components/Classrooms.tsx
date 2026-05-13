@@ -37,7 +37,7 @@ function ClassroomCard({ room, index }: { room: Classroom; index: number }) {
       <motion.div
         animate={{ scale: expanded ? 1.04 : 1, y: expanded ? -6 : 0 }}
         transition={{ duration: 0.35, ease: EASE }}
-        className="relative rounded-[1.6rem] bg-white/[0.05] border border-white/[0.08] backdrop-blur-xl overflow-hidden will-change-transform"
+        className="relative rounded-[1.6rem] bg-white/60 backdrop-blur-xl border border-emerald-100/50 shadow-sm overflow-hidden will-change-transform"
       >
         <motion.div
           animate={{ opacity: expanded ? 1 : 0 }}
@@ -49,26 +49,26 @@ function ClassroomCard({ room, index }: { room: Classroom; index: number }) {
           <img src={room.image} alt={room.name} loading="lazy" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent z-[2]" />
           <div className="absolute top-2 left-2 z-[3]">
-            <span className="px-2 py-0.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-[9px] md:text-[10px] font-medium text-white/80">{room.type}</span>
+            <span className="px-2 py-0.5 rounded-full bg-white/70 backdrop-blur-md border border-emerald-200/40 text-[9px] md:text-[10px] font-medium text-foreground/70">{room.type}</span>
           </div>
         </div>
         <div className="p-3 md:p-5 relative z-[2]">
           <div className="flex items-center justify-between mb-1">
-            <h3 className="text-white font-bold text-xs md:text-lg leading-tight truncate">{room.name}</h3>
+            <h3 className="text-foreground font-bold text-xs md:text-lg leading-tight truncate">{room.name}</h3>
             <span className={`text-[10px] md:text-[11px] font-semibold shrink-0 ${room.color}`}>{room.capacity}</span>
           </div>
-          <p className="text-white/50 text-[10px] md:text-sm leading-relaxed line-clamp-1">{room.desc}</p>
+          <p className="text-foreground/50 text-[10px] md:text-sm leading-relaxed line-clamp-1">{room.desc}</p>
           <div className="flex items-center gap-2 mt-2">
             {room.features.map((f, i) => (
-              <div key={i} className="flex items-center gap-1 text-white/35" title={f.label}>
+              <div key={i} className="flex items-center gap-1 text-foreground/30" title={f.label}>
                 <f.icon className="w-3 md:w-3.5 h-3 md:h-3.5" />
                 <span className="text-[8px] md:text-[9px] font-medium hidden sm:inline">{f.label}</span>
               </div>
             ))}
           </div>
           <div className="flex items-center gap-1 mt-1.5">
-            <span className="text-white/20 text-[9px] font-medium uppercase tracking-wider">Batafsil</span>
-            <ChevronRight className="w-2.5 h-2.5 text-white/20" />
+            <span className="text-foreground/20 text-[9px] font-medium uppercase tracking-wider">Batafsil</span>
+            <ChevronRight className="w-2.5 h-2.5 text-foreground/20" />
           </div>
         </div>
       </motion.div>
@@ -81,11 +81,11 @@ function ClassroomCard({ room, index }: { room: Classroom; index: number }) {
             transition={{ duration: 0.25, ease: EASE }}
             className="absolute inset-x-0 bottom-0 z-20 pointer-events-none"
           >
-            <div className="rounded-xl bg-background/95 backdrop-blur-2xl border border-white/[0.1] p-3 shadow-[0_8px_32px_rgba(0,0,0,0.5)] pointer-events-auto mx-2 mb-2">
-              <p className="text-white/70 text-[10px] md:text-sm leading-relaxed mb-2">{room.desc}</p>
+            <div className="rounded-xl bg-white/90 backdrop-blur-2xl border border-emerald-100/50 p-3 shadow-lg pointer-events-auto mx-2 mb-2">
+              <p className="text-foreground/70 text-[10px] md:text-sm leading-relaxed mb-2">{room.desc}</p>
               <div className="flex flex-wrap gap-1.5">
                 {room.features.map((f, i) => (
-                  <span key={i} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/[0.06] border border-white/[0.06] text-[9px] md:text-[10px] text-white/60">
+                  <span key={i} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50/80 border border-emerald-200/30 text-[9px] md:text-[10px] text-foreground/60">
                     <f.icon className="w-2.5 h-2.5" />{f.label}
                   </span>
                 ))}
@@ -100,9 +100,9 @@ function ClassroomCard({ room, index }: { room: Classroom; index: number }) {
 
 export default function Classrooms() {
   return (
-    <section id="sinflar" className="py-24 md:py-28 relative overflow-hidden">
-      <div className="absolute right-0 top-1/3 w-[500px] h-[500px] bg-primary/8 rounded-full blur-[160px] pointer-events-none" />
-      <div className="absolute left-0 bottom-1/3 w-[400px] h-[400px] bg-primary/[0.03] rounded-full blur-[120px] pointer-events-none" />
+    <section id="sinflar" className="py-24 md:py-28 relative overflow-hidden bg-emerald-50/60 dark:bg-emerald-900/20">
+      <div className="absolute right-0 top-1/3 w-[500px] h-[500px] bg-emerald-200/40 rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute left-0 bottom-1/3 w-[400px] h-[400px] bg-emerald-100/30 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="text-center mb-14 md:mb-18">
@@ -111,22 +111,22 @@ export default function Classrooms() {
             whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true }}
             transition={{ duration: 0.75, ease: EASE }}
-            className="text-4xl md:text-5xl font-bold font-poppins text-white mb-5"
+            className="text-4xl md:text-5xl font-bold font-poppins text-foreground mb-5"
           >
-            Sinf <span className="text-primary drop-shadow-[0_0_10px_rgba(74,222,128,0.3)]">Xonalarimiz</span>
+            Sinf <span className="text-primary">Xonalarimiz</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: EASE, delay: 0.12 }}
-            className="text-base md:text-lg text-white/80 max-w-2xl mx-auto font-normal leading-[1.8]"
+            className="text-base md:text-lg text-foreground/60 max-w-2xl mx-auto font-normal leading-[1.8]"
           >
             Har bir sinf xonasi zamonaviy texnologiyalar va qulayliklar bilan jihozlangan
           </motion.p>
         </div>
 
-        <Carousel opts={{ align: "start", loop: false }} className="w-full">
+        <Carousel opts={{ align: "start", loop: false }} autoPlay autoPlayInterval={4000} className="w-full">
           <CarouselContent>
             {classrooms.map((room, idx) => (
               <CarouselItem key={idx} className="basis-1/2 sm:basis-1/2 md:basis-1/3 lg:basis-1/4">

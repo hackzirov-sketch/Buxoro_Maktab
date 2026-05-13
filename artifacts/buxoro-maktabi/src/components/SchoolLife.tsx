@@ -54,7 +54,7 @@ function MomentCard({ item, index }: { item: typeof moments[0]; index: number })
 
 export default function SchoolLife() {
   return (
-    <section id="maktab-hayoti" className="py-24 relative overflow-hidden">
+    <section id="maktab-hayoti" className="py-24 relative overflow-hidden dark:bg-emerald-900/15">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-transparent pointer-events-none" />
 
       <div className="container mx-auto px-4 md:px-6">
