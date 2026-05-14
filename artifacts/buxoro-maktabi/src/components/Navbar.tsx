@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { Phone, X, Sun, Moon } from "lucide-react";
+import { Phone, X } from "lucide-react";
 import { Link, useLocation } from "wouter";
-import { useTheme } from "next-themes";
 const logoImg = "/logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -19,8 +18,6 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [location] = useLocation();
-  const { theme, setTheme } = useTheme();
-  const isDark = theme === "dark";
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -90,13 +87,6 @@ export default function Navbar() {
             aria-label="Tilni o'zgartirish"
           >
             <img src="/uz.gif" alt="O'zbekcha" className="w-5 h-5 object-cover rounded-sm" />
-          </button>
-          <button
-            onClick={() => setTheme(isDark ? "light" : "dark")}
-            className="glass-button text-[#065f46] dark:text-white/80 hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(34,197,94,0.15)] flex items-center justify-center shrink-0 w-10 h-10 focus-visible:outline-2 focus-visible:outline-primary/60 transition-all duration-300"
-            aria-label="Tema almashtirish"
-          >
-            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
           <a
             href="tel:+998948356666"
@@ -182,13 +172,6 @@ export default function Navbar() {
                   aria-label="Tilni o'zgartirish"
                 >
                   <img src="/uz.gif" alt="O'zbekcha" className="w-5 h-5 object-cover rounded-sm" />
-                </button>
-                <button
-                  onClick={() => { setTheme(isDark ? "light" : "dark"); closeMobile(); }}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/10 dark:bg-white/5 text-sm font-medium text-[#3C2415] dark:text-amber-100/80 active:scale-[0.98] transition-all duration-300"
-                >
-                  {isDark ? <Sun className="w-4 h-4 text-primary shrink-0" /> : <Moon className="w-4 h-4 text-primary shrink-0" />}
-                  {isDark ? "Yorug' tema" : "Qorong'i tema"}
                 </button>
               </div>
               <a
