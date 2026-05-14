@@ -70,6 +70,13 @@ const Carousel = React.forwardRef<
     const [canScrollPrev, setCanScrollPrev] = React.useState(false)
     const [canScrollNext, setCanScrollNext] = React.useState(false)
     const [isPaused, setIsPaused] = React.useState(false)
+    const pauseTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+
+    const pauseForAWhile = React.useCallback(() => {
+      setIsPaused(true)
+      if (pauseTimer.current) clearTimeout(pauseTimer.current)
+      pauseTimer.current = setTimeout(() => setIsPaused(false), 8000)
+    }, [])
 
     const onSelect = React.useCallback((api: CarouselApi) => {
       if (!api) {
@@ -122,14 +129,6 @@ const Carousel = React.forwardRef<
         api?.off("select", onSelect)
       }
     }, [api, onSelect])
-
-    const pauseTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
-
-    const pauseForAWhile = React.useCallback(() => {
-      setIsPaused(true)
-      if (pauseTimer.current) clearTimeout(pauseTimer.current)
-      pauseTimer.current = setTimeout(() => setIsPaused(false), 8000)
-    }, [])
 
     React.useEffect(() => {
       if (!api || !autoPlay || isPaused) return
