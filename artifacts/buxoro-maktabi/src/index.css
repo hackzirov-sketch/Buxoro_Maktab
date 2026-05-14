@@ -65,6 +65,7 @@
   --animate-shimmer: shimmer 2s linear infinite;
   --animate-glow-btn: glow-btn 2.5s ease-in-out infinite;
   --animate-neon-pulse: neon-pulse 2s ease-in-out infinite;
+  --animate-neon-border: neon-border 2.5s ease-in-out infinite;
 
   @keyframes glow-btn {
     0%, 100% {
@@ -95,6 +96,17 @@
   @keyframes neon-pulse {
     0%, 100% { text-shadow: 0 0 7px rgba(5, 150, 105, 0.3), 0 0 20px rgba(5, 150, 105, 0.1); }
     50% { text-shadow: 0 0 15px rgba(5, 150, 105, 0.6), 0 0 40px rgba(5, 150, 105, 0.3), 0 0 60px rgba(5, 150, 105, 0.1); }
+  }
+
+  @keyframes neon-border {
+    0%, 100% {
+      box-shadow: 0 0 8px rgba(5, 150, 105, 0.25), 0 0 20px rgba(5, 150, 105, 0.1);
+      border-color: rgba(5, 150, 105, 0.25);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(5, 150, 105, 0.5), 0 0 50px rgba(5, 150, 105, 0.2), 0 0 80px rgba(5, 150, 105, 0.08);
+      border-color: rgba(5, 150, 105, 0.5);
+    }
   }
 
   @keyframes overlay-in {
