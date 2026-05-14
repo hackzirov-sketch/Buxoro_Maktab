@@ -49,7 +49,7 @@ export default function CardViewer({ items, className = "", perPage = 4 }: Props
   return (
     <div className={`relative ${className}`}>
       <div id="card-viewer-track" className="overflow-hidden select-none">
-        <div className="grid grid-cols-4 gap-3 md:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
           {pageItems.map((item, i) => (
             <div key={i}>{item}</div>
           ))}

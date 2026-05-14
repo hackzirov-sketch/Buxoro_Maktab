@@ -6,6 +6,7 @@ import Advantages from "@/components/Advantages";
 import Roadmap from "@/components/Roadmap";
 import FAQ from "@/components/FAQ";
 import CTASection from "@/components/CTASection";
+import Map from "@/components/Map";
 import Footer from "@/components/Footer";
 import ChatBot from "@/components/ChatBot";
 import { useScroll, useSpring } from "framer-motion";
@@ -30,6 +31,7 @@ export default function HomePage() {
         <Roadmap />
         <FAQ />
         <CTASection />
+        <Map />
 
       </main>
       <Footer />

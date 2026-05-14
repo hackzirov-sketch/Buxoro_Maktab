@@ -143,7 +143,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 top-0 left-0 w-full h-full bg-black/30 z-40 lg:hidden"
+            className="fixed inset-0 top-0 left-0 w-full h-full bg-black/40 backdrop-blur-md z-40 lg:hidden"
             onClick={closeMobile}
             aria-hidden="true"
           />
@@ -159,7 +159,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0, scaleY: 1 }}
             exit={{ opacity: 0, y: -12, scaleY: 0.96 }}
             transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
-            className="glass-card fixed top-[72px] left-4 right-4 z-50 lg:hidden overflow-hidden"
+            className="glass-card fixed top-20 left-4 right-4 z-50 lg:hidden overflow-hidden bg-black/60 dark:bg-black/80"
           >
             <div className="py-3 px-4 flex flex-col gap-0.5">
               {navLinks.map((link, i) => (
@@ -168,8 +168,8 @@ export default function Navbar() {
                   href={link.href}
                   className={`text-base font-medium transition-colors py-3 px-3 rounded-xl ${
                     isActive(link.href)
-                      ? "text-primary bg-black/[0.04] dark:bg-white/[0.06]"
-                      : "text-foreground/70 hover:text-primary hover:bg-black/[0.03] dark:hover:bg-white/[0.04]"
+                      ? "text-primary bg-black/[0.06] dark:bg-white/[0.08]"
+                      : "text-[#3C2415] dark:text-amber-100/80 hover:text-primary hover:bg-black/[0.04] dark:hover:bg-white/[0.06]"
                   }`}
                   onClick={closeMobile}
                 >
@@ -178,14 +178,14 @@ export default function Navbar() {
               ))}
               <div className="flex items-center gap-2 px-3">
                 <button
-                  className="glass-button hover:bg-primary/10 flex items-center justify-center shrink-0 w-10 h-10 transition-all duration-300 overflow-hidden"
+                  className="flex items-center justify-center shrink-0 w-10 h-10 rounded-xl bg-white/10 dark:bg-white/5 transition-all duration-300 overflow-hidden"
                   aria-label="Tilni o'zgartirish"
                 >
                   <img src="/uz.gif" alt="O'zbekcha" className="w-5 h-5 object-cover rounded-sm" />
                 </button>
                 <button
                   onClick={() => { setTheme(isDark ? "light" : "dark"); closeMobile(); }}
-                  className="glass-button text-[#065f46] dark:text-white/80 hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(34,197,94,0.15)] flex items-center justify-center gap-2 px-4 py-3 font-medium text-sm active:scale-[0.98] transition-all duration-300 flex-1"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/10 dark:bg-white/5 text-sm font-medium text-[#3C2415] dark:text-amber-100/80 active:scale-[0.98] transition-all duration-300"
                 >
                   {isDark ? <Sun className="w-4 h-4 text-primary shrink-0" /> : <Moon className="w-4 h-4 text-primary shrink-0" />}
                   {isDark ? "Yorug' tema" : "Qorong'i tema"}
@@ -193,7 +193,7 @@ export default function Navbar() {
               </div>
               <a
                 href="tel:+998948356666"
-                className="glass-button text-[#065f46] dark:text-white/80 hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(34,197,94,0.15)] flex items-center justify-center gap-2 px-5 py-3 mt-2 font-medium text-sm active:scale-[0.98] transition-all duration-300"
+                className="flex items-center justify-center gap-2 px-5 py-3 mt-2 rounded-xl bg-white/10 dark:bg-white/5 text-sm font-medium text-[#3C2415] dark:text-amber-100/80 active:scale-[0.98] transition-all duration-300"
                 onClick={closeMobile}
               >
                 <Phone className="w-4 h-4 text-primary shrink-0" />

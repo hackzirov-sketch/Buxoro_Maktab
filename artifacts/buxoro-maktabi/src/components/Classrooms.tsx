@@ -49,7 +49,7 @@ function ClassroomCard({ room, index }: { room: Classroom; index: number }) {
           <img src={room.image} alt={room.name} loading="lazy" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent z-[2]" />
           <div className="absolute top-2 left-2 z-[3]">
-            <span className="px-2 py-0.5 rounded-full bg-white/70 backdrop-blur-md border border-emerald-200/40 text-[9px] md:text-[10px] font-medium text-foreground/70">{room.type}</span>
+            <span className="px-2 py-0.5 rounded-full bg-white/70 backdrop-blur-md border border-emerald-200/40 text-[10px] md:text-xs font-medium text-foreground/70">{room.type}</span>
           </div>
         </div>
         <div className="p-3 md:p-5 relative z-[2]">
@@ -60,9 +60,9 @@ function ClassroomCard({ room, index }: { room: Classroom; index: number }) {
           <p className="text-foreground/50 text-[10px] md:text-sm leading-relaxed line-clamp-1">{room.desc}</p>
           <div className="flex items-center gap-2 mt-2">
             {room.features.map((f, i) => (
-              <div key={i} className="flex items-center gap-1 text-foreground/30" title={f.label}>
+              <div key={i} className="flex items-center gap-1 text-foreground/40" title={f.label}>
                 <f.icon className="w-3 md:w-3.5 h-3 md:h-3.5" />
-                <span className="text-[8px] md:text-[9px] font-medium hidden sm:inline">{f.label}</span>
+                <span className="text-[10px] md:text-xs font-medium hidden sm:inline">{f.label}</span>
               </div>
             ))}
           </div>
@@ -126,7 +126,7 @@ export default function Classrooms() {
           </motion.p>
         </div>
 
-        <Carousel opts={{ align: "start", loop: false }} autoPlay autoPlayInterval={4000} className="w-full">
+        <Carousel opts={{ align: "start", loop: true }} autoPlay autoPlayInterval={3000} className="w-full">
           <CarouselContent>
             {classrooms.map((room, idx) => (
               <CarouselItem key={idx} className="basis-1/2 sm:basis-1/2 md:basis-1/3 lg:basis-1/4">

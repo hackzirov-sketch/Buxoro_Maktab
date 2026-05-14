@@ -72,9 +72,9 @@ export default function CTASection() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, ease: EASE }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-btn text-xs font-semibold text-primary uppercase tracking-[0.15em] mb-5"
+            className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full glass-btn text-sm md:text-base font-semibold text-primary uppercase tracking-[0.15em] mb-5"
           >
-            <Sparkles className="w-3 h-3" /> Maktab bilan tanishing
+            <Sparkles className="w-4 h-4" /> Maktab bilan tanishing
           </motion.span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.05] tracking-tight">
             Ko'proq <span className="text-primary">bilishni xohlaysizmi?</span>

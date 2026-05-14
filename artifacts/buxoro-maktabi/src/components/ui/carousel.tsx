@@ -69,6 +69,7 @@ const Carousel = React.forwardRef<
     )
     const [canScrollPrev, setCanScrollPrev] = React.useState(false)
     const [canScrollNext, setCanScrollNext] = React.useState(false)
+    const [isPaused, setIsPaused] = React.useState(false)
 
     const onSelect = React.useCallback((api: CarouselApi) => {
       if (!api) {
@@ -123,14 +124,14 @@ const Carousel = React.forwardRef<
     }, [api, onSelect])
 
     React.useEffect(() => {
-      if (!api || !autoPlay) return
+      if (!api || !autoPlay || isPaused) return
 
       const interval = setInterval(() => {
         api.scrollNext()
       }, autoPlayInterval)
 
       return () => clearInterval(interval)
-    }, [api, autoPlay, autoPlayInterval])
+    }, [api, autoPlay, autoPlayInterval, isPaused])
 
     return (
       <CarouselContext.Provider
@@ -149,6 +150,8 @@ const Carousel = React.forwardRef<
         <div
           ref={ref}
           onKeyDownCapture={handleKeyDown}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
           className={cn("relative", className)}
           role="region"
           aria-roledescription="carousel"

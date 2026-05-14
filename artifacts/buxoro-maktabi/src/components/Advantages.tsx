@@ -1,43 +1,36 @@
 import { motion } from "framer-motion";
-import { BookOpen, Shield, Music, Cpu, PlusCircle, Sparkles, ArrowRight } from "lucide-react";
+import { BookOpen, Shield, Cpu, Award, Sparkles, ArrowRight } from "lucide-react";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 const advantages = [
   {
     icon: BookOpen, num: "01",
-    title: "Sifatli ta'lim",
-    desc: "Malakali pedagoglar va zamonaviy metodikalar asosida yuqori darajadagi ta'lim",
+    title: "Chuqurlashtirilgan ta'lim",
+    desc: "Har bir o'quvchining qiziqishi va salohiyatiga mos ravishda aniq, tabiiy yoki ijtimoiy fanlar yo'nalishida chuqurlashtirilgan ta'lim beriladi.",
     gradient: "from-emerald-400/20 to-teal-400/10", color: "#059669",
     glow: "rgba(5,150,105,0.15)",
   },
   {
     icon: Shield, num: "02",
-    title: "Xavfsiz va sog'lom muhit",
-    desc: "Doimiy videokuzatuv, xavfsiz hudud va sog'lom ovqatlanish bilan ta'minlangan maktab",
+    title: "Tizimli nazorat",
+    desc: "O'quvchilarning darsdagi faolligi, davomati va o'zlashtirish ko'rsatkichlari zamonaviy monitoring tizimi orqali muntazam kuzatib boriladi.",
     gradient: "from-sky-400/20 to-blue-400/10", color: "#0284c7",
     glow: "rgba(2,132,199,0.15)",
   },
   {
-    icon: Music, num: "03",
-    title: "Darsdan tashqari mashg'ulotlar",
-    desc: "Sport, san'at, musiqa va texnik to'garaklar orqali o'quvchilarning iqtidorini rivojlantirish",
+    icon: Cpu, num: "03",
+    title: "Zamonaviy yondashuv",
+    desc: "Innovatsion metodlar, ilg'or texnologiyalar va malakali ustozlar orqali xalqaro standartlarga mos ta'lim muhiti yaratilgan.",
     gradient: "from-purple-400/20 to-violet-400/10", color: "#7c3aed",
     glow: "rgba(124,58,237,0.15)",
   },
   {
-    icon: Cpu, num: "04",
-    title: "Zamonaviy va ilg'or texnologiyalar",
-    desc: "Smart doskalar, interaktiv laboratoriyalar va raqamli ta'lim platformalari bilan jihozlangan sinflar",
+    icon: Award, num: "04",
+    title: "Yuksak natijalar",
+    desc: "O'quvchilarimiz xalqaro olimpiadalar, IELTS, SAT, milliy sertifikat va CEFR kabi yo'nalishlarda yuqori natijalarga erishib kelmoqda.",
     gradient: "from-amber-400/20 to-orange-400/10", color: "#d97706",
     glow: "rgba(217,119,6,0.15)",
-  },
-  {
-    icon: PlusCircle, num: "05",
-    title: "Qo'shimcha darslar",
-    desc: "Ingliz tili, IT, robototexnika va boshqa fanlardan qo'shimcha mashg'ulotlar",
-    gradient: "from-rose-400/20 to-pink-400/10", color: "#e11d48",
-    glow: "rgba(225,29,72,0.15)",
   },
 ];
 
@@ -62,9 +55,9 @@ export default function Advantages() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, ease: EASE }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-btn text-xs font-semibold text-primary uppercase tracking-[0.15em] mb-5"
+            className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full glass-btn text-sm md:text-base font-semibold text-primary uppercase tracking-[0.15em] mb-5"
           >
-            <Sparkles className="w-3 h-3" /> Nega aynan biz?
+            <Sparkles className="w-4 h-4" /> Nega aynan biz?
           </motion.span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.05] tracking-tight">
             Bizning{" "}
@@ -84,7 +77,7 @@ export default function Advantages() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
           {advantages.map((item, idx) => {
             const Icon = item.icon;
             return (

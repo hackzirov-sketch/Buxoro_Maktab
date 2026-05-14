@@ -57,9 +57,9 @@ export default function Roadmap() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, ease: EASE }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-btn text-xs font-semibold text-primary uppercase tracking-[0.15em] mb-5"
+            className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full glass-btn text-sm md:text-base font-semibold text-primary uppercase tracking-[0.15em] mb-5"
           >
-            <Sparkles className="w-3 h-3" /> Ta'lim yo'nalishi
+            <Sparkles className="w-4 h-4" /> Ta'lim yo'nalishi
           </motion.span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.05] tracking-tight">
             Maktab <span className="text-primary">ta'lim bosqichlari</span>
@@ -75,7 +75,7 @@ export default function Roadmap() {
             whileInView={{ scaleY: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 1.2, ease: EASE, delay: 0.3 }}
-            className="absolute left-[27px] md:left-1/2 top-0 w-[2px] h-full bg-gradient-to-b from-primary/40 via-primary/20 to-transparent -translate-x-1/2 origin-top"
+            className="absolute left-7 md:left-1/2 top-0 w-[2px] h-full bg-gradient-to-b from-primary/40 via-primary/20 to-transparent -translate-x-1/2 origin-top"
           />
 
           <div className="space-y-16 md:space-y-24">

@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { ArrowRight, Users, Building2, Utensils, FileText } from "lucide-react";
-import { useRef, useEffect } from "react";
 const logoImg = "/logo.png";
 
 const previews = [
@@ -31,36 +30,22 @@ const lineVariants = {
 };
 
 export default function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    const play = () => v.play().catch(() => {});
-    let timeout = setTimeout(() => play(), 3000);
-    const cb = () => { clearTimeout(timeout); play(); };
-    v.addEventListener("canplaythrough", cb, { once: true });
-    return () => {
-      v.removeEventListener("canplaythrough", cb);
-      clearTimeout(timeout);
-    };
-  }, []);
-
   return (
-    <section className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden pt-16 md:pt-20">
+    <section className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden pt-24 md:pt-20">
 
-      {/* Background video — laptop only */}
-      <div className="hidden lg:block absolute inset-0 z-0 pointer-events-none overflow-hidden">
+      {/* Background video */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <video
-          ref={videoRef}
           muted
           loop
           playsInline
+          autoPlay
           preload="metadata"
           className="w-full h-full object-cover"
         >
-          <source src="/hero-bg.mp4" type="video/mp4" />
+          <source src="/hero-bg.webm" type="video/webm" />
         </video>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent" />
       </div>
 
       <div className="w-full px-4 sm:px-6 md:px-8 relative z-10 flex-1 flex flex-col justify-center pb-6">
@@ -73,11 +58,11 @@ export default function Hero() {
           className="flex justify-center items-center mb-8 lg:hidden"
         >
           <div className="relative flex items-center justify-center">
-            <div className="absolute -inset-12 bg-primary/10 blur-[70px] rounded-full animate-pulse-slow" />
+            <div className="absolute -inset-14 bg-primary/10 blur-[80px] rounded-full animate-pulse-slow" />
             <img
               src={logoImg}
               alt="Buxoro Maktabi Logo"
-              className="w-44 h-44 sm:w-48 sm:h-48 object-cover relative z-10 animate-float drop-shadow-[0_0_28px_rgba(34,197,94,0.3)] rounded-full opacity-70"
+              className="w-52 h-52 sm:w-56 sm:h-56 object-cover relative z-10 animate-float drop-shadow-[0_0_35px_rgba(5,150,105,0.4)] rounded-full"
             />
           </div>
         </motion.div>
@@ -107,12 +92,14 @@ export default function Hero() {
               va sifatli ta'lim markazi
             </motion.h1>
 
-            <motion.p
+            <motion.div
               variants={lineVariants}
-              className="text-base sm:text-lg md:text-xl font-['Playfair_Display'] italic font-black text-[#059669] max-w-xl leading-[1.8] animate-neon-pulse"
+              className="inline-block glass-card px-5 py-3 md:px-6 md:py-4 mt-4"
             >
-              Bekoboddagi eng ilg'or va ishonchli ta'lim muhitini yaratayotgan maktab. Kelajak yetakchilarini bugun tarbiyalaymiz.
-            </motion.p>
+              <p className="text-base sm:text-lg md:text-xl font-['Playfair_Display'] italic font-black text-[#059669] leading-[1.8] animate-neon-pulse">
+                Bekoboddagi eng ilg'or va ishonchli ta'lim muhitini yaratayotgan maktab. Kelajak yetakchilarini bugun tarbiyalaymiz.
+              </p>
+            </motion.div>
 
           </motion.div>
 
