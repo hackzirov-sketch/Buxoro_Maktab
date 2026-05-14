@@ -43,12 +43,18 @@ async function tg(method, payload) {
 
 async function tgDoc(filePath, caption) {
   try {
-    const FormData = (await import("form-data")).default;
+    const buffer = fs.readFileSync(filePath);
+    const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     const form = new FormData();
     form.append("chat_id", CHAT_ID);
-    form.append("document", fs.createReadStream(filePath));
+    form.append("document", blob, path.basename(filePath));
     form.append("caption", caption);
-    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, { method: "POST", body: form });
+    const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {
+      method: "POST",
+      body: form,
+    });
+    const result = await res.json();
+    if (!result.ok) console.error("Telegram fayl xatosi:", JSON.stringify(result));
   } catch (err) {
     console.error("Telegram fayl xatosi:", err.message);
   }
