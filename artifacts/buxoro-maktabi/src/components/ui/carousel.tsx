@@ -123,6 +123,14 @@ const Carousel = React.forwardRef<
       }
     }, [api, onSelect])
 
+    const pauseTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+
+    const pauseForAWhile = React.useCallback(() => {
+      setIsPaused(true)
+      if (pauseTimer.current) clearTimeout(pauseTimer.current)
+      pauseTimer.current = setTimeout(() => setIsPaused(false), 8000)
+    }, [])
+
     React.useEffect(() => {
       if (!api || !autoPlay || isPaused) return
 
@@ -152,6 +160,7 @@ const Carousel = React.forwardRef<
           onKeyDownCapture={handleKeyDown}
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
+          onClick={() => pauseForAWhile()}
           className={cn("relative", className)}
           role="region"
           aria-roledescription="carousel"

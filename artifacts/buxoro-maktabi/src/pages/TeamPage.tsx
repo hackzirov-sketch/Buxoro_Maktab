@@ -9,7 +9,7 @@ const EASE = [0.4, 0, 0.2, 1] as const;
 
 const members = [
   { name: "Mamadaliyev Abdulaziz", role: "Jismoniy tarbiya o'qituvchisi", short: "10 yillik tajriba", full: "Sport ustasi. Basketbol, voleybol va yengil atletika bo'yicha murabbiy.", grad: "from-lime-400 to-green-400", image: "/GYM.jpg" },
-  { name: "Zulfiya Karimova", role: "O'quv ishlari bo'yicha direktor", short: "15 yillik tajriba", full: "Xalqaro ta'lim dasturlari sertifikati (IB, Cambridge) egasi.", grad: "from-primary to-emerald-400", image: "/History.jpg" },
+  { name: "Xojimuratov Bekzod", role: "Milliy sertifikat o'qituvchisi", short: "A+ natija", full: "Milliy sertifikat natijasi A+. 10 dan oshiq o'quvchilarni yuqori natijalarga olib chiqqan.", grad: "from-primary to-emerald-400", image: "/History.jpg" },
   { name: "Rustam Xoldorov", role: "IT bo'limi rahbari", short: "10 yillik IT tajribasi", full: "Zamonaviy ta'lim texnologiyalarini joriy etish bo'yicha mutaxassis.", grad: "from-amber-400 to-orange-400", image: "/English 2.jpg" },
   { name: "Alisher Rustamov", role: "Matematika o'qituvchisi", short: "12 yillik tajriba", full: "Matematika olimpiadalarining g'oliblarini tayyorlagan tajribali pedagog.", grad: "from-pink-400 to-rose-400", image: "/Boshlangich1.jpg" },
   { name: "Dilnoza Murodova", role: "Ingliz tili o'qituvchisi", short: "8 yillik tajriba", full: "IELTS 8.0 va CELTA sertifikatlariga ega.", grad: "from-primary to-emerald-400", image: "/English.jpg" },
@@ -17,6 +17,7 @@ const members = [
   { name: "Nigora Aliyeva", role: "Ona tili o'qituvchisi", short: "20 yillik tajriba", full: "Filologiya fanlari nomzodi.", grad: "from-purple-400 to-violet-400", image: "/Rus Tili.jpg" },
   { name: "Bekzod Rahimov", role: "Maktab direktori", short: "25 yillik tajriba", full: "25 yillik pedagogik va rahbarlik tajribasi.", grad: "from-sky-400 to-blue-400", image: "/Boshlangich3.jpg" },
   { name: "Mr. Sherzod", role: "Ingliz tili o'qituvchisi", short: "IELTS 7.5", full: "Yuqori sinflarni CEFR va IELTS imtihoniga tayyorlaydi. CEFR natijasi C1, IELTS 7.5.", grad: "from-primary to-emerald-400", image: "/Mr.Sherzod.JPEG" },
+  { name: "Hakimbek Gʻulomjonov", role: "Huquq va ingliz tili fani oʻqituvchisi", short: "IELTS 7.0", full: "Toshkent davlat yuridik universiteti (2025). “Adolat-advokat” advokatlik firmasi advokat yordamchisi. Xitoy, Chongching shahrida stajirovka.", grad: "from-amber-400 to-orange-400", image: "/LawXuquq.jpg" },
 ];
 
 function Card({ m, idx }: { m: typeof members[0]; idx: number }) {
