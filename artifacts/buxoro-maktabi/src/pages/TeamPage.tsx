@@ -16,6 +16,7 @@ const members = [
   { name: "Sanjar Qodirov", role: "Fizika o'qituvchisi", short: "15 yillik tajriba", full: "Ilmiy loyihalar va amaliy tajribalar asosida fizika fanini o'rgatadi.", grad: "from-teal-400 to-cyan-400", image: "/Boshlangich.jpg" },
   { name: "Nigora Aliyeva", role: "Ona tili o'qituvchisi", short: "20 yillik tajriba", full: "Filologiya fanlari nomzodi.", grad: "from-purple-400 to-violet-400", image: "/Rus Tili.jpg" },
   { name: "Bekzod Rahimov", role: "Maktab direktori", short: "25 yillik tajriba", full: "25 yillik pedagogik va rahbarlik tajribasi.", grad: "from-sky-400 to-blue-400", image: "/Boshlangich3.jpg" },
+  { name: "Mr. Sherzod", role: "Ingliz tili o'qituvchisi", short: "IELTS 7.5", full: "Yuqori sinflarni CEFR va IELTS imtihoniga tayyorlaydi. CEFR natijasi C1, IELTS 7.5.", grad: "from-primary to-emerald-400", image: "/Mr.Sherzod.JPEG" },
 ];
 
 function Card({ m, idx }: { m: typeof members[0]; idx: number }) {

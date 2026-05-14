@@ -14,6 +14,7 @@ const colorPalette = [
   "from-primary to-emerald-400", "from-amber-400 to-orange-400", "from-pink-400 to-rose-400",
   "from-sky-400 to-blue-400", "from-purple-400 to-violet-400", "from-teal-400 to-cyan-400",
   "from-primary to-emerald-400", "from-amber-400 to-orange-400", "from-pink-400 to-rose-400",
+  "from-primary to-emerald-400", "from-lime-400 to-green-400",
 ];
 
 const topRowMembers: (TeamMember & { image?: string })[] = [
@@ -27,6 +28,7 @@ const topRowMembers: (TeamMember & { image?: string })[] = [
   { name: "Javohir Olimov", role: "Informatika o'qituvchisi", shortDesc: "7 yillik tajriba", fullDesc: "Dasturlash, robototexnika va sun'iy intellekt asoslari bo'yicha dars beradi.", highlight: "🤖 3 marta RoboContest finalchisi", image: "/LawXuquq.jpg" },
   { name: "Nigora Aliyeva", role: "Ona tili o'qituvchisi", shortDesc: "20 yillik tajriba", fullDesc: "Filologiya fanlari nomzodi.", highlight: "📖 5 ta o'quv qo'llanma muallifi", image: "/Rus Tili.jpg" },
   { name: "Bekzod Rahimov", role: "Maktab direktori", shortDesc: "25 yillik tajriba", fullDesc: "25 yillik pedagogik va rahbarlik tajribasi.", highlight: "🏆 2024 — Eng yaxshi direktor mukofoti", image: "/Boshlangich3.jpg" },
+  { name: "Mr. Sherzod", role: "Ingliz tili o'qituvchisi", shortDesc: "IELTS 7.5", fullDesc: "Yuqori sinflarni CEFR va IELTS imtihoniga tayyorlaydi. CEFR natijasi C1, IELTS 7.5.", highlight: "🎯 IELTS 7.5 | CEFR C1", image: "/Mr.Sherzod.JPEG" },
 ];
 
 const bottomRowMembers: TeamMember[] = [

@@ -68,8 +68,8 @@ async function createExcel(data, title) {
 
   const sheet = workbook.addWorksheet("Arizalar");
 
-  // Sarlavha rangi
-  sheet.columns = [
+  // Ustunlar — widths bilan, birlashib ketmasligi uchun
+  const colDefs = [
     { header: "#", key: "id", width: 5 },
     { header: "Sana", key: "date", width: 22 },
     { header: "Ism", key: "firstName", width: 18 },
@@ -77,35 +77,76 @@ async function createExcel(data, title) {
     { header: "Telefon", key: "phone", width: 20 },
     { header: "Bola ismi", key: "childFirstName", width: 18 },
     { header: "Bola familiyasi", key: "childLastName", width: 18 },
-    { header: "Hozirgi maktab", key: "currentSchool", width: 25 },
-    { header: "Tugatgan sinf", key: "graduatedClass", width: 15 },
-    { header: "Qabul sinfi", key: "applyingClass", width: 15 },
+    { header: "Hozirgi maktab", key: "currentSchool", width: 28 },
+    { header: "Tugatgan sinf", key: "graduatedClass", width: 16 },
+    { header: "Qabul sinfi", key: "applyingClass", width: 16 },
     { header: "Hudud", key: "region", width: 18 },
   ];
+  sheet.columns = colDefs;
 
-  const headerRow = sheet.getRow(1);
-  headerRow.font = { bold: true, color: { argb: "FFFFFFFF" }, size: 12 };
-  headerRow.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF059669" } };
-  headerRow.alignment = { vertical: "middle", horizontal: "center" };
-  headerRow.height = 30;
+  // Sarlavha
+  const hRow = sheet.getRow(1);
+  hRow.font = { bold: true, color: { argb: "FFFFFFFF" }, size: 11, name: "Arial" };
+  hRow.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF059669" } };
+  hRow.alignment = { vertical: "middle", horizontal: "center", wrapText: true };
+  hRow.height = 28;
+  // Sarlavhaga border
+  hRow.eachCell(cell => {
+    cell.border = {
+      top: { style: "thin", color: { argb: "FF047857" } },
+      bottom: { style: "thin", color: { argb: "FF047857" } },
+      left: { style: "thin", color: { argb: "FF047857" } },
+      right: { style: "thin", color: { argb: "FF047857" } },
+    };
+  });
 
+  // Ma'lumotlar
   data.forEach((row, i) => {
-    const addedRow = sheet.addRow({
-      id: i + 1, date: row.createdAt,
-      firstName: row.firstName, lastName: row.lastName,
+    const r = sheet.addRow({
+      id: i + 1,
+      date: row.createdAt,
+      firstName: row.firstName,
+      lastName: row.lastName,
       phone: row.phone,
-      childFirstName: row.childFirstName, childLastName: row.childLastName,
+      childFirstName: row.childFirstName,
+      childLastName: row.childLastName,
       currentSchool: row.currentSchool,
-      graduatedClass: row.graduatedClass, applyingClass: row.applyingClass,
+      graduatedClass: row.graduatedClass + "-sinf",
+      applyingClass: row.applyingClass + "-sinf",
       region: row.region,
     });
-    addedRow.height = 25;
-    addedRow.alignment = { vertical: "middle" };
-    // Har ikkinchi qatorga fon rangi
+    r.height = 22;
+    r.alignment = { vertical: "middle", wrapText: false };
+
+    // Border har bir katakka
+    r.eachCell(cell => {
+      cell.border = {
+        top: { style: "thin", color: { argb: "FFE2E8F0" } },
+        bottom: { style: "thin", color: { argb: "FFE2E8F0" } },
+        left: { style: "thin", color: { argb: "FFE2E8F0" } },
+        right: { style: "thin", color: { argb: "FFE2E8F0" } },
+      };
+    });
+
+    // Juft qatorlar uchun fon
     if (i % 2 === 0) {
-      addedRow.eachCell(cell => { cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFF0FDF4" } }; });
+      r.eachCell(cell => {
+        cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFF0FDF4" } };
+      });
     }
   });
+
+  // Muzlatilgan sarlavha (scroll qilganda sarlavha yuqorida qoladi)
+  sheet.views = [{ state: "frozen", ySplit: 1 }];
+
+  // Avtofiltr
+  sheet.autoFilter = {
+    from: { row: 1, column: 1 },
+    to: { row: data.length + 1, column: colDefs.length },
+  };
+
+  // Telefon ustunidagi matn formatini matn sifatida saqlash
+  sheet.getColumn(5).numFmt = "@";
 
   const filePath = path.join(__dirname, `${title}.xlsx`);
   await workbook.xlsx.writeFile(filePath);
