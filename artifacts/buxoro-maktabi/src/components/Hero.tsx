@@ -135,20 +135,22 @@ export default function Hero() {
             {previews.map((item, idx) => (
               <motion.div
                 key={item.label}
-                whileHover={{ scale: 1.04, y: -4 }}
+                whileHover={{ scale: 1.05, y: -6 }}
                 whileTap={{ scale: 0.96 }}
               >
                 <Link
                   href={item.href}
-                  className="group block p-5 md:p-6 rounded-2xl glass-card hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                  className="group block p-6 md:p-7 rounded-2xl glass-card hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border border-white/10 hover:border-white/20"
                 >
-                  <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${item.gradient} bg-opacity-20 flex items-center justify-center mb-4`}>
-                    <item.icon className="w-5 h-5 text-white" />
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.gradient} shadow-lg flex items-center justify-center mb-5`}
+                    style={{ boxShadow: "0 0 18px 4px rgba(255,255,255,0.15), 0 4px 16px rgba(0,0,0,0.3)" }}
+                  >
+                    <item.icon className="w-7 h-7 text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]" />
                   </div>
-                  <h3 className="text-foreground font-bold text-base md:text-xl mb-1.5 group-hover:text-primary transition-colors duration-300">{item.label}</h3>
-                  <p className="text-foreground/60 text-sm md:text-base leading-relaxed mb-3">{item.desc}</p>
-                  <span className="inline-flex items-center gap-1.5 text-primary text-xs md:text-sm font-medium">
-                    Batafsil ko'rish <ArrowRight className="w-3.5 h-3.5" />
+                  <h3 className="text-white font-extrabold text-xl md:text-2xl mb-2 group-hover:text-primary transition-colors duration-300 tracking-tight">{item.label}</h3>
+                  <p className="text-white/75 text-sm md:text-base leading-relaxed mb-4 font-medium">{item.desc}</p>
+                  <span className="inline-flex items-center gap-1.5 text-primary text-sm md:text-base font-semibold">
+                    Batafsil ko'rish <ArrowRight className="w-4 h-4" />
                   </span>
                 </Link>
               </motion.div>
