@@ -391,11 +391,11 @@ app.get("/api/applications/stats", (req, res) => {
 });
 
 // ==================== SPA FALLBACK ====================
-app.get("*", (req, res) => {
-  if (req.path.startsWith("/api/") || req.path.startsWith("/webhook")) return;
+app.use((req, res, next) => {
+  if (req.path.startsWith("/api/") || req.path.startsWith("/webhook") || req.path.includes(".")) return next();
   const indexFile = path.join(distPath, "index.html");
   if (fs.existsSync(indexFile)) res.sendFile(indexFile);
-  else res.status(404).json({ error: "Not found" });
+  else next();
 });
 
 // ==================== AUTO-HISOBOT (soat 21:00) ====================
