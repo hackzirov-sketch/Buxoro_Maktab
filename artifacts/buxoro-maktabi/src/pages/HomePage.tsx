@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import SchoolLife from "@/components/SchoolLife";
@@ -10,9 +10,6 @@ import Map from "@/components/Map";
 import CTABanner from "@/components/CTABanner";
 import Footer from "@/components/Footer";
 import FloatingCTA from "@/components/FloatingCTA";
-import { useScroll, useSpring } from "framer-motion";
-
-const EASE = [0.16, 1, 0.3, 1] as const;
 
 function ScrollProgress() {
   const { scrollYProgress } = useScroll();
