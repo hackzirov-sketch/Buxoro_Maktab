@@ -1,13 +1,12 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowRight, Users, Building2, Utensils, FileText } from "lucide-react";
+import { ArrowRight, Users, Building2, Utensils } from "lucide-react";
 const logoImg = "/logo.png";
 
 const previews = [
   { icon: Users, label: "Jamoa", desc: "Professional o'qituvchilar va rahbarlar jamoasi", href: "/jamoa", gradient: "from-primary to-emerald-400", cardBg: "rgba(5,150,105,0.35)" },
   { icon: Building2, label: "Sinfxonalar", desc: "Zamonaviy texnologiyalar bilan jihozlangan sinflar", href: "/sinflar", gradient: "from-sky-400 to-blue-400", cardBg: "rgba(56,189,248,0.30)" },
   { icon: Utensils, label: "Oshxona", desc: "Sog'lom va mazali taomlar, kunlik menyu", href: "/oshxona", gradient: "from-orange-400 to-rose-400", cardBg: "rgba(251,146,60,0.32)" },
-  { icon: FileText, label: "Ariza", desc: "Farzandingizni maktabga ro'yxatdan o'tkazing", href: "/ariza", gradient: "from-primary to-emerald-400", cardBg: "rgba(5,150,105,0.35)" },
 ];
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
