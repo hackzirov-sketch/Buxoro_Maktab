@@ -40,8 +40,10 @@ export default function Hero() {
           loop
           playsInline
           autoPlay
-          preload="metadata"
+          preload="auto"
+          disablePictureInPicture
           className="w-full h-full object-cover"
+          onCanPlay={(e) => (e.currentTarget as HTMLVideoElement).play().catch(() => {})}
         >
           <source src="/hero-bg.webm" type="video/webm" />
         </video>
