@@ -1,13 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowRight, Users, Building2, Utensils } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 const logoImg = "/logo.png";
-
-const previews = [
-  { icon: Users, label: "Jamoa", desc: "Professional o'qituvchilar va rahbarlar jamoasi", href: "/jamoa", gradient: "from-primary to-emerald-400", cardBg: "rgba(5,150,105,0.35)" },
-  { icon: Building2, label: "Sinfxonalar", desc: "Zamonaviy texnologiyalar bilan jihozlangan sinflar", href: "/sinflar", gradient: "from-sky-400 to-blue-400", cardBg: "rgba(56,189,248,0.30)" },
-  { icon: Utensils, label: "Oshxona", desc: "Sog'lom va mazali taomlar, kunlik menyu", href: "/oshxona", gradient: "from-orange-400 to-rose-400", cardBg: "rgba(251,146,60,0.32)" },
-];
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 
@@ -138,46 +132,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Section Preview Cards */}
-      <div className="w-full pb-8 px-4 sm:px-6 md:px-8 relative z-10">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE_OUT_EXPO, delay: 0.5 }}
-          >
-            {previews.map((item, idx) => (
-              <motion.div
-                key={item.label}
-                whileHover={{ scale: 1.05, y: -6 }}
-                whileTap={{ scale: 0.96 }}
-              >
-                <Link
-                  href={item.href}
-                  className="group block p-6 md:p-7 rounded-2xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border border-white/20 hover:border-white/40"
-                  style={{
-                    background: item.cardBg,
-                    backdropFilter: "blur(20px)",
-                    WebkitBackdropFilter: "blur(20px)",
-                  }}
-                >
-                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.gradient} shadow-lg flex items-center justify-center mb-5`}
-                    style={{ boxShadow: "0 0 22px 6px rgba(255,255,255,0.18), 0 4px 18px rgba(0,0,0,0.35)" }}
-                  >
-                    <item.icon className="w-8 h-8 text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]" />
-                  </div>
-                  <h3 className="text-white font-extrabold text-2xl md:text-2xl mb-2 group-hover:text-primary transition-colors duration-300 tracking-tight">{item.label}</h3>
-                  <p className="text-white/80 text-base md:text-base leading-relaxed mb-4 font-medium">{item.desc}</p>
-                  <span className="inline-flex items-center gap-1.5 text-primary text-base md:text-base font-semibold">
-                    Batafsil ko'rish <ArrowRight className="w-4 h-4" />
-                  </span>
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </div>
 
     </section>
   );
