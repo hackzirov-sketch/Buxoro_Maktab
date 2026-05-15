@@ -12,6 +12,15 @@ const CHAT_ID = process.env.CHAT_ID;
 const DATA_FILE = path.join(__dirname, "applications.json");
 const PORT = process.env.PORT || 4000;
 
+// Frontend dist papkasini serv qilish
+const distPath = path.join(__dirname, "..", "artifacts", "buxoro-maktabi", "dist");
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+  console.log("✅ Frontend static fayllar serv qilinmoqda");
+} else {
+  console.log("⚠️ Frontend dist topilmadi, faqat API ishlaydi");
+}
+
 app.use(cors());
 app.use(express.json());
 
@@ -379,6 +388,14 @@ app.get("/api/applications/stats", (req, res) => {
     total: allData.length,
     today: allData.filter(a => a.createdAt && a.createdAt.startsWith(new Date().toLocaleDateString("uz-UZ", { timeZone: "Asia/Tashkent" }).slice(0, 10))).length,
   });
+});
+
+// ==================== SPA FALLBACK ====================
+app.get("*", (req, res) => {
+  if (req.path.startsWith("/api/") || req.path.startsWith("/webhook")) return;
+  const indexFile = path.join(distPath, "index.html");
+  if (fs.existsSync(indexFile)) res.sendFile(indexFile);
+  else res.status(404).json({ error: "Not found" });
 });
 
 // ==================== AUTO-HISOBOT (soat 21:00) ====================
