@@ -133,7 +133,7 @@ export default function Team() {
 
         <div className="mb-8 md:mb-12 -mx-4 sm:-mx-6 md:-mx-8 md:mx-0 overflow-hidden md:rounded-2xl flex justify-center bg-emerald-50/30 dark:bg-emerald-900/10 py-4 md:py-6 px-4">
           <img
-            src="/All.jpg"
+            src="/all.JPEG"
             alt="Jamoa"
             className="w-full max-w-md h-auto rounded-xl border border-transparent animate-neon-border"
           />
