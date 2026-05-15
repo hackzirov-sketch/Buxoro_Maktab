@@ -34,18 +34,19 @@ export default function Hero() {
 
       {/* Background — video on desktop, gradient on mobile */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        {/* Mobile gradient background */}
-        <div
-          className="absolute inset-0 md:hidden"
-          style={{
-            background: "linear-gradient(135deg, #031a10 0%, #052e16 30%, #064e3b 60%, #065f46 80%, #031a10 100%)",
-          }}
-        />
-        {/* Animated blobs for mobile depth */}
-        <div className="absolute inset-0 md:hidden pointer-events-none">
-          <div style={{ position: "absolute", width: "60vw", height: "60vw", top: "-10%", right: "-10%", background: "radial-gradient(circle, rgba(5,150,105,0.35) 0%, transparent 70%)", filter: "blur(40px)", animation: "drift 12s ease-in-out infinite" }} />
-          <div style={{ position: "absolute", width: "50vw", height: "50vw", bottom: "10%", left: "-10%", background: "radial-gradient(circle, rgba(16,185,129,0.25) 0%, transparent 70%)", filter: "blur(40px)", animation: "drift 16s ease-in-out infinite reverse" }} />
-        </div>
+        {/* Mobile video background */}
+        <video
+          muted
+          loop
+          playsInline
+          autoPlay
+          preload="auto"
+          disablePictureInPicture
+          className="md:hidden absolute inset-0 w-full h-full object-cover"
+          onCanPlay={(e) => (e.currentTarget as HTMLVideoElement).play().catch(() => {})}
+        >
+          <source src="/hero-mobile.mp4" type="video/mp4" />
+        </video>
         {/* Desktop video */}
         <video
           muted
