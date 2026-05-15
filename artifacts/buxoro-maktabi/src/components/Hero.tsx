@@ -31,7 +31,7 @@ const lineVariants = {
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden pt-24 md:pt-20">
+    <section className="relative min-h-[100dvh] flex flex-col justify-center overflow-visible pt-24 md:pt-20">
 
       {/* Background video */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -124,25 +124,18 @@ export default function Hero() {
       </div>
 
       {/* Section Preview Cards */}
-      <div className="w-full pb-8 px-4 sm:px-6 md:px-8">
+      <div className="w-full pb-8 px-4 sm:px-6 md:px-8 relative z-10">
         <div className="max-w-7xl mx-auto">
           <motion.div
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5"
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: {},
-              visible: { transition: { staggerChildren: 0.08, delayChildren: 0.5 } },
-            }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: EASE_OUT_EXPO, delay: 0.5 }}
           >
             {previews.map((item, idx) => (
               <motion.div
                 key={item.label}
-                variants={{
-                  hidden: { opacity: 0, y: 20, scale: 0.94 },
-                  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: EASE_OUT_EXPO } },
-                }}
-                whileHover={{ scale: 1.04, transition: { type: "spring", stiffness: 350, damping: 22 } }}
+                whileHover={{ scale: 1.04, y: -4 }}
                 whileTap={{ scale: 0.96 }}
               >
                 <Link
@@ -152,9 +145,9 @@ export default function Hero() {
                   <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${item.gradient} bg-opacity-20 flex items-center justify-center mb-4`}>
                     <item.icon className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="text-foreground font-semibold text-base md:text-lg mb-1.5 group-hover:text-primary transition-colors duration-300">{item.label}</h3>
-                  <p className="text-foreground/50 text-sm leading-relaxed mb-3">{item.desc}</p>
-                  <span className="inline-flex items-center gap-1.5 text-primary text-xs font-medium">
+                  <h3 className="text-foreground font-bold text-base md:text-xl mb-1.5 group-hover:text-primary transition-colors duration-300">{item.label}</h3>
+                  <p className="text-foreground/60 text-sm md:text-base leading-relaxed mb-3">{item.desc}</p>
+                  <span className="inline-flex items-center gap-1.5 text-primary text-xs md:text-sm font-medium">
                     Batafsil ko'rish <ArrowRight className="w-3.5 h-3.5" />
                   </span>
                 </Link>

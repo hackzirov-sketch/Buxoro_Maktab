@@ -71,7 +71,7 @@ export default function FAQ() {
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.05] tracking-tight">
             Sizni <span className="text-primary">o'ylantiradigan savollar</span>
           </h2>
-          <p className="text-base md:text-lg text-foreground/50 mt-5 max-w-2xl mx-auto leading-relaxed font-['Playfair_Display'] italic">
+          <p className="text-lg md:text-xl text-foreground/70 mt-5 max-w-3xl mx-auto leading-relaxed font-['Playfair_Display'] italic">
             "Har bir ota-ona tashvishlanadi. Biz bu tashvishlarni yuzlab marta eshitdik — va maktabimizni ularni hal qilish uchun qurdik."
           </p>
         </motion.div>
@@ -97,7 +97,7 @@ export default function FAQ() {
                     <span className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold transition-colors duration-300 ${openIndex === idx ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary"}`}>
                       {String(idx + 1).padStart(2, "0")}
                     </span>
-                    <span className="text-sm md:text-base font-semibold text-foreground">{faq.q}</span>
+                    <span className="text-base md:text-lg font-semibold text-foreground">{faq.q}</span>
                   </span>
                   <motion.div
                     animate={{ rotate: openIndex === idx ? 180 : 0 }}
@@ -116,7 +116,7 @@ export default function FAQ() {
                       transition={{ duration: 0.35, ease: EASE }}
                       className="overflow-hidden"
                     >
-                      <p className="pt-4 text-sm md:text-base text-foreground/60 leading-relaxed pl-11">
+                      <p className="pt-4 text-base md:text-lg text-foreground/60 leading-relaxed pl-11">
                         {faq.a}
                       </p>
                     </motion.div>

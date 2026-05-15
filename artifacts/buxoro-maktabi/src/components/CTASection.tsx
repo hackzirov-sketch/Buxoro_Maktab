@@ -79,7 +79,7 @@ export default function CTASection() {
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.05] tracking-tight">
             Ko'proq <span className="text-primary">bilishni xohlaysizmi?</span>
           </h2>
-          <p className="text-base md:text-lg text-foreground/50 mt-4 max-w-lg mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-foreground/70 mt-5 max-w-2xl mx-auto leading-relaxed font-['Playfair_Display'] italic">
             Siz uchun eng qiziqarli bo'limga o'ting va maktab hayoti bilan tanishing
           </p>
         </motion.div>

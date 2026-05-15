@@ -30,7 +30,7 @@ export default function Map() {
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.05] tracking-tight">
             Bizni <span className="text-primary">xaritada toping</span>
           </h2>
-          <p className="text-base md:text-lg text-foreground/50 mt-4 max-w-lg mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-foreground/70 mt-5 max-w-2xl mx-auto leading-relaxed font-['Playfair_Display'] italic">
             Bekobod shahri, Toshkent viloyati — maktabimizga tashrif buyuring
           </p>
         </motion.div>

@@ -45,7 +45,7 @@ function MomentCard({ item, index }: { item: typeof moments[0]; index: number })
         </div>
         <div className="p-3 md:p-4">
           <h3 className="text-foreground font-semibold text-xs md:text-base mb-0.5 md:mb-1 truncate">{item.title}</h3>
-          <p className="text-foreground/50 text-[10px] md:text-sm leading-relaxed line-clamp-1">{item.desc}</p>
+          <p className="text-foreground/50 text-xs md:text-sm leading-relaxed line-clamp-2">{item.desc}</p>
         </div>
       </div>
     </motion.div>
@@ -73,7 +73,7 @@ export default function SchoolLife() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: EASE, delay: 0.12 }}
-            className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto font-normal leading-[1.8]"
+            className="text-lg md:text-xl text-muted-foreground/80 max-w-2xl mx-auto font-normal leading-[1.8] font-['Playfair_Display'] italic"
           >
             Kunlik hayotimizdan eng yorqin lahzalarni jamlagan xotira devori
           </motion.p>

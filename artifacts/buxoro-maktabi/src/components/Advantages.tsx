@@ -72,7 +72,7 @@ export default function Advantages() {
               />
             </span>
           </h2>
-          <p className="text-base md:text-lg text-foreground/50 mt-4 max-w-lg mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl font-['Playfair_Display'] italic font-black text-[#065f46] dark:text-emerald-300 mt-6 max-w-2xl mx-auto leading-relaxed drop-shadow-[0_0_10px_rgba(5,150,105,0.15)]">
             Farzandingiz kelajagi uchun eng yaxshi tanlov
           </p>
         </motion.div>
@@ -127,11 +127,11 @@ export default function Advantages() {
                     />
                   </motion.div>
 
-                  <h3 className="text-base md:text-lg font-bold text-foreground mb-2.5 leading-tight">
+                  <h3 className="text-lg md:text-xl font-bold text-foreground mb-2.5 leading-tight">
                     {item.title}
                   </h3>
 
-                  <p className="text-xs md:text-sm text-foreground/50 leading-relaxed flex-1">
+                  <p className="text-sm md:text-base text-foreground/60 leading-relaxed flex-1">
                     {item.desc}
                   </p>
 

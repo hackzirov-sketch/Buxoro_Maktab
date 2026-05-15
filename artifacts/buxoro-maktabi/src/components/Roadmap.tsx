@@ -64,7 +64,7 @@ export default function Roadmap() {
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.05] tracking-tight">
             Maktab <span className="text-primary">ta'lim bosqichlari</span>
           </h2>
-          <p className="text-base md:text-lg text-foreground/50 mt-4 max-w-lg mx-auto leading-relaxed">
+          <p className="text-base md:text-lg text-foreground/50 mt-4 max-w-lg mx-auto leading-relaxed font-['Playfair_Display'] italic">
             Har bir bosqichda o'quvchilarning yosh va psixologik xususiyatlariga mos ta'lim dasturlari
           </p>
         </motion.div>
@@ -102,13 +102,13 @@ export default function Roadmap() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, ease: EASE, delay: 0.3 }}
-                        className="inline-block text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] mb-3"
+                        className="inline-block text-sm md:text-base font-bold uppercase tracking-[0.2em] mb-3"
                         style={{ color: step.color }}
                       >
                         {step.year}
                       </motion.span>
-                      <h3 className="text-lg md:text-2xl font-bold text-foreground mb-3">{step.title}</h3>
-                      <p className="text-sm md:text-base text-foreground/50 leading-relaxed">{step.desc}</p>
+                      <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3">{step.title}</h3>
+                      <p className="text-base md:text-lg text-foreground/50 leading-relaxed">{step.desc}</p>
                     </motion.div>
                   </div>
 
