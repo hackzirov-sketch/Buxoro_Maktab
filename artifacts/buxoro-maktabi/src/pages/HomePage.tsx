@@ -32,8 +32,8 @@ export default function HomePage() {
         <Roadmap />
         <FAQ />
         <CTASection />
-        <Map />
         <CTABanner />
+        <Map />
 
       </main>
       <Footer />
