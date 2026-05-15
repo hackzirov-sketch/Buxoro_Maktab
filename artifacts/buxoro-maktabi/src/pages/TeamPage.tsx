@@ -15,7 +15,7 @@ const members = [
   { name: "Anorkulov Kamronbek", role: "Ingliz tili o'qituvchisi", short: "IELTS 8.0", full: "O'rta sinflar uchun ingliz tili fanidan dars berishadi. IELTS darajasi 8 bo'lgan yuqori malumotli o'qituvchilarimizdan biri.", grad: "from-primary to-emerald-400", image: "/English.jpg" },
   { name: "Mirzayeva Mohidil", role: "Boshlang'ich sinf o'qituvchisi", short: "Boshlang'ich ta'lim", full: "Boshlang'ich o'quvchilar uchun muallima.", grad: "from-teal-400 to-cyan-400", image: "/Boshlangich.jpg" },
   { name: "Otaboyeva Shaxnoza", role: "Rus tili o'qituvchisi", short: "Rus tili fani", full: "Rus tili fanidan dars berishadi.", grad: "from-purple-400 to-violet-400", image: "/Rus Tili.jpg" },
-  { name: "Bekzod Rahimov", role: "Maktab direktori", short: "25 yillik tajriba", full: "25 yillik pedagogik va rahbarlik tajribasi.", grad: "from-sky-400 to-blue-400", image: "/Boshlangich3.jpg" },
+  { name: "Raxmatkulova Saboat Berdikulovna", role: "Oliy toifali boshlang'ich sinf o'qituvchisi", short: "Oliy toifali", full: "Oliy toifali boshlang'ich sinf o'qituvchisi.", grad: "from-sky-400 to-blue-400", image: "/Boshlangich3.jpg" },
   { name: "Mr. Sherzod", role: "Ingliz tili o'qituvchisi", short: "IELTS 7.5", full: "Yuqori sinflarni CEFR va IELTS imtihoniga tayyorlaydi. CEFR natijasi C1, IELTS 7.5.", grad: "from-primary to-emerald-400", image: "/Mr.Sherzod.JPEG" },
   { name: "Hakimbek Gʻulomjonov", role: "Huquq va ingliz tili fani oʻqituvchisi", short: "IELTS 7.0", full: "Toshkent davlat yuridik universiteti (2025). “Adolat-advokat” advokatlik firmasi advokat yordamchisi. Xitoy, Chongching shahrida stajirovka.", grad: "from-amber-400 to-orange-400", image: "/LawXuquq.jpg" },
 ];

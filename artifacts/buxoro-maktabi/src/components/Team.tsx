@@ -27,7 +27,7 @@ const topRowMembers: (TeamMember & { image?: string })[] = [
   { name: "Malika Ismoilova", role: "Kimyo o'qituvchisi", shortDesc: "10 yillik tajriba", fullDesc: "Zamonaviy laboratoriya jihozlari bilan ishlash bo'yicha mutaxassis.", highlight: "🧪 50+ laboratoriya ishlanmasi", image: "/Biology.jpg" },
   { name: "Hakimbek Gʻulomjonov", role: "Huquq va ingliz tili fani oʻqituvchisi", shortDesc: "IELTS 7.0", fullDesc: "Toshkent davlat yuridik universiteti (2025). “Adolat-advokat” advokatlik firmasi advokat yordamchisi. Xitoy, Chongching shahrida stajirovka.", highlight: "⚖️ IELTS 7.0 | Advokat yordamchisi | Xitoy stajirovkasi", image: "/LawXuquq.jpg" },
   { name: "Otaboyeva Shaxnoza", role: "Rus tili o'qituvchisi", shortDesc: "Rus tili fani", fullDesc: "Rus tili fanidan dars berishadi.", highlight: "📚 Rus tili mutaxassisi", image: "/Rus Tili.jpg" },
-  { name: "Bekzod Rahimov", role: "Maktab direktori", shortDesc: "25 yillik tajriba", fullDesc: "25 yillik pedagogik va rahbarlik tajribasi.", highlight: "🏆 2024 — Eng yaxshi direktor mukofoti", image: "/Boshlangich3.jpg" },
+  { name: "Raxmatkulova Saboat Berdikulovna", role: "Oliy toifali boshlang'ich sinf o'qituvchisi", shortDesc: "Oliy toifali", fullDesc: "Oliy toifali boshlang'ich sinf o'qituvchisi.", highlight: "📚 Oliy toifa | Boshlang'ich ta'lim", image: "/Boshlangich3.jpg" },
   { name: "Mr. Sherzod", role: "Ingliz tili o'qituvchisi", shortDesc: "IELTS 7.5", fullDesc: "Yuqori sinflarni CEFR va IELTS imtihoniga tayyorlaydi. CEFR natijasi C1, IELTS 7.5.", highlight: "🎯 IELTS 7.5 | CEFR C1", image: "/Mr.Sherzod.JPEG" },
 ];
 
