@@ -4,10 +4,10 @@ import { ArrowRight, Users, Building2, Utensils, FileText } from "lucide-react";
 const logoImg = "/logo.png";
 
 const previews = [
-  { icon: Users, label: "Jamoa", desc: "Professional o'qituvchilar va rahbarlar jamoasi", href: "/jamoa", gradient: "from-primary to-emerald-400" },
-  { icon: Building2, label: "Sinfxonalar", desc: "Zamonaviy texnologiyalar bilan jihozlangan sinflar", href: "/sinflar", gradient: "from-sky-400 to-blue-400" },
-  { icon: Utensils, label: "Oshxona", desc: "Sog'lom va mazali taomlar, kunlik menyu", href: "/oshxona", gradient: "from-orange-400 to-rose-400" },
-  { icon: FileText, label: "Ariza", desc: "Farzandingizni maktabga ro'yxatdan o'tkazing", href: "/ariza", gradient: "from-primary to-emerald-400" },
+  { icon: Users, label: "Jamoa", desc: "Professional o'qituvchilar va rahbarlar jamoasi", href: "/jamoa", gradient: "from-primary to-emerald-400", cardBg: "rgba(5,150,105,0.35)" },
+  { icon: Building2, label: "Sinfxonalar", desc: "Zamonaviy texnologiyalar bilan jihozlangan sinflar", href: "/sinflar", gradient: "from-sky-400 to-blue-400", cardBg: "rgba(56,189,248,0.30)" },
+  { icon: Utensils, label: "Oshxona", desc: "Sog'lom va mazali taomlar, kunlik menyu", href: "/oshxona", gradient: "from-orange-400 to-rose-400", cardBg: "rgba(251,146,60,0.32)" },
+  { icon: FileText, label: "Ariza", desc: "Farzandingizni maktabga ro'yxatdan o'tkazing", href: "/ariza", gradient: "from-primary to-emerald-400", cardBg: "rgba(5,150,105,0.35)" },
 ];
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
@@ -140,7 +140,12 @@ export default function Hero() {
               >
                 <Link
                   href={item.href}
-                  className="group block p-6 md:p-7 rounded-2xl glass-card hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border border-white/10 hover:border-white/20"
+                  className="group block p-6 md:p-7 rounded-2xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border border-white/20 hover:border-white/40"
+                  style={{
+                    background: item.cardBg,
+                    backdropFilter: "blur(20px)",
+                    WebkitBackdropFilter: "blur(20px)",
+                  }}
                 >
                   <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.gradient} shadow-lg flex items-center justify-center mb-5`}
                     style={{ boxShadow: "0 0 22px 6px rgba(255,255,255,0.18), 0 4px 18px rgba(0,0,0,0.35)" }}
