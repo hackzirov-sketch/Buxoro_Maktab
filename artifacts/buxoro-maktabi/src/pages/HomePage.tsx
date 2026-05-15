@@ -10,6 +10,7 @@ import Map from "@/components/Map";
 import CTABanner from "@/components/CTABanner";
 import Footer from "@/components/Footer";
 import ChatBot from "@/components/ChatBot";
+import FloatingCTA from "@/components/FloatingCTA";
 import { useScroll, useSpring } from "framer-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -38,6 +39,7 @@ export default function HomePage() {
       </main>
       <Footer />
       <ChatBot />
+      <FloatingCTA />
     </div>
   );
 }
