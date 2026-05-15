@@ -8,31 +8,31 @@ const steps = [
     year: "0-sinf",
     title: "Maktabga tayyorlov",
     desc: "Bolalarni maktab hayotiga tayyorlash. Alifbo, raqamlar va ijtimoiy ko'nikmalar bilan tanishtirish.",
-    icon: Star, gradient: "from-pink-400/20 to-rose-400/10", color: "#e11d48",
+    icon: Star, gradient: "from-pink-400 to-rose-500", color: "#e11d48",
   },
   {
     year: "1–4-sinflar",
     title: "Boshlang'ich ta'lim",
     desc: "O'qish, yozish va hisoblash asoslari. Ijodiy fikrlash va mustaqil o'rganish ko'nikmalari shakllantiriladi.",
-    icon: BookOpen, gradient: "from-emerald-400/20 to-teal-400/10", color: "#059669",
+    icon: BookOpen, gradient: "from-emerald-400 to-teal-500", color: "#059669",
   },
   {
     year: "5–9-sinflar",
     title: "Asosiy o'rta ta'lim",
     desc: "Fanlar bo'yicha chuqur bilim beriladi. Xorijiy tillar, aniq fanlar va texnologiyalarga alohida e'tibor.",
-    icon: Users, gradient: "from-sky-400/20 to-blue-400/10", color: "#0284c7",
+    icon: Users, gradient: "from-sky-400 to-blue-500", color: "#0284c7",
   },
   {
     year: "10–11-sinflar",
     title: "Yuqori bosqich",
     desc: "Oliy ta'lim muassasalariga tayyorgarlik. Ixtisoslashtirilgan fanlar va ilmiy loyihalar bilan shug'ullanish.",
-    icon: GraduationCap, gradient: "from-purple-400/20 to-violet-400/10", color: "#7c3aed",
+    icon: GraduationCap, gradient: "from-purple-400 to-violet-600", color: "#7c3aed",
   },
   {
     year: "Bitiruv",
     title: "Muvaffaqiyatli kelajak",
     desc: "Bitiruvchilarimiz O'zbekiston va xorijning nufuzli oliy ta'lim muassasalarida o'qishni davom ettiradilar.",
-    icon: Award, gradient: "from-amber-400/20 to-orange-400/10", color: "#d97706",
+    icon: Award, gradient: "from-amber-400 to-orange-500", color: "#d97706",
   },
 ];
 
@@ -116,16 +116,16 @@ export default function Roadmap() {
                     <motion.div
                       whileHover={{ scale: 1.15, rotate: 360 }}
                       transition={{ duration: 0.5, ease: EASE }}
-                      className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${step.gradient} flex items-center justify-center shadow-lg border border-white/30`}
-                      style={{ boxShadow: `0 0 35px ${step.color}20` }}
+                      className={`w-20 h-20 rounded-3xl bg-gradient-to-br ${step.gradient} flex items-center justify-center border border-white/40`}
+                      style={{ boxShadow: `0 0 40px 10px ${step.color}60, 0 0 80px 20px ${step.color}30, inset 0 1px 1px rgba(255,255,255,0.3)` }}
                     >
-                      <Icon className="w-6 h-6" style={{ color: step.color }} />
+                      <Icon className="w-10 h-10 text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
                     </motion.div>
                     <motion.div
-                      className="absolute -inset-3 rounded-2xl opacity-0 -z-10"
-                      style={{ background: step.color + "15", filter: "blur(16px)" }}
-                      animate={{ opacity: [0, 0.5, 0] }}
-                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: idx * 0.5 }}
+                      className="absolute -inset-4 rounded-3xl -z-10"
+                      style={{ background: step.color + "30", filter: "blur(20px)" }}
+                      animate={{ opacity: [0.4, 0.9, 0.4] }}
+                      transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: idx * 0.5 }}
                     />
                   </div>
 
