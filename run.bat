@@ -3,21 +3,22 @@ title Buxoro Maktabi
 cd /d "C:\Users\hackz\Desktop\Buxoro-Maktabi"
 
 echo ========================================
-echo   BUXORO MAKTABI - Ishga tushirish
+echo   BUXORO MAKTABI
 echo ========================================
 echo.
 
-echo [1/2] Frontend build...
-cd /d "C:\Users\hackz\Desktop\Buxoro-Maktabi"
-pnpm --filter @workspace/buxoro-maktabi run build
-if %errorlevel% neq 0 (
-  echo Frontend build xatosi!
-  pause
-  exit /b
+:: Backend server ni ishga tushirish
+echo Backend server ishga tushmoqda...
+cd /d "C:\Users\hackz\Desktop\Buxoro-Maktabi\server"
+
+:: .env fayli borligini tekshirish
+if not exist .env (
+  echo .
+  echo .env fayli topilmadi! Bot ishlamaydi.
+  echo Bot token va Chat ID ni .env fayliga yozing.
+  echo.
 )
 
-echo [2/2] Backend server ishga tushmoqda...
-cd /d "C:\Users\hackz\Desktop\Buxoro-Maktabi\server"
 node index.js
 
 pause

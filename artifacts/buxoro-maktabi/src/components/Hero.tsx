@@ -94,9 +94,10 @@ export default function Hero() {
 
             <motion.div
               variants={lineVariants}
-              className="inline-block glass-card px-5 py-3 md:px-6 md:py-4 mt-4"
+              className="inline-block glass-card px-6 py-4 md:px-8 md:py-5 mt-4"
             >
-              <p className="text-base sm:text-lg md:text-xl font-['Playfair_Display'] italic font-black text-[#059669] leading-[1.8] animate-neon-pulse">
+              <p className="font-['Playfair_Display'] italic font-black text-white leading-[1.7] animate-neon-pulse drop-shadow-[0_0_20px_rgba(5,150,105,0.3)]"
+                 style={{fontSize:"clamp(1.1rem, 3vw, 1.6rem)"}}>
                 Bekoboddagi eng ilg'or va ishonchli ta'lim muhitini yaratayotgan maktab. Kelajak yetakchilarini bugun tarbiyalaymiz.
               </p>
             </motion.div>
