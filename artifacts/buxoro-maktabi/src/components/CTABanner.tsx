@@ -6,10 +6,13 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 
 export default function CTABanner() {
   return (
-    <section className="relative py-16 md:py-20 overflow-hidden bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 dark:from-amber-950/30 dark:via-yellow-950/20 dark:to-amber-950/30">
+    <section className="relative py-16 md:py-20 overflow-hidden"
+      style={{ background: "linear-gradient(135deg, #064e3b 0%, #065f46 40%, #047857 70%, #059669 100%)" }}
+    >
       <div className="absolute inset-0 pointer-events-none">
-        <div className="blob" style={{ width: "400px", height: "400px", top: "-30%", right: "-10%", background: "radial-gradient(circle, rgba(217,119,6,0.1) 0%, transparent 70%)", animation: "drift 20s ease-in-out infinite" }} />
-        <div className="blob" style={{ width: "300px", height: "300px", bottom: "-20%", left: "-5%", background: "radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%)", animation: "drift 18s ease-in-out infinite reverse" }} />
+        <div className="blob" style={{ width: "500px", height: "500px", top: "-20%", right: "-10%", background: "radial-gradient(circle, rgba(52,211,153,0.25) 0%, transparent 70%)", animation: "drift 20s ease-in-out infinite" }} />
+        <div className="blob" style={{ width: "400px", height: "400px", bottom: "-20%", left: "-8%", background: "radial-gradient(circle, rgba(16,185,129,0.2) 0%, transparent 70%)", animation: "drift 18s ease-in-out infinite reverse" }} />
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 70% 50%, rgba(110,231,183,0.15) 0%, transparent 60%)" }} />
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 relative z-10">
@@ -18,20 +21,17 @@ export default function CTABanner() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: EASE }}
-          className="glass-card overflow-hidden"
+          className="overflow-hidden rounded-3xl border border-white/20"
+          style={{ background: "rgba(255,255,255,0.08)", backdropFilter: "blur(20px)" }}
         >
-          <div className="relative p-8 md:p-12 lg:p-16 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-10"
-            style={{
-              background: "linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(254,243,199,0.6) 100%)",
-            }}
-          >
+          <div className="relative p-8 md:p-12 lg:p-16 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-10">
             <div className="flex-1 text-center md:text-left">
               <motion.span
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, ease: EASE, delay: 0.1 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100/80 dark:bg-amber-800/40 text-xs font-semibold text-amber-700 dark:text-amber-300 uppercase tracking-[0.12em] mb-4"
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 text-xs font-semibold text-white uppercase tracking-[0.12em] mb-4"
               >
                 <Sparkles className="w-3.5 h-3.5" /> Hoziroq boshlang
               </motion.span>
@@ -41,7 +41,7 @@ export default function CTABanner() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, ease: EASE, delay: 0.2 }}
-                className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-[1.1] tracking-tight"
+                className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-[1.1] tracking-tight"
               >
                 Farzandingizni bugun ro'yxatdan o'tkazing
               </motion.h2>
@@ -51,7 +51,7 @@ export default function CTABanner() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, ease: EASE, delay: 0.3 }}
-                className="text-base md:text-lg text-foreground/60 mt-3 max-w-xl leading-relaxed"
+                className="text-base md:text-lg text-white/80 mt-3 max-w-xl leading-relaxed"
               >
                 O'rinlar soni cheklangan. 2026-2027 o'quv yili uchun qabul ochiq. 
                 Ariza qoldiring, operatorlarimiz siz bilan bog'lansin.
