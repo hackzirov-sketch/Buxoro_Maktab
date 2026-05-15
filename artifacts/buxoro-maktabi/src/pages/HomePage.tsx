@@ -9,6 +9,7 @@ import CTASection from "@/components/CTASection";
 import Map from "@/components/Map";
 import CTABanner from "@/components/CTABanner";
 import Footer from "@/components/Footer";
+import Results from "@/components/Results";
 import FloatingCTA from "@/components/FloatingCTA";
 
 function ScrollProgress() {
@@ -27,6 +28,7 @@ export default function HomePage() {
         <Advantages />
         <SchoolLife />
         <Roadmap />
+        <Results />
         <FAQ />
         <CTASection />
         <CTABanner />
