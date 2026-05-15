@@ -2,7 +2,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
-import { Route, Switch } from "wouter";
+import { Route, Switch, useLocation } from "wouter";
+import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ChatBot from "@/components/ChatBot";
@@ -12,6 +13,14 @@ import ClassroomsPage from "@/pages/ClassroomsPage";
 import KitchenPage from "@/pages/KitchenPage";
 import ResultsPage from "@/pages/ResultsPage";
 import ArizaPage from "@/pages/ArizaPage";
+
+function ScrollToTop() {
+  const [location] = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [location]);
+  return null;
+}
 
 const queryClient = new QueryClient();
 
@@ -31,6 +40,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
         <TooltipProvider>
+          <ScrollToTop />
           <Switch>
             <Route path="/" component={HomePage} />
             <Route path="/jamoa">
