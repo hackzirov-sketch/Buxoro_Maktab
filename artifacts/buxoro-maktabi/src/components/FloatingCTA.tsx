@@ -1,10 +1,11 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function FloatingCTA() {
   const [visible, setVisible] = useState(false);
+  const [location] = useLocation();
 
   useEffect(() => {
     const onScroll = () => {
@@ -13,6 +14,8 @@ export default function FloatingCTA() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  if (location === "/ariza") return null;
 
   return (
     <AnimatePresence>

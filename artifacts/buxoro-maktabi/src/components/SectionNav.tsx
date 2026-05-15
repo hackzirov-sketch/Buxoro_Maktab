@@ -1,11 +1,10 @@
 import { Link } from "wouter";
-import { ArrowRight, Users, Building2, Utensils, FileText } from "lucide-react";
+import { ArrowRight, Users, Building2, Utensils } from "lucide-react";
 
 const links = [
   { label: "Jamoamiz", href: "/jamoa", icon: Users, color: "#059669" },
   { label: "Sinfxonalar", href: "/sinflar", icon: Building2, color: "#0284c7" },
   { label: "Oshxona", href: "/oshxona", icon: Utensils, color: "#d97706" },
-  { label: "Ariza topshirish", href: "/ariza", icon: FileText, color: "#059669" },
 ];
 
 export default function SectionNav() {
