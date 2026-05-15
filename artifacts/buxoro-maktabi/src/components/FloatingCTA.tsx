@@ -4,22 +4,33 @@ import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function FloatingCTA() {
-  const [visible, setVisible] = useState(false);
+  const [pastFaq, setPastFaq] = useState(false);
   const [location] = useLocation();
 
   useEffect(() => {
-    const onScroll = () => {
-      setVisible(window.scrollY > 300);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    const faqEl = document.getElementById("faq");
+    if (!faqEl) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+          setPastFaq(true);
+        } else {
+          setPastFaq(false);
+        }
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(faqEl);
+    return () => observer.disconnect();
+  }, [location]);
 
   if (location === "/ariza") return null;
 
   return (
     <AnimatePresence>
-      {visible && (
+      {pastFaq && (
         <motion.div
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}

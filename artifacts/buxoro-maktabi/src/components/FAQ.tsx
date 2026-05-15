@@ -45,7 +45,7 @@ export default function FAQ() {
   const toggle = (idx: number) => setOpenIndex(openIndex === idx ? null : idx);
 
   return (
-    <section className="relative py-28 md:py-36 overflow-hidden dark:bg-emerald-900/15">
+    <section id="faq" className="relative py-28 md:py-36 overflow-hidden dark:bg-emerald-900/15">
       <div className="absolute inset-0 pointer-events-none">
         <div className="blob" style={{ width: "500px", height: "500px", top: "-10%", right: "-5%", background: "radial-gradient(circle, rgba(5,150,105,0.04) 0%, transparent 70%)", animation: "drift 25s ease-in-out infinite" }} />
         <div className="blob" style={{ width: "350px", height: "350px", bottom: "-5%", left: "-5%", background: "radial-gradient(circle, rgba(5,150,105,0.03) 0%, transparent 70%)", animation: "drift 20s ease-in-out infinite reverse" }} />
