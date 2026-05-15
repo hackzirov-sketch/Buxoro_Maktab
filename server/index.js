@@ -300,16 +300,24 @@ app.post(`/webhook`, async (req, res) => {
 
 // ==================== POLLING (zaxira) ====================
 async function startPolling() {
+  const offsetFile = path.join(__dirname, "polling_offset.txt");
   let offset = 0;
+  try { offset = parseInt(fs.readFileSync(offsetFile, "utf8")) || 0; } catch {}
+
+  // Eski kutilayotgan xabarlarni tozalash
+  await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=-1`);
   console.log("🤖 Telegram polling ishga tushdi...");
+
   while (true) {
     try {
       const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${offset}&timeout=15`);
       const data = await res.json();
       if (data.ok && data.result.length > 0) {
         for (const update of data.result) {
+          if (update.update_id < offset) continue; // eski xabarlarni o'tkazib yuborish
           await handleUpdate(update);
           offset = update.update_id + 1;
+          fs.writeFileSync(offsetFile, offset.toString(), "utf8");
         }
       }
     } catch (err) {
@@ -320,15 +328,9 @@ async function startPolling() {
 }
 
 (async () => {
-  // Webhook ni o'rnatish
-  const webhookUrl = `https://localhost:${PORT}/webhook`;
-  const wh = await tg("setWebhook", { url: webhookUrl, drop_pending_updates: true });
-  if (wh.ok) {
-    console.log("✅ Webhook o'rnatildi");
-  } else {
-    console.log("⚠️ Webhook o'rnatilmadi, polling ishlatiladi");
-    startPolling();
-  }
+  // Avval webhook ni o'chirish (polling bilan konflikt bo'lmasligi uchun)
+  await tg("deleteWebhook", { drop_pending_updates: true });
+  startPolling();
 })();
 
 // ==================== API: ARIZA QABUL QILISH ====================
