@@ -107,8 +107,8 @@ export default function Roadmap() {
                       >
                         {step.year}
                       </motion.span>
-                      <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3">{step.title}</h3>
-                      <p className="text-base md:text-lg text-foreground/50 leading-relaxed">{step.desc}</p>
+                      <h3 className="text-xl md:text-2xl font-extrabold text-foreground mb-3">{step.title}</h3>
+                      <p className="text-base md:text-lg text-foreground leading-relaxed">{step.desc}</p>
                     </motion.div>
                   </div>
 
