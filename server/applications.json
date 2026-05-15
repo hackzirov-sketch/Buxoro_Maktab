@@ -11,5 +11,18 @@
     "applyingClass": "5",
     "region": "Bekobod shahar",
     "createdAt": "14/05/2026, 22:14:44"
+  },
+  {
+    "id": 1778825843448,
+    "firstName": "Ahmad",
+    "lastName": "Zokirov",
+    "phone": "+998909779999",
+    "childFirstName": "Anvar",
+    "childLastName": "Saypiyev",
+    "currentSchool": "16-maktab",
+    "graduatedClass": "8",
+    "applyingClass": "9",
+    "region": "Juma",
+    "createdAt": "15/05/2026, 11:17:23"
   }
 ]
