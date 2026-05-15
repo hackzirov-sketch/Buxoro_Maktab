@@ -9,7 +9,6 @@ import CTASection from "@/components/CTASection";
 import Map from "@/components/Map";
 import CTABanner from "@/components/CTABanner";
 import Footer from "@/components/Footer";
-import ChatBot from "@/components/ChatBot";
 import FloatingCTA from "@/components/FloatingCTA";
 import { useScroll, useSpring } from "framer-motion";
 
@@ -38,7 +37,6 @@ export default function HomePage() {
 
       </main>
       <Footer />
-      <ChatBot />
       <FloatingCTA />
     </div>
   );

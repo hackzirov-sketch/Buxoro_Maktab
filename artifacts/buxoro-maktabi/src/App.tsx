@@ -6,7 +6,6 @@ import { Route, Switch, useLocation } from "wouter";
 import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import ChatBot from "@/components/ChatBot";
 import HomePage from "@/pages/HomePage";
 import TeamPage from "@/pages/TeamPage";
 import ClassroomsPage from "@/pages/ClassroomsPage";
@@ -30,7 +29,6 @@ function PageShell({ children }: { children: React.ReactNode }) {
       <Navbar />
       {children}
       <Footer />
-      <ChatBot />
     </div>
   );
 }
