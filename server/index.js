@@ -162,6 +162,16 @@ async function createExcel(data, title) {
   return filePath;
 }
 
+// ==================== KEYBOARD (doimiy pastki tugmalar) ====================
+const replyKeyboard = {
+  keyboard: [
+    [{ text: "📊 Statistika" }, { text: "📥 Excel" }],
+    [{ text: "📅 Bugungi hisobot" }, { text: "🔄 Yangilash" }],
+  ],
+  resize_keyboard: true,
+  is_persistent: true,
+};
+
 // ==================== BOT MENU ====================
 async function sendMainMenu(chatId, editMsgId) {
   const allData = loadData();
@@ -194,7 +204,7 @@ async function sendMainMenu(chatId, editMsgId) {
   if (editMsgId) {
     await tg("editMessageText", { chat_id: chatId, message_id: editMsgId, text: msg, parse_mode: "HTML", reply_markup: keyboard });
   } else {
-    await tg("sendMessage", { chat_id: chatId, text: msg, parse_mode: "HTML", reply_markup: keyboard });
+    await tg("sendMessage", { chat_id: chatId, text: msg, parse_mode: "HTML", reply_markup: { inline_keyboard: keyboard.inline_keyboard, keyboard: replyKeyboard.keyboard, resize_keyboard: true, is_persistent: true } });
   }
 }
 
@@ -204,17 +214,24 @@ async function handleUpdate(update) {
   const cb = update.callback_query;
 
   if (msg) {
-    if (msg.text === "/start" || msg.text === "/menu") await sendMainMenu(msg.chat.id);
-    if (msg.text === "/stats") {
-      const allData = loadData();
-      await tg("sendMessage", { chat_id: msg.chat.id, text: `📊 Jami arizalar: ${allData.length} ta`, parse_mode: "HTML" });
-    }
-    if (msg.text === "/excel") {
+    const txt = msg.text || "";
+    if (txt === "/start" || txt === "/menu" || txt === "🔄 Yangilash" || txt === "📊 Statistika") {
+      await sendMainMenu(msg.chat.id);
+    } else if (txt === "/excel" || txt === "📥 Excel") {
       const allData = loadData();
       if (allData.length === 0) return await tg("sendMessage", { chat_id: msg.chat.id, text: "❌ Ma'lumot yo'q" });
       await tg("sendMessage", { chat_id: msg.chat.id, text: "⏳ Fayl tayyorlanmoqda..." });
       const filePath = await createExcel(allData, `barcha_arizalar_${new Date().toISOString().slice(0, 10)}`);
       await tgDoc(filePath, `📊 Barcha arizalar (${allData.length} ta)`);
+      fs.unlinkSync(filePath);
+    } else if (txt === "📅 Bugungi hisobot") {
+      const allData = loadData();
+      const today = new Date().toLocaleDateString("uz-UZ", { timeZone: "Asia/Tashkent" });
+      const todayData = allData.filter(a => a.createdAt && a.createdAt.startsWith(today.slice(0, 10)));
+      if (todayData.length === 0) return await tg("sendMessage", { chat_id: msg.chat.id, text: "📅 Bugun ariza yo'q" });
+      await tg("sendMessage", { chat_id: msg.chat.id, text: "⏳ Hisobot tayyorlanmoqda..." });
+      const filePath = await createExcel(todayData, `kunlik_${new Date().toISOString().slice(0, 10)}`);
+      await tgDoc(filePath, `📅 Bugungi hisobot — ${todayData.length} ta ariza`);
       fs.unlinkSync(filePath);
     }
     return;
@@ -356,7 +373,7 @@ app.post("/api/applications", async (req, res) => {
 🕐 <b>Vaqt:</b> ${application.createdAt}
     `.trim();
 
-    await tg("sendMessage", { chat_id: CHAT_ID, text: msg, parse_mode: "HTML" });
+    await tg("sendMessage", { chat_id: CHAT_ID, text: msg, parse_mode: "HTML", reply_markup: { keyboard: replyKeyboard.keyboard, resize_keyboard: true, is_persistent: true } });
     res.json({ success: true, id: application.id });
   } catch (err) {
     console.error(err);
@@ -410,7 +427,7 @@ cron.schedule("0 21 * * *", async () => {
   }
 
   if (todayData.length === 0) {
-    await tg("sendMessage", { chat_id: CHAT_ID, text: `📊 <b>Kunlik hisobot</b>\n\nBugun hech qanday ariza kelmadi.`, parse_mode: "HTML" });
+    await tg("sendMessage", { chat_id: CHAT_ID, text: `📊 <b>Kunlik hisobot</b>\n\nBugun hech qanday ariza kelmadi.`, parse_mode: "HTML", reply_markup: { keyboard: replyKeyboard.keyboard, resize_keyboard: true, is_persistent: true } });
     lastReportDate = today;
     return;
   }
