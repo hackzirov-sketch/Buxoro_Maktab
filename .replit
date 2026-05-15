@@ -58,3 +58,8 @@ externalPort = 80
 
 [nix]
 channel = "stable-25_05"
+
+[userenv]
+
+[userenv.shared]
+VITE_GEMINI_API_KEY = "AIzaSyBZr7PanH9wt77m6-PW2M1eO88I2mEqKl8"
