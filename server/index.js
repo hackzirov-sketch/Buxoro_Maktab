@@ -162,15 +162,119 @@ async function createExcel(data, title) {
   return filePath;
 }
 
+// ==================== BOT ORQALI ARIZA TOPSHIRISH ====================
+const questions = [
+  { key: "firstName", question: "👤 Ismingizni kiriting:" },
+  { key: "lastName", question: "👤 Familiyangizni kiriting:" },
+  { key: "phone", question: "📞 Telefon raqamingizni kiriting (+998xxxxxxxxx):" },
+  { key: "childFirstName", question: "👶 Bolaning ismini kiriting:" },
+  { key: "childLastName", question: "👶 Bolaning familiyasini kiriting:" },
+  { key: "currentSchool", question: "🏫 Hozirgi o'qish joyini (maktab) kiriting:" },
+  { key: "graduatedClass", question: "📚 Tugatgan sinfini tanlang (0-11):" },
+  { key: "applyingClass", question: "📚 Qabul qilinadigan sinfini tanlang (0-11):" },
+  { key: "region", question: "📍 Hududni kiriting (masalan: Bekobod shahar):" },
+];
+
+const userSessions = {}; // { chatId: { step: 0, data: {} } }
+
+function getUserSession(chatId) {
+  if (!userSessions[chatId]) userSessions[chatId] = { step: 0, data: {} };
+  return userSessions[chatId];
+}
+
+async function startApplication(chatId) {
+  userSessions[chatId] = { step: 0, data: {} };
+  await tg("sendMessage", {
+    chat_id: chatId,
+    text: "📝 *Ariza topshirish*\n\nQuyidagi savollarga javob bering. Bekor qilish uchun /cancel yozing.\n\n" + questions[0].question,
+    parse_mode: "Markdown",
+    reply_markup: { remove_keyboard: true },
+  });
+}
+
+async function handleApplicationStep(chatId, text) {
+  const session = getUserSession(chatId);
+  const step = session.step;
+  const q = questions[step];
+
+  // Telefon raqam validatsiyasi
+  if (q.key === "phone") {
+    const cleaned = text.replace(/[^\d+]/g, "");
+    if (cleaned.length < 12) {
+      await tg("sendMessage", { chat_id: chatId, text: "❌ Telefon raqam noto'g'ri. +998xxxxxxxxx formatida kiriting:" });
+      return;
+    }
+    session.data.phone = cleaned;
+  } else if (q.key === "graduatedClass" || q.key === "applyingClass") {
+    const num = parseInt(text);
+    if (isNaN(num) || num < 0 || num > 11) {
+      await tg("sendMessage", { chat_id: chatId, text: "❌ Noto'g'ri sinf. 0 dan 11 gacha son kiriting:" });
+      return;
+    }
+    session.data[q.key] = num.toString();
+  } else {
+    session.data[q.key] = text.trim();
+  }
+
+  session.step++;
+
+  // Keyingi savol yoki tugatish
+  if (session.step < questions.length) {
+    await tg("sendMessage", { chat_id: chatId, text: questions[session.step].question });
+  } else {
+    // Arizani saqlash
+    const application = {
+      id: Date.now(),
+      ...session.data,
+      createdAt: new Date().toLocaleString("uz-UZ", { timeZone: "Asia/Tashkent" }),
+    };
+
+    const allData = loadData();
+    allData.push(application);
+    saveData(allData);
+
+    // Foydalanuvchiga xabar
+    await tg("sendMessage", {
+      chat_id: chatId,
+      text: "✅ *Arizangiz qabul qilindi!*\n\nOperatorlarimiz tez orada siz bilan bog'lanishadi.\n\nRahmat! 🙏",
+      parse_mode: "Markdown",
+      reply_markup: replyKeyboard,
+    });
+
+    // Adminlarga xabar (CHAT_ID dan tashqari barcha)
+    const msg = `
+📩 <b>Yangi ariza #${allData.length} (bot)</b>
+
+👤 <b>Ota-ona:</b> ${application.firstName} ${application.lastName}
+📞 <b>Telefon:</b> ${application.phone}
+👶 <b>Bola:</b> ${application.childFirstName} ${application.childLastName}
+🏫 <b>Hozirgi maktab:</b> ${application.currentSchool}
+📚 <b>Tugatgan sinf:</b> ${application.graduatedClass}-sinf
+🎯 <b>Qabul sinfi:</b> ${application.applyingClass}-sinf
+📍 <b>Hudud:</b> ${application.region}
+🕐 <b>Vaqt:</b> ${application.createdAt}
+    `.trim();
+    await tg("sendMessage", { chat_id: CHAT_ID, text: msg, parse_mode: "HTML", reply_markup: { keyboard: replyKeyboard.keyboard, resize_keyboard: true, is_persistent: true } });
+    userSessions[chatId] = undefined;
+  }
+}
+
 // ==================== KEYBOARD (doimiy pastki tugmalar) ====================
-const replyKeyboard = {
-  keyboard: [
-    [{ text: "📊 Statistika" }, { text: "📥 Excel" }],
-    [{ text: "📅 Bugungi hisobot" }, { text: "🔄 Yangilash" }],
-  ],
-  resize_keyboard: true,
-  is_persistent: true,
-};
+function getKeyboard(isAdmin) {
+  return {
+    keyboard: isAdmin
+      ? [
+          [{ text: "📊 Statistika" }, { text: "📥 Excel" }],
+          [{ text: "📝 Ariza topshirish" }, { text: "📅 Bugungi hisobot" }],
+          [{ text: "🔄 Yangilash" }],
+        ]
+      : [
+          [{ text: "📝 Ariza topshirish" }],
+        ],
+    resize_keyboard: true,
+    is_persistent: true,
+  };
+}
 
 // ==================== BOT MENU ====================
 async function sendMainMenu(chatId, editMsgId) {
@@ -204,7 +308,7 @@ async function sendMainMenu(chatId, editMsgId) {
   if (editMsgId) {
     await tg("editMessageText", { chat_id: chatId, message_id: editMsgId, text: msg, parse_mode: "HTML", reply_markup: keyboard });
   } else {
-    await tg("sendMessage", { chat_id: chatId, text: msg, parse_mode: "HTML", reply_markup: { inline_keyboard: keyboard.inline_keyboard, keyboard: replyKeyboard.keyboard, resize_keyboard: true, is_persistent: true } });
+    await tg("sendMessage", { chat_id: chatId, text: msg, parse_mode: "HTML", reply_markup: { inline_keyboard: keyboard.inline_keyboard, keyboard: getKeyboard(isAdmin).keyboard, resize_keyboard: true, is_persistent: true } });
   }
 }
 
@@ -375,7 +479,7 @@ app.post("/api/applications", async (req, res) => {
 🕐 <b>Vaqt:</b> ${application.createdAt}
     `.trim();
 
-    await tg("sendMessage", { chat_id: CHAT_ID, text: msg, parse_mode: "HTML", reply_markup: { keyboard: replyKeyboard.keyboard, resize_keyboard: true, is_persistent: true } });
+    await tg("sendMessage", { chat_id: CHAT_ID, text: msg, parse_mode: "HTML", reply_markup: getKeyboard(true) });
     res.json({ success: true, id: application.id });
   } catch (err) {
     console.error(err);
@@ -429,7 +533,7 @@ cron.schedule("0 21 * * *", async () => {
   }
 
   if (todayData.length === 0) {
-    await tg("sendMessage", { chat_id: CHAT_ID, text: `📊 <b>Kunlik hisobot</b>\n\nBugun hech qanday ariza kelmadi.`, parse_mode: "HTML", reply_markup: { keyboard: replyKeyboard.keyboard, resize_keyboard: true, is_persistent: true } });
+    await tg("sendMessage", { chat_id: CHAT_ID, text: `📊 <b>Kunlik hisobot</b>\n\nBugun hech qanday ariza kelmadi.`, parse_mode: "HTML", reply_markup: getKeyboard(true) });
     lastReportDate = today;
     return;
   }
