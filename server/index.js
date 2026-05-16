@@ -238,7 +238,7 @@ async function handleApplicationStep(chatId, text) {
       chat_id: chatId,
       text: "✅ *Arizangiz qabul qilindi!*\n\nOperatorlarimiz tez orada siz bilan bog'lanishadi.\n\nRahmat! 🙏",
       parse_mode: "Markdown",
-      reply_markup: replyKeyboard,
+      reply_markup: getKeyboard(false),
     });
 
     // Adminlarga xabar (CHAT_ID dan tashqari barcha)
@@ -254,7 +254,7 @@ async function handleApplicationStep(chatId, text) {
 📍 <b>Hudud:</b> ${application.region}
 🕐 <b>Vaqt:</b> ${application.createdAt}
     `.trim();
-    await tg("sendMessage", { chat_id: CHAT_ID, text: msg, parse_mode: "HTML", reply_markup: { keyboard: replyKeyboard.keyboard, resize_keyboard: true, is_persistent: true } });
+    await tg("sendMessage", { chat_id: CHAT_ID, text: msg, parse_mode: "HTML", reply_markup: getKeyboard(true) });
     userSessions[chatId] = undefined;
   }
 }
@@ -319,24 +319,48 @@ async function handleUpdate(update) {
 
   if (msg) {
     const txt = msg.text || "";
-    if (txt === "/start" || txt === "/menu" || txt === "🔄 Yangilash" || txt === "📊 Statistika") {
-      await sendMainMenu(msg.chat.id);
+    const chatId = msg.chat.id;
+
+    // Ariza jarayoni davom etayotgan bo'lsa
+    if (userSessions[chatId] && txt !== "/cancel") {
+      await handleApplicationStep(chatId, txt);
+      return;
+    }
+
+    if (txt === "/start") {
+      if (chatId === CHAT_ID) {
+        await sendMainMenu(chatId);
+      } else {
+        await tg("sendMessage", { chat_id: chatId, text: "🤖 *Buxoro Maktabi botiga xush kelibsiz!*\n\nAriza topshirish uchun quyidagi tugmani bosing:", parse_mode: "Markdown", reply_markup: getKeyboard(false) });
+      }
+    } else if (txt === "/menu" || txt === "🔄 Yangilash" || txt === "📊 Statistika") {
+      if (chatId !== CHAT_ID) return;
+      await sendMainMenu(chatId);
     } else if (txt === "/excel" || txt === "📥 Excel") {
+      if (chatId !== CHAT_ID) return;
       const allData = loadData();
-      if (allData.length === 0) return await tg("sendMessage", { chat_id: msg.chat.id, text: "❌ Ma'lumot yo'q" });
-      await tg("sendMessage", { chat_id: msg.chat.id, text: "⏳ Fayl tayyorlanmoqda..." });
+      if (allData.length === 0) return await tg("sendMessage", { chat_id: chatId, text: "❌ Ma'lumot yo'q" });
+      await tg("sendMessage", { chat_id: chatId, text: "⏳ Fayl tayyorlanmoqda..." });
       const filePath = await createExcel(allData, `barcha_arizalar_${new Date().toISOString().slice(0, 10)}`);
       await tgDoc(filePath, `📊 Barcha arizalar (${allData.length} ta)`);
       fs.unlinkSync(filePath);
     } else if (txt === "📅 Bugungi hisobot") {
+      if (chatId !== CHAT_ID) return;
       const allData = loadData();
       const today = new Date().toLocaleDateString("uz-UZ", { timeZone: "Asia/Tashkent" });
       const todayData = allData.filter(a => a.createdAt && a.createdAt.startsWith(today.slice(0, 10)));
-      if (todayData.length === 0) return await tg("sendMessage", { chat_id: msg.chat.id, text: "📅 Bugun ariza yo'q" });
-      await tg("sendMessage", { chat_id: msg.chat.id, text: "⏳ Hisobot tayyorlanmoqda..." });
+      if (todayData.length === 0) return await tg("sendMessage", { chat_id: chatId, text: "📅 Bugun ariza yo'q" });
+      await tg("sendMessage", { chat_id: chatId, text: "⏳ Hisobot tayyorlanmoqda..." });
       const filePath = await createExcel(todayData, `kunlik_${new Date().toISOString().slice(0, 10)}`);
       await tgDoc(filePath, `📅 Bugungi hisobot — ${todayData.length} ta ariza`);
       fs.unlinkSync(filePath);
+    } else if (txt === "📝 Ariza topshirish") {
+      await startApplication(chatId);
+    } else if (txt === "/cancel") {
+      if (userSessions[chatId]) {
+        delete userSessions[chatId];
+        await tg("sendMessage", { chat_id: chatId, text: "❌ Ariza bekor qilindi.", reply_markup: getKeyboard(chatId === CHAT_ID) });
+      }
     }
     return;
   }

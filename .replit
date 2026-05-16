@@ -82,6 +82,5 @@ channel = "stable-25_05"
 [userenv]
 
 [userenv.shared]
-VITE_GEMINI_API_KEY = "AIzaSyBZr7PanH9wt77m6-PW2M1eO88I2mEqKl8"
 BOT_TOKEN = "8902533259:AAEr9tXaqVhuDcXgURxbA-WJcJxT0nMfYDQ"
 CHAT_ID = "7521446360"
