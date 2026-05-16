@@ -282,6 +282,7 @@ async function sendMainMenu(chatId, editMsgId) {
   const today = new Date().toLocaleDateString("uz-UZ", { timeZone: "Asia/Tashkent" });
   const todayData = allData.filter(a => a.createdAt && a.createdAt.startsWith(today.slice(0, 10)));
   const regions = [...new Set(allData.map(a => a.region))];
+  const isAdmin = Number(chatId) === Number(CHAT_ID);
 
   const msg = `
 📊 <b>Buxoro Maktabi — Statistika</b>
@@ -328,16 +329,16 @@ async function handleUpdate(update) {
     }
 
     if (txt === "/start") {
-      if (chatId === CHAT_ID) {
+      if (Number(chatId) === Number(CHAT_ID)) {
         await sendMainMenu(chatId);
       } else {
         await tg("sendMessage", { chat_id: chatId, text: "🤖 *Buxoro Maktabi botiga xush kelibsiz!*\n\nAriza topshirish uchun quyidagi tugmani bosing:", parse_mode: "Markdown", reply_markup: getKeyboard(false) });
       }
     } else if (txt === "/menu" || txt === "🔄 Yangilash" || txt === "📊 Statistika") {
-      if (chatId !== CHAT_ID) return;
+      if (Number(chatId) !== Number(CHAT_ID)) return;
       await sendMainMenu(chatId);
     } else if (txt === "/excel" || txt === "📥 Excel") {
-      if (chatId !== CHAT_ID) return;
+      if (Number(chatId) !== Number(CHAT_ID)) return;
       const allData = loadData();
       if (allData.length === 0) return await tg("sendMessage", { chat_id: chatId, text: "❌ Ma'lumot yo'q" });
       await tg("sendMessage", { chat_id: chatId, text: "⏳ Fayl tayyorlanmoqda..." });
@@ -345,7 +346,7 @@ async function handleUpdate(update) {
       await tgDoc(filePath, `📊 Barcha arizalar (${allData.length} ta)`);
       fs.unlinkSync(filePath);
     } else if (txt === "📅 Bugungi hisobot") {
-      if (chatId !== CHAT_ID) return;
+      if (Number(chatId) !== Number(CHAT_ID)) return;
       const allData = loadData();
       const today = new Date().toLocaleDateString("uz-UZ", { timeZone: "Asia/Tashkent" });
       const todayData = allData.filter(a => a.createdAt && a.createdAt.startsWith(today.slice(0, 10)));
@@ -359,7 +360,7 @@ async function handleUpdate(update) {
     } else if (txt === "/cancel") {
       if (userSessions[chatId]) {
         delete userSessions[chatId];
-        await tg("sendMessage", { chat_id: chatId, text: "❌ Ariza bekor qilindi.", reply_markup: getKeyboard(chatId === CHAT_ID) });
+        await tg("sendMessage", { chat_id: chatId, text: "❌ Ariza bekor qilindi.", reply_markup: getKeyboard(Number(chatId) === Number(CHAT_ID)) });
       }
     }
     return;
