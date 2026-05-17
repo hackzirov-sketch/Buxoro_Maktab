@@ -2,14 +2,15 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Phone, MapPin, GraduationCap, Send, CheckCircle2, AlertCircle, User, BookOpen, School } from "lucide-react";
 import { z } from "zod";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
-  firstName: z.string().min(2, "Ismingizni kiriting"),
-  lastName: z.string().min(2, "Familiyangizni kiriting"),
-  phone: z.string().min(12, "Telefon raqam to'liq emas"),
-  childFirstName: z.string().min(2, "Bola ismini kiriting"),
-  childLastName: z.string().min(2, "Bola familiyasini kiriting"),
-  currentSchool: z.string().min(1, "Hozirgi maktabni kiriting"),
+  firstName: z.string().min(2, "Ismingizni kiriting").max(50, "Ism 50 belgidan oshmasligi kerak"),
+  lastName: z.string().min(2, "Familiyangizni kiriting").max(50, "Familiya 50 belgidan oshmasligi kerak"),
+  phone: z.string().regex(/^\+998\d{9}$/, "Telefon raqam +998xxxxxxxxx formatida bo'lishi kerak"),
+  childFirstName: z.string().min(2, "Bola ismini kiriting").max(50, "Bola ismi 50 belgidan oshmasligi kerak"),
+  childLastName: z.string().min(2, "Bola familiyasini kiriting").max(50, "Bola familiyasi 50 belgidan oshmasligi kerak"),
+  currentSchool: z.string().min(2, "Hozirgi maktabni kiriting").max(100, "Maktab nomi 100 belgidan oshmasligi kerak"),
   graduatedClass: z.string().min(1, "Sinfni tanlang"),
   applyingClass: z.string().min(1, "Sinfni tanlang"),
   region: z.string().min(1, "Hududni tanlang"),
@@ -42,6 +43,7 @@ export default function ApplicationForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const { toast } = useToast();
 
   const update = (field: string, val: string) => {
     setFormData(prev => ({ ...prev, [field]: val }));
@@ -84,7 +86,14 @@ export default function ApplicationForm() {
           if (err.path[0]) newErrors[err.path[0].toString()] = err.message;
         });
         setErrors(newErrors);
+      } else {
+        toast({
+          title: "Xatolik yuz berdi",
+          description: "Serverga ulanishda muammo. Iltimos, qaytadan urinib ko'ring yoki +998 94 835 66 66 raqamiga qo'ng'iroq qiling.",
+          variant: "destructive",
+        });
       }
+      setIsSubmitting(false);
     }
   };
 

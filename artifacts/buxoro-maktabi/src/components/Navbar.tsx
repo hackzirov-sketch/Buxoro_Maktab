@@ -9,6 +9,7 @@ const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 const navLinks = [
   { name: "Bosh sahifa", href: "/" },
   { name: "Jamoa", href: "/jamoa" },
+  { name: "Natijalar", href: "/natijalar" },
   { name: "Sinflar", href: "/sinflar" },
   { name: "Oshxona", href: "/oshxona" },
   { name: "Ariza", href: "/ariza" },

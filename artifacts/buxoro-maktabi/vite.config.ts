@@ -26,8 +26,9 @@ export default defineConfig({
           { src: "/logo.png", sizes: "512x512", type: "image/png" },
         ],
       },
-      workbox: {
-        globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
+  workbox: {
+    globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
+    maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

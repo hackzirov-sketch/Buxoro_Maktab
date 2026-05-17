@@ -8,12 +8,13 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 const EASE = [0.4, 0, 0.2, 1] as const;
 
 const members = [
-  { name: "Mamadaliyev Abdulaziz", role: "Jismoniy tarbiya o'qituvchisi", short: "10 yillik tajriba", full: "Sport ustasi. Basketbol, voleybol va yengil atletika bo'yicha murabbiy.", grad: "from-lime-400 to-green-400", image: "/GYM.jpg" },
+  { name: "Saydullayev Abdumumin", role: "Matematika o'qituvchisi", short: "Milliy sertifikat A+, SAT 900", full: "Milliy sertifikat darajasi A+. SAT dan Matematika qismi 700, Ingliz tili 200, umumiy SAT bali 900. 5 dan ortiq o'quvchini muvaffaqiyatli natijaga olib chiqqan.", grad: "from-lime-400 to-green-400", image: "/Math.jpg" },
+  { name: "Mamadaliyev Abdulaziz", role: "Jismoniy tarbiya o'qituvchisi", short: "10 yillik tajriba", full: "Sport ustasi. Basketbol, voleybol va yengil atletika bo'yicha murabbiy.", grad: "from-sky-400 to-blue-400", image: "/GYM.jpg" },
   { name: "Xojimuratov Bekzod", role: "Milliy sertifikat o'qituvchisi", short: "A+ natija", full: "Milliy sertifikat natijasi A+. 10 dan oshiq o'quvchilarni yuqori natijalarga olib chiqqan.", grad: "from-primary to-emerald-400", image: "/History.jpg" },
   { name: "Umarov Zamira", role: "Boshlang'ich sinf ingliz tili o'qituvchisi", short: "Boshlang'ich ta'lim", full: "Ingliz tili fanidan boshlang'ich o'quvchilar uchun dars berishadi.", grad: "from-amber-400 to-orange-400", image: "/English 2.jpg" },
   { name: "Shodmatova Nozima", role: "Boshlang'ich sinf o'qituvchisi", short: "Boshlang'ich ta'lim", full: "Boshlang'ich o'quvchilar uchun o'qituvchi.", grad: "from-pink-400 to-rose-400", image: "/Boshlangich1.jpg" },
   { name: "Anorkulov Kamronbek", role: "Ingliz tili o'qituvchisi", short: "IELTS 8.0", full: "O'rta sinflar uchun ingliz tili fanidan dars berishadi. IELTS darajasi 8 bo'lgan yuqori malumotli o'qituvchilarimizdan biri.", grad: "from-primary to-emerald-400", image: "/English.jpg" },
-  { name: "Mirzayeva Mohidil", role: "Boshlang'ich sinf o'qituvchisi", short: "Boshlang'ich ta'lim", full: "Boshlang'ich o'quvchilar uchun muallima.", grad: "from-teal-400 to-cyan-400", image: "/Boshlangich.jpg" },
+  { name: "Mirzayeva Mohidil Abdunaviyevna", role: "Boshlang'ich sinf o'qituvchisi", short: "Oliy ma'lumotli, 1-malaka toifali", full: "Oliy ma'lumotli. 1- malaka toifasiga ega. Ta'lim sohasida 8- yillik ish tajribasiga ega.", grad: "from-teal-400 to-cyan-400", image: "/Boshlangich.jpg" },
   { name: "Otaboyeva Shaxnoza", role: "Rus tili o'qituvchisi", short: "Rus tili fani", full: "Rus tili fanidan dars berishadi.", grad: "from-purple-400 to-violet-400", image: "/Rus Tili.jpg" },
   { name: "Raxmatkulova Saboat Berdikulovna", role: "Oliy toifali boshlang'ich sinf o'qituvchisi", short: "Oliy toifali", full: "Oliy toifali boshlang'ich sinf o'qituvchisi.", grad: "from-sky-400 to-blue-400", image: "/Boshlangich3.jpg" },
   { name: "Mr. Sherzod", role: "Ingliz tili o'qituvchisi", short: "IELTS 7.5", full: "Yuqori sinflarni CEFR va IELTS imtihoniga tayyorlaydi. CEFR natijasi C1, IELTS 7.5.", grad: "from-primary to-emerald-400", image: "/Mr.Sherzod.JPEG" },

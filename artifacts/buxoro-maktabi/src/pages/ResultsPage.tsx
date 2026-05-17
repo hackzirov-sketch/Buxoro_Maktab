@@ -1,10 +1,10 @@
 import { PageWrapper } from "./Layout";
-import Results from "@/components/Results";
+import Certificates from "@/components/Certificates";
 
 export default function ResultsPage() {
   return (
     <PageWrapper>
-      <Results />
+      <Certificates />
     </PageWrapper>
   );
 }

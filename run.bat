@@ -7,6 +7,12 @@ echo   BUXORO MAKTABI
 echo ========================================
 echo.
 
+:: Frontend build
+echo Frontend build qilinmoqda...
+cd /d "C:\Users\hackz\Desktop\Buxoro-Maktabi\artifacts\buxoro-maktabi"
+call npm run build 2>&1
+echo.
+
 :: Backend server ni ishga tushirish
 echo Backend server ishga tushmoqda...
 cd /d "C:\Users\hackz\Desktop\Buxoro-Maktabi\server"

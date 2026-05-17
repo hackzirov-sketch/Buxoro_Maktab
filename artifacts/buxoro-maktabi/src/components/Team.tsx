@@ -11,19 +11,20 @@ interface TeamMember {
 }
 
 const colorPalette = [
-  "from-primary to-emerald-400", "from-amber-400 to-orange-400", "from-pink-400 to-rose-400",
+  "from-lime-400 to-green-400", "from-amber-400 to-orange-400", "from-pink-400 to-rose-400",
   "from-sky-400 to-blue-400", "from-purple-400 to-violet-400", "from-teal-400 to-cyan-400",
   "from-primary to-emerald-400", "from-amber-400 to-orange-400", "from-pink-400 to-rose-400",
-  "from-primary to-emerald-400", "from-lime-400 to-green-400",
+  "from-primary to-emerald-400", "from-primary to-emerald-400",
 ];
 
 const topRowMembers: (TeamMember & { image?: string })[] = [
+  { name: "Saydullayev Abdumumin", role: "Matematika o'qituvchisi", shortDesc: "Milliy sertifikat A+, SAT 900", fullDesc: "Milliy sertifikat darajasi A+. SAT dan Matematika qismi 700, Ingliz tili 200, umumiy SAT bali 900. 5 dan ortiq o'quvchini muvaffaqiyatli natijaga olib chiqqan.", highlight: "🏆 Milliy sertifikat A+ | SAT 900", image: "/Math.jpg" },
   { name: "Mamadaliyev Abdulaziz", role: "Jismoniy tarbiya o'qituvchisi", shortDesc: "10 yillik tajriba", fullDesc: "Sport ustasi. Basketbol, voleybol va yengil atletika bo'yicha murabbiy.", highlight: "🏅 Respublika musobaqalari g'olibi", image: "/GYM.jpg" },
   { name: "Xojimuratov Bekzod", role: "Milliy sertifikat o'qituvchisi", shortDesc: "A+ natija", fullDesc: "Milliy sertifikat natijasi A+. 10 dan oshiq o'quvchilarni yuqori natijalarga olib chiqqan.", highlight: "🏆 Milliy sertifikat A+ | 10+ o'quvchi", image: "/History.jpg" },
   { name: "Umarov Zamira", role: "Boshlang'ich sinf ingliz tili o'qituvchisi", shortDesc: "Boshlang'ich ta'lim", fullDesc: "Ingliz tili fanidan boshlang'ich o'quvchilar uchun dars berishadi.", highlight: "📚 Boshlang'ich sinf ingliz tili mutaxassisi", image: "/English 2.jpg" },
   { name: "Shodmatova Nozima", role: "Boshlang'ich sinf o'qituvchisi", shortDesc: "Boshlang'ich ta'lim", fullDesc: "Boshlang'ich o'quvchilar uchun o'qituvchi.", highlight: "📚 Boshlang'ich sinf mutaxassisi", image: "/Boshlangich1.jpg" },
   { name: "Anorkulov Kamronbek", role: "Ingliz tili o'qituvchisi", shortDesc: "IELTS 8.0", fullDesc: "O'rta sinflar uchun ingliz tili fanidan dars berishadi. IELTS darajasi 8 bo'lgan yuqori malumotli o'qituvchilarimizdan biri.", highlight: "🎯 IELTS 8.0 | O'rta sinf mutaxassisi", image: "/English.jpg" },
-  { name: "Mirzayeva Mohidil", role: "Boshlang'ich sinf o'qituvchisi", shortDesc: "Boshlang'ich ta'lim", fullDesc: "Boshlang'ich o'quvchilar uchun muallima.", highlight: "📚 Boshlang'ich sinf mutaxassisi", image: "/Boshlangich.jpg" },
+  { name: "Mirzayeva Mohidil Abdunaviyevna", role: "Boshlang'ich sinf o'qituvchisi", shortDesc: "Oliy ma'lumotli, 1-malaka toifali", fullDesc: "Oliy ma'lumotli. 1- malaka toifasiga ega. Ta'lim sohasida 8- yillik ish tajribasiga ega.", highlight: "🎓 Oliy ma'lumot | 1-malaka toifasi | 8 yillik tajriba", image: "/Boshlangich.jpg" },
   { name: "Malika Ismoilova", role: "Kimyo o'qituvchisi", shortDesc: "10 yillik tajriba", fullDesc: "Zamonaviy laboratoriya jihozlari bilan ishlash bo'yicha mutaxassis.", highlight: "🧪 50+ laboratoriya ishlanmasi", image: "/Biology.jpg" },
   { name: "Hakimbek Gʻulomjonov", role: "Huquq va ingliz tili fani oʻqituvchisi", shortDesc: "IELTS 7.0", fullDesc: "Toshkent davlat yuridik universiteti (2025). “Adolat-advokat” advokatlik firmasi advokat yordamchisi. Xitoy, Chongching shahrida stajirovka.", highlight: "⚖️ IELTS 7.0 | Advokat yordamchisi | Xitoy stajirovkasi", image: "/LawXuquq.jpg" },
   { name: "Otaboyeva Shaxnoza", role: "Rus tili o'qituvchisi", shortDesc: "Rus tili fani", fullDesc: "Rus tili fanidan dars berishadi.", highlight: "📚 Rus tili mutaxassisi", image: "/Rus Tili.jpg" },

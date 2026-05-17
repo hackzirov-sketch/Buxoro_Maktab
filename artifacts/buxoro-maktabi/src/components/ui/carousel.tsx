@@ -131,7 +131,7 @@ const Carousel = React.forwardRef<
     }, [api, onSelect])
 
     React.useEffect(() => {
-      if (!api || !autoPlay || isPaused) return
+      if (!api || !autoPlay || isPaused || (plugins && plugins.length > 0)) return
 
       const interval = setInterval(() => {
         api.scrollNext()

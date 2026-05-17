@@ -164,85 +164,155 @@ async function createExcel(data, title) {
 
 // ==================== BOT ORQALI ARIZA TOPSHIRISH ====================
 const questions = [
-  { key: "firstName", question: "👤 Ismingizni kiriting:" },
-  { key: "lastName", question: "👤 Familiyangizni kiriting:" },
-  { key: "phone", question: "📞 Telefon raqamingizni kiriting (+998xxxxxxxxx):" },
-  { key: "childFirstName", question: "👶 Bolaning ismini kiriting:" },
-  { key: "childLastName", question: "👶 Bolaning familiyasini kiriting:" },
-  { key: "currentSchool", question: "🏫 Hozirgi o'qish joyini (maktab) kiriting:" },
-  { key: "graduatedClass", question: "📚 Tugatgan sinfini tanlang (0-11):" },
-  { key: "applyingClass", question: "📚 Qabul qilinadigan sinfini tanlang (0-11):" },
-  { key: "region", question: "📍 Hududni kiriting (masalan: Bekobod shahar):" },
+  { key: "firstName", question: "👤 Ismingizni kiriting:", validate: v => v.length >= 2 && v.length <= 50, error: "Ism 2-50 belgi orasida bo'lishi kerak" },
+  { key: "lastName", question: "👤 Familiyangizni kiriting:", validate: v => v.length >= 2 && v.length <= 50, error: "Familiya 2-50 belgi orasida bo'lishi kerak" },
+  { key: "phone", question: "📞 Telefon raqamingizni kiriting (+998xxxxxxxxx):", validate: v => /^\+998\d{9}$/.test(v), error: "❌ Noto'g'ri format. +998xxxxxxxxx" },
+  { key: "childFirstName", question: "👶 Bolaning ismini kiriting:", validate: v => v.length >= 2 && v.length <= 50, error: "Bola ismi 2-50 belgi" },
+  { key: "childLastName", question: "👶 Bolaning familiyasini kiriting:", validate: v => v.length >= 2 && v.length <= 50, error: "Bola familiyasi 2-50 belgi" },
+  { key: "currentSchool", question: "🏫 Hozirgi o'qish joyini (maktab) kiriting:", validate: v => v.length >= 2 && v.length <= 100, error: "Maktab nomi 2-100 belgi" },
+  { key: "graduatedClass", question: "📚 Tugatgan sinfini tanlang:", validate: v => !isNaN(parseInt(v)) && parseInt(v) >= 0 && parseInt(v) <= 11, error: "0-11 orasida son kiriting", isClass: true },
+  { key: "applyingClass", question: "📚 Qabul qilinadigan sinfini tanlang:", validate: v => !isNaN(parseInt(v)) && parseInt(v) >= 0 && parseInt(v) <= 11, error: "0-11 orasida son kiriting", isClass: true },
+  { key: "region", question: "📍 Hududni kiriting (masalan: Bekobod shahar):", validate: v => v.length >= 3 && v.length <= 100, error: "Hudud 3-100 belgi" },
 ];
+const TOTAL_STEPS = questions.length;
 
-const userSessions = {}; // { chatId: { step: 0, data: {} } }
+const userSessions = {};
+const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 daqiqa
 
 function getUserSession(chatId) {
-  if (!userSessions[chatId]) userSessions[chatId] = { step: 0, data: {} };
-  return userSessions[chatId];
+  const now = Date.now();
+  if (userSessions[chatId]) {
+    if (now - userSessions[chatId].startedAt > SESSION_TIMEOUT) {
+      delete userSessions[chatId];
+      return null;
+    }
+    userSessions[chatId].startedAt = now;
+  }
+  return userSessions[chatId] || null;
+}
+
+function cleanupExpiredSessions() {
+  const now = Date.now();
+  for (const chatId in userSessions) {
+    if (now - userSessions[chatId].startedAt > SESSION_TIMEOUT) {
+      delete userSessions[chatId];
+    }
+  }
+}
+setInterval(cleanupExpiredSessions, 60000);
+
+function classKeyboard(selected) {
+  const rows = [];
+  for (let i = 0; i < 12; i += 4) {
+    rows.push(Array.from({ length: Math.min(4, 12 - i) }, (_, j) => {
+      const v = (i + j).toString();
+      return { text: v === selected ? "✅ " + v : v, callback_data: "class_" + v };
+    }));
+  }
+  return { inline_keyboard: rows };
 }
 
 async function startApplication(chatId) {
-  userSessions[chatId] = { step: 0, data: {} };
+  userSessions[chatId] = { step: 0, data: {}, startedAt: Date.now() };
+  const q = questions[0];
+  const extra = q.isClass ? { reply_markup: classKeyboard() } : { reply_markup: { remove_keyboard: true } };
   await tg("sendMessage", {
     chat_id: chatId,
-    text: "📝 *Ariza topshirish*\n\nQuyidagi savollarga javob bering. Bekor qilish uchun /cancel yozing.\n\n" + questions[0].question,
+    text: "📝 *Ariza topshirish*\n\nQuyidagi savollarga javob bering.\n/back — oldingi savolga qaytish\n/cancel — bekor qilish\n\n1/" + TOTAL_STEPS + ". " + q.question,
     parse_mode: "Markdown",
-    reply_markup: { remove_keyboard: true },
+    ...extra,
+  });
+}
+
+async function sendCurrentQuestion(chatId) {
+  const session = getUserSession(chatId);
+  if (!session) return;
+  const step = session.step;
+  const q = questions[step];
+  const extra = q.isClass ? { reply_markup: classKeyboard(session.data[q.key]) } : { reply_markup: { remove_keyboard: true } };
+  await tg("sendMessage", {
+    chat_id: chatId,
+    text: (step + 1) + "/" + TOTAL_STEPS + ". " + q.question,
+    parse_mode: "Markdown",
+    ...extra,
   });
 }
 
 async function handleApplicationStep(chatId, text) {
   const session = getUserSession(chatId);
-  const step = session.step;
-  const q = questions[step];
-
-  // Telefon raqam validatsiyasi
-  if (q.key === "phone") {
-    const cleaned = text.replace(/[^\d+]/g, "");
-    if (cleaned.length < 12) {
-      await tg("sendMessage", { chat_id: chatId, text: "❌ Telefon raqam noto'g'ri. +998xxxxxxxxx formatida kiriting:" });
-      return;
-    }
-    session.data.phone = cleaned;
-  } else if (q.key === "graduatedClass" || q.key === "applyingClass") {
-    const num = parseInt(text);
-    if (isNaN(num) || num < 0 || num > 11) {
-      await tg("sendMessage", { chat_id: chatId, text: "❌ Noto'g'ri sinf. 0 dan 11 gacha son kiriting:" });
-      return;
-    }
-    session.data[q.key] = num.toString();
-  } else {
-    session.data[q.key] = text.trim();
+  if (!session) {
+    await tg("sendMessage", { chat_id: chatId, text: "⏳ Vaqt tugadi. Qaytadan /start yozing.", reply_markup: getKeyboard(Number(chatId) === Number(CHAT_ID)) });
+    return;
   }
 
+  const step = session.step;
+  if (step >= TOTAL_STEPS) return;
+
+  const q = questions[step];
+  let value = text.trim();
+
+  // Telefon uchun raqamlarni tozalash
+  if (q.key === "phone") {
+    value = text.replace(/[^\d+]/g, "");
+  }
+
+  // Validatsiya
+  if (!q.validate(value)) {
+    await tg("sendMessage", { chat_id: chatId, text: "❌ " + q.error + ". Qayta kiriting:" });
+    return;
+  }
+
+  session.data[q.key] = q.key === "graduatedClass" || q.key === "applyingClass" ? parseInt(value).toString() : value;
   session.step++;
 
-  // Keyingi savol yoki tugatish
-  if (session.step < questions.length) {
-    await tg("sendMessage", { chat_id: chatId, text: questions[session.step].question });
-  } else {
-    // Arizani saqlash
-    const application = {
-      id: Date.now(),
-      ...session.data,
-      createdAt: new Date().toLocaleString("uz-UZ", { timeZone: "Asia/Tashkent" }),
-    };
-
-    const allData = loadData();
-    allData.push(application);
-    saveData(allData);
-
-    // Foydalanuvchiga xabar
+  // Keyingi savol
+  if (session.step < TOTAL_STEPS) {
+    const nextQ = questions[session.step];
+    const extra = nextQ.isClass ? { reply_markup: classKeyboard() } : { reply_markup: { remove_keyboard: true } };
     await tg("sendMessage", {
       chat_id: chatId,
-      text: "✅ *Arizangiz qabul qilindi!*\n\nOperatorlarimiz tez orada siz bilan bog'lanishadi.\n\nRahmat! 🙏",
+      text: (session.step + 1) + "/" + TOTAL_STEPS + ". " + nextQ.question,
       parse_mode: "Markdown",
-      reply_markup: getKeyboard(false),
+      ...extra,
     });
+    return;
+  }
 
-    // Adminlarga xabar (CHAT_ID dan tashqari barcha)
-    const msg = `
+  // Barcha savollar tugadi — tasdiqlash
+  const summary =
+    "📝 *Arizangizni tekshiring:*\n\n" +
+    questions.map((q, i) => {
+      const val = session.data[q.key];
+      return `*${i + 1}. ${q.question.replace(/[:].*/, "")}:* ${q.isClass ? val + "-sinf" : val}`;
+    }).join("\n") +
+    "\n\n✅ *Tasdiqlash* uchun /submit\n❌ *Bekor qilish* uchun /cancel yozing.";
+
+  session.step = TOTAL_STEPS; // submit kutish
+  await tg("sendMessage", { chat_id: chatId, text: summary, parse_mode: "Markdown", reply_markup: { remove_keyboard: true } });
+}
+
+async function submitApplication(chatId) {
+  const session = getUserSession(chatId);
+  if (!session || !session.data || Object.keys(session.data).length !== TOTAL_STEPS) return;
+
+  const application = {
+    id: Date.now(),
+    ...session.data,
+    createdAt: new Date().toLocaleString("uz-UZ", { timeZone: "Asia/Tashkent" }),
+  };
+
+  const allData = loadData();
+  allData.push(application);
+  saveData(allData);
+
+  await tg("sendMessage", {
+    chat_id: chatId,
+    text: "✅ *Arizangiz qabul qilindi!*\n\nOperatorlarimiz tez orada siz bilan bog'lanishadi.\n\nRahmat! 🙏",
+    parse_mode: "Markdown",
+    reply_markup: getKeyboard(false),
+  });
+
+  const msg = `
 📩 <b>Yangi ariza #${allData.length} (bot)</b>
 
 👤 <b>Ota-ona:</b> ${application.firstName} ${application.lastName}
@@ -253,10 +323,9 @@ async function handleApplicationStep(chatId, text) {
 🎯 <b>Qabul sinfi:</b> ${application.applyingClass}-sinf
 📍 <b>Hudud:</b> ${application.region}
 🕐 <b>Vaqt:</b> ${application.createdAt}
-    `.trim();
-    await tg("sendMessage", { chat_id: CHAT_ID, text: msg, parse_mode: "HTML", reply_markup: getKeyboard(true) });
-    userSessions[chatId] = undefined;
-  }
+  `.trim();
+  await tg("sendMessage", { chat_id: CHAT_ID, text: msg, parse_mode: "HTML", reply_markup: getKeyboard(true) });
+  delete userSessions[chatId];
 }
 
 // ==================== KEYBOARD (doimiy pastki tugmalar) ====================
@@ -321,10 +390,57 @@ async function handleUpdate(update) {
   if (msg) {
     const txt = msg.text || "";
     const chatId = msg.chat.id;
+    const session = userSessions[chatId];
 
-    // Ariza jarayoni davom etayotgan bo'lsa
-    if (userSessions[chatId] && txt !== "/cancel") {
-      await handleApplicationStep(chatId, txt);
+    // Ariza jarayoni buyruqlari
+    if (session) {
+      const isClassQuestion = session.step < TOTAL_STEPS && questions[session.step].isClass;
+
+      if (txt === "/cancel" || txt === "❌ Bekor qilish") {
+        delete userSessions[chatId];
+        await tg("sendMessage", { chat_id: chatId, text: "❌ Ariza bekor qilindi.", reply_markup: getKeyboard(Number(chatId) === Number(CHAT_ID)) });
+        return;
+      }
+
+      if (txt === "/back" || txt === "⬅️ Orqaga") {
+        if (session.step > 0) {
+          session.step--;
+          const q = questions[session.step];
+          const extra = q.isClass ? { reply_markup: classKeyboard(session.data[q.key]) } : { reply_markup: { remove_keyboard: true } };
+          await tg("sendMessage", {
+            chat_id: chatId,
+            text: "⬅️ Oldingi savol:\n\n" + (session.step + 1) + "/" + TOTAL_STEPS + ". " + q.question,
+            parse_mode: "Markdown",
+            ...extra,
+          });
+        } else {
+          await tg("sendMessage", { chat_id: chatId, text: "🏁 Siz birinchi savoldasiz. /cancel bilan bekor qiling." });
+        }
+        return;
+      }
+
+      if (txt === "/submit" && session.step === TOTAL_STEPS) {
+        await submitApplication(chatId);
+        return;
+      }
+
+      // Sinfni inline keyboard bilan tanlash kerak
+      if (isClassQuestion) {
+        await tg("sendMessage", { chat_id: chatId, text: "Iltimos, quyidagi tugmalardan sinfni tanlang:", reply_markup: classKeyboard() });
+        return;
+      }
+
+      // Oddiy matnli javob
+      if (session.step < TOTAL_STEPS) {
+        await handleApplicationStep(chatId, txt);
+        return;
+      }
+
+      // Submit kutish holati
+      if (session.step === TOTAL_STEPS) {
+        await tg("sendMessage", { chat_id: chatId, text: "/submit — tasdiqlash, /cancel — bekor qilish" });
+        return;
+      }
       return;
     }
 
@@ -370,6 +486,41 @@ async function handleUpdate(update) {
   const chatId = cb.message.chat.id;
   const msgId = cb.message.message_id;
   const data = cb.data;
+
+  // Sinf tanlash — ariza jarayonida
+  if (data.startsWith("class_")) {
+    const classVal = data.replace("class_", "");
+    const session = getUserSession(chatId);
+    if (session && session.step < TOTAL_STEPS && questions[session.step].isClass) {
+      session.data[questions[session.step].key] = classVal;
+      session.step++;
+
+      if (session.step < TOTAL_STEPS) {
+        const nextQ = questions[session.step];
+        const extra = nextQ.isClass ? { reply_markup: classKeyboard() } : { reply_markup: { remove_keyboard: true } };
+        await tg("editMessageText", {
+          chat_id: chatId,
+          message_id: msgId,
+          text: "✅ " + classVal + "-sinf tanlandi.\n\n" + (session.step + 1) + "/" + TOTAL_STEPS + ". " + nextQ.question,
+          parse_mode: "Markdown",
+          ...extra,
+        });
+      } else {
+        // Barcha savollar tugadi
+        const summary =
+          "📝 *Arizangizni tekshiring:*\n\n" +
+          questions.map((q, i) => {
+            const val = session.data[q.key];
+            return "*" + (i + 1) + ". " + q.question.replace(/[:].*/, "") + ":* " + (q.isClass ? val + "-sinf" : val);
+          }).join("\n") +
+          "\n\n✅ *Tasdiqlash* uchun /submit\n❌ *Bekor qilish* uchun /cancel yozing.";
+        session.step = TOTAL_STEPS;
+        await tg("editMessageText", { chat_id: chatId, message_id: msgId, text: summary, parse_mode: "Markdown", reply_markup: { remove_keyboard: true } });
+      }
+    }
+    await tg("answerCallbackQuery", { callback_query_id: cb.id });
+    return;
+  }
 
   if (data === "refresh") {
     await sendMainMenu(chatId, msgId);
@@ -538,6 +689,11 @@ app.get("/api/applications/stats", (req, res) => {
   });
 });
 
+// ==================== HEALTH CHECK ====================
+app.get("/api/healthz", (req, res) => {
+  res.json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
 // ==================== SPA FALLBACK ====================
 app.use((req, res, next) => {
   if (req.path.startsWith("/api/") || req.path.startsWith("/webhook") || req.path.includes(".")) return next();
@@ -578,6 +734,7 @@ app.listen(PORT, () => {
   console.log(`📊 GET  /api/applications/excel — Excel yuklab olish`);
   console.log(`📋 GET  /api/applications/stats — statistika`);
   console.log(`📅 GET  /api/applications/today — bugungi arizalar`);
+  console.log(`💚 GET  /api/healthz — sog'liqni tekshirish`);
   console.log(`🤖 Bot: @BuxoroMaktabi_EDU777_bot`);
   console.log(`⏰ Kunlik hisobot: soat 21:00`);
 });
