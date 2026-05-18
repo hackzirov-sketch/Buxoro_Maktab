@@ -36,7 +36,7 @@ const advantages = [
 
 export default function Advantages() {
   return (
-    <section className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-b from-white via-white/80 to-white dark:from-emerald-900/30 dark:via-emerald-900/20 dark:to-emerald-900/30">
+    <section className="relative py-20 md:py-36 overflow-hidden bg-gradient-to-b from-white via-white/80 to-white dark:from-emerald-900/30 dark:via-emerald-900/20 dark:to-emerald-900/30">
       <div className="absolute inset-0 pointer-events-none">
         <div className="blob" style={{ width: "400px", height: "400px", top: "-10%", left: "-5%", background: "radial-gradient(circle, rgba(5,150,105,0.04) 0%, transparent 70%)", animation: "drift 25s ease-in-out infinite" }} />
         <div className="blob" style={{ width: "300px", height: "300px", bottom: "-5%", right: "-5%", background: "radial-gradient(circle, rgba(5,150,105,0.03) 0%, transparent 70%)", animation: "drift 20s ease-in-out infinite reverse" }} />
@@ -55,11 +55,11 @@ export default function Advantages() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, ease: EASE }}
-            className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full glass-btn text-sm md:text-base font-semibold text-primary uppercase tracking-[0.15em] mb-5"
+            className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full glass-btn text-base md:text-base font-bold text-primary uppercase tracking-wide md:tracking-[0.15em] mb-5"
           >
             <Sparkles className="w-4 h-4" /> Nega aynan biz?
           </motion.span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.05] tracking-tight">
+          <h2 className="text-5xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.08] tracking-tight">
             Bizning{" "}
             <span className="relative">
               <span className="text-primary">ustunliklarimiz</span>
@@ -72,7 +72,7 @@ export default function Advantages() {
               />
             </span>
           </h2>
-          <p className="text-xl md:text-2xl font-['Playfair_Display'] italic font-black text-[#065f46] dark:text-emerald-300 mt-6 max-w-2xl mx-auto leading-relaxed drop-shadow-[0_0_10px_rgba(5,150,105,0.15)]">
+          <p className="text-2xl md:text-2xl font-bold text-[#065f46] dark:text-emerald-300 mt-6 max-w-2xl mx-auto leading-relaxed drop-shadow-[0_0_10px_rgba(5,150,105,0.15)]">
             Farzandingiz kelajagi uchun eng yaxshi tanlov
           </p>
         </motion.div>
@@ -106,7 +106,7 @@ export default function Advantages() {
                   />
 
                   <span
-                    className="text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mb-3"
+                    className="text-sm md:text-xs font-bold tracking-wide md:tracking-[0.2em] uppercase mb-3"
                     style={{ color: item.color + "80" }}
                   >
                     {item.num}
@@ -127,16 +127,16 @@ export default function Advantages() {
                     />
                   </motion.div>
 
-                  <h3 className="text-xl md:text-xl font-extrabold text-foreground mb-3 leading-tight">
+                  <h3 className="text-2xl md:text-xl font-extrabold text-foreground mb-3 leading-tight">
                     {item.title}
                   </h3>
 
-                  <p className="text-base md:text-base text-foreground leading-relaxed flex-1">
+                  <p className="text-lg md:text-base text-foreground leading-relaxed flex-1">
                     {item.desc}
                   </p>
 
                   <motion.div
-                    className="mt-4 flex items-center gap-1.5 text-[10px] md:text-xs font-semibold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-1 group-hover:translate-y-0"
+                    className="mt-4 flex items-center gap-1.5 text-sm md:text-xs font-semibold uppercase tracking-wide opacity-100 md:opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-0 md:translate-y-1 md:group-hover:translate-y-0"
                     style={{ color: item.color }}
                   >
                     Batafsil <ArrowRight className="w-3 h-3" />

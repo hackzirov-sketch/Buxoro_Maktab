@@ -31,7 +31,7 @@ export default function CTABanner() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, ease: EASE, delay: 0.1 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 text-xs font-semibold text-white uppercase tracking-[0.12em] mb-4"
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 text-base md:text-xs font-bold text-white uppercase tracking-wide md:tracking-[0.12em] mb-4"
               >
                 <Sparkles className="w-3.5 h-3.5" /> Hoziroq boshlang
               </motion.span>
@@ -41,7 +41,7 @@ export default function CTABanner() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, ease: EASE, delay: 0.2 }}
-                className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-[1.1] tracking-tight"
+                className="text-5xl md:text-4xl lg:text-5xl font-bold text-white leading-[1.12] tracking-tight"
               >
                 Farzandingizni bugun ro'yxatdan o'tkazing
               </motion.h2>
@@ -51,7 +51,7 @@ export default function CTABanner() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, ease: EASE, delay: 0.3 }}
-                className="text-base md:text-lg text-white/80 mt-3 max-w-xl leading-relaxed"
+                className="text-xl md:text-lg text-white/88 mt-3 max-w-xl leading-relaxed font-semibold md:font-normal"
               >
                 O'rinlar soni cheklangan. 2026-2027 o'quv yili uchun qabul ochiq. 
                 Ariza qoldiring, operatorlarimiz siz bilan bog'lansin.
@@ -71,7 +71,7 @@ export default function CTABanner() {
               >
                 <Link
                   href="/ariza"
-                  className="group relative inline-flex items-center gap-3 px-8 md:px-10 py-4 md:py-5 rounded-2xl text-lg md:text-xl font-bold text-white overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
+                  className="group relative inline-flex items-center gap-3 px-8 md:px-10 py-4 md:py-5 rounded-2xl text-xl md:text-xl font-bold text-white overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
                   style={{
                     background: "linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #fbbf24 100%)",
                     boxShadow: "0 8px 32px rgba(217,119,6,0.35)",

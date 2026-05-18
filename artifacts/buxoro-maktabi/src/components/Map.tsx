@@ -5,7 +5,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 
 export default function Map() {
   return (
-    <section className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-b from-white via-white/80 to-white dark:from-emerald-900/30 dark:via-emerald-900/20 dark:to-emerald-900/30">
+    <section className="relative py-20 md:py-36 overflow-hidden bg-gradient-to-b from-white via-white/80 to-white dark:from-emerald-900/30 dark:via-emerald-900/20 dark:to-emerald-900/30">
       <div className="absolute inset-0 pointer-events-none">
         <div className="blob" style={{ width: "400px", height: "400px", top: "10%", right: "-5%", background: "radial-gradient(circle, rgba(5,150,105,0.04) 0%, transparent 70%)", animation: "drift 22s ease-in-out infinite" }} />
       </div>
@@ -23,14 +23,14 @@ export default function Map() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, ease: EASE }}
-            className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full glass-btn text-sm md:text-base font-semibold text-primary uppercase tracking-[0.15em] mb-5"
+            className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full glass-btn text-base md:text-base font-bold text-primary uppercase tracking-wide md:tracking-[0.15em] mb-5"
           >
             <MapPin className="w-4 h-4" /> Manzilimiz
           </motion.span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.05] tracking-tight">
+          <h2 className="text-5xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.08] tracking-tight">
             Bizni <span className="text-primary">xaritada toping</span>
           </h2>
-          <p className="text-lg md:text-xl text-foreground/70 mt-5 max-w-2xl mx-auto leading-relaxed font-['Playfair_Display'] italic">
+          <p className="text-xl md:text-xl text-foreground/80 mt-5 max-w-2xl mx-auto leading-relaxed font-semibold md:font-normal">
             Bekobod shahri, Toshkent viloyati — maktabimizga tashrif buyuring
           </p>
         </motion.div>
@@ -52,16 +52,16 @@ export default function Map() {
               title="Buxoro Maktabi xaritada"
             />
           </div>
-          <div className="flex items-center justify-between px-2 pt-3 pb-1">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-2 pt-3 pb-1">
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-primary" />
-              <span className="text-sm md:text-base text-foreground/70">6779+CQ, Bekobod, Toshkent viloyati</span>
+              <span className="text-base md:text-base text-foreground/75">6779+CQ, Bekobod, Toshkent viloyati</span>
             </div>
             <a
               href="https://maps.google.com/maps?q=40.213644,69.269192"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs md:text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+              className="text-base md:text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
             >
               Katta xaritada ko'rish →
             </a>

@@ -38,7 +38,7 @@ const steps = [
 
 export default function Roadmap() {
   return (
-    <section className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-b from-white via-white/80 to-white dark:from-emerald-900/30 dark:via-emerald-900/20 dark:to-emerald-900/30">
+    <section className="relative py-20 md:py-36 overflow-hidden bg-gradient-to-b from-white via-white/80 to-white dark:from-emerald-900/30 dark:via-emerald-900/20 dark:to-emerald-900/30">
       <div className="absolute inset-0 pointer-events-none">
         <div className="blob" style={{ width: "500px", height: "500px", top: "-15%", right: "-10%", background: "radial-gradient(circle, rgba(5,150,105,0.03) 0%, transparent 70%)", animation: "drift 22s ease-in-out infinite" }} />
         <div className="blob" style={{ width: "350px", height: "350px", bottom: "-8%", left: "-8%", background: "radial-gradient(circle, rgba(5,150,105,0.02) 0%, transparent 70%)", animation: "drift 18s ease-in-out infinite reverse" }} />
@@ -57,14 +57,14 @@ export default function Roadmap() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, ease: EASE }}
-            className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full glass-btn text-sm md:text-base font-semibold text-primary uppercase tracking-[0.15em] mb-5"
+            className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full glass-btn text-base md:text-base font-bold text-primary uppercase tracking-wide md:tracking-[0.15em] mb-5"
           >
             <Sparkles className="w-4 h-4" /> Ta'lim yo'nalishi
           </motion.span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.05] tracking-tight">
+          <h2 className="text-5xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.08] tracking-tight">
             Maktab <span className="text-primary">ta'lim bosqichlari</span>
           </h2>
-          <p className="text-base md:text-lg text-foreground/50 mt-4 max-w-lg mx-auto leading-relaxed font-['Playfair_Display'] italic">
+          <p className="text-xl md:text-lg text-foreground/70 mt-4 max-w-lg mx-auto leading-relaxed font-semibold md:font-normal">
             Har bir bosqichda o'quvchilarning yosh va psixologik xususiyatlariga mos ta'lim dasturlari
           </p>
         </motion.div>
@@ -102,13 +102,13 @@ export default function Roadmap() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, ease: EASE, delay: 0.3 }}
-                        className="inline-block text-sm md:text-base font-bold uppercase tracking-[0.2em] mb-3"
+                        className="inline-block text-base md:text-base font-bold uppercase tracking-wide md:tracking-[0.2em] mb-3"
                         style={{ color: step.color }}
                       >
                         {step.year}
                       </motion.span>
-                      <h3 className="text-xl md:text-2xl font-extrabold text-foreground mb-3">{step.title}</h3>
-                      <p className="text-base md:text-lg text-foreground leading-relaxed">{step.desc}</p>
+                      <h3 className="text-2xl md:text-2xl font-extrabold text-foreground mb-3">{step.title}</h3>
+                      <p className="text-lg md:text-lg text-foreground leading-relaxed">{step.desc}</p>
                     </motion.div>
                   </div>
 

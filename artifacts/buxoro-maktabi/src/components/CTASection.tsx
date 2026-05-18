@@ -54,7 +54,7 @@ const cardVariants = {
 export default function CTASection() {
   return (
     <section className="relative py-28 md:py-36 overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="absolute inset-0 pointer-events-none hidden md:block">
         <div className="blob" style={{ width: "600px", height: "600px", top: "-20%", left: "-10%", background: "radial-gradient(circle, rgba(5,150,105,0.06) 0%, transparent 70%)", animation: "drift 25s ease-in-out infinite" }} />
         <div className="blob" style={{ width: "400px", height: "400px", bottom: "-15%", right: "-5%", background: "radial-gradient(circle, rgba(2,132,199,0.04) 0%, transparent 70%)", animation: "drift 20s ease-in-out infinite reverse" }} />
       </div>
@@ -72,15 +72,15 @@ export default function CTASection() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, ease: EASE }}
-            className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full glass-btn text-sm md:text-base font-semibold text-primary uppercase tracking-[0.15em] mb-5"
+            className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full glass-btn text-base md:text-base font-bold text-primary uppercase tracking-wide md:tracking-[0.15em] mb-5"
           >
             <Sparkles className="w-4 h-4" /> Maktab bilan tanishing
           </motion.span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.05] tracking-tight">
-            Ko'proq <span className="text-primary">bilishni xohlaysizmi?</span>
+          <h2 className="text-5xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.08] tracking-tight">
+            Maktab haqida <span className="text-primary">tez tanishing</span>
           </h2>
-          <p className="text-lg md:text-xl text-foreground/70 mt-5 max-w-2xl mx-auto leading-relaxed font-['Playfair_Display'] italic">
-            Siz uchun eng qiziqarli bo'limga o'ting va maktab hayoti bilan tanishing
+          <p className="text-xl md:text-lg text-foreground/75 mt-5 max-w-2xl mx-auto leading-relaxed font-semibold md:font-normal">
+            O'qituvchilar, sinfxonalar, oshxona va qabul bo'limlariga bir bosishda o'ting.
           </p>
         </motion.div>
 
@@ -104,7 +104,7 @@ export default function CTASection() {
                     className="absolute -inset-1 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                     style={{
                       background: `radial-gradient(circle at 50% 50%, ${btn.shadow}, transparent 70%)`,
-                      filter: "blur(25px)",
+                      filter: "blur(18px)",
                     }}
                   />
 
@@ -139,11 +139,11 @@ export default function CTASection() {
                       />
                     </motion.div>
 
-                    <h3 className="text-lg md:text-xl font-bold text-foreground mb-1.5">{btn.label}</h3>
-                    <p className="text-xs md:text-sm text-foreground/50 mb-4 leading-relaxed">{btn.desc}</p>
+                    <h3 className="text-2xl md:text-xl font-bold text-foreground mb-1.5">{btn.label}</h3>
+                    <p className="text-base md:text-sm text-foreground/65 mb-4 leading-relaxed">{btn.desc}</p>
 
                     <motion.span
-                      className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white transition-all duration-300 ${btn.href === "/ariza" ? "bg-primary" : ""}`}
+                      className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base md:text-sm font-semibold text-white transition-all duration-300 ${btn.href === "/ariza" ? "bg-primary" : ""}`}
                       style={btn.href !== "/ariza" ? { background: btn.color } : {}}
                       whileHover={{ scale: 1.05, boxShadow: `0 0 30px ${btn.shadow}` }}
                     >

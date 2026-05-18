@@ -45,7 +45,7 @@ export default function FAQ() {
   const toggle = (idx: number) => setOpenIndex(openIndex === idx ? null : idx);
 
   return (
-    <section id="faq" className="relative py-28 md:py-36 overflow-hidden dark:bg-emerald-900/15">
+    <section id="faq" className="relative py-20 md:py-36 overflow-hidden dark:bg-emerald-900/15">
       <div className="absolute inset-0 pointer-events-none">
         <div className="blob" style={{ width: "500px", height: "500px", top: "-10%", right: "-5%", background: "radial-gradient(circle, rgba(5,150,105,0.04) 0%, transparent 70%)", animation: "drift 25s ease-in-out infinite" }} />
         <div className="blob" style={{ width: "350px", height: "350px", bottom: "-5%", left: "-5%", background: "radial-gradient(circle, rgba(5,150,105,0.03) 0%, transparent 70%)", animation: "drift 20s ease-in-out infinite reverse" }} />
@@ -64,14 +64,14 @@ export default function FAQ() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, ease: EASE }}
-            className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full glass-btn text-sm md:text-base font-semibold text-primary uppercase tracking-[0.15em] mb-5"
+            className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full glass-btn text-base md:text-base font-bold text-primary uppercase tracking-wide md:tracking-[0.15em] mb-5"
           >
             <MessageCircle className="w-4 h-4" /> Biz tushunamiz
           </motion.span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.05] tracking-tight">
+          <h2 className="text-5xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.08] tracking-tight">
             Sizni <span className="text-primary">o'ylantiradigan savollar</span>
           </h2>
-          <p className="text-lg md:text-xl text-foreground/70 mt-5 max-w-3xl mx-auto leading-relaxed font-['Playfair_Display'] italic">
+          <p className="text-xl md:text-xl text-foreground/80 mt-5 max-w-3xl mx-auto leading-relaxed font-semibold md:font-normal">
             "Har bir ota-ona tashvishlanadi. Biz bu tashvishlarni yuzlab marta eshitdik — va maktabimizni ularni hal qilish uchun qurdik."
           </p>
         </motion.div>
@@ -94,10 +94,10 @@ export default function FAQ() {
               >
                 <div className="flex items-center justify-between gap-4">
                   <span className="flex items-center gap-3">
-                    <span className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold transition-colors duration-300 ${openIndex === idx ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary"}`}>
+                    <span className={`w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold transition-colors duration-300 ${openIndex === idx ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary"}`}>
                       {String(idx + 1).padStart(2, "0")}
                     </span>
-                    <span className="text-base md:text-lg font-semibold text-foreground">{faq.q}</span>
+                    <span className="text-lg md:text-lg font-bold text-foreground">{faq.q}</span>
                   </span>
                   <motion.div
                     animate={{ rotate: openIndex === idx ? 180 : 0 }}
@@ -116,7 +116,7 @@ export default function FAQ() {
                       transition={{ duration: 0.35, ease: EASE }}
                       className="overflow-hidden"
                     >
-                      <p className="pt-4 text-base md:text-lg text-foreground/60 leading-relaxed pl-11">
+                      <p className="pt-4 text-lg md:text-lg text-foreground/70 leading-relaxed pl-0 sm:pl-11">
                         {faq.a}
                       </p>
                     </motion.div>
