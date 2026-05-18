@@ -15,6 +15,28 @@ const moments = [
       "Po'ladxo'jayeva Dilshoda, 6-sinf: Matematika yo'nalishida 1-o'rin.",
     ],
   },
+  {
+    src: "/photo_2026-05-18_17-03-45.jpg",
+    title: "Tarixdan super natija",
+    desc: "6-sinf o'quvchimiz G'aibulloyev Shoxijahon tarix fanidan navbatdagi yuqori natijani qo'lga kiritdi.",
+    badge: "O'quvchi yutug'i",
+    meta: "Fan: Tarix • Vaqt: 3,5 oy",
+    details: [
+      "O'quvchi: G'aibulloyev Shoxijahon, 6-sinf.",
+      "Daraja: A +. Tarix ustozi: Bekzod Xojimuratov.",
+    ],
+  },
+  {
+    src: "/photo_2026-04-26_14-22-25.jpg",
+    title: "Tibbiyot o'quvchilari",
+    desc: "Bir necha kunlik sayohat o'quvchilarimiz uchun katta tajriba va yangi maqsadlar manbai bo'ldi.",
+    badge: "Tajriba safari",
+    meta: "Bilim • Jamoa • Maqsad",
+    details: [
+      "Kelajak shifokorlari bilim, jamoaviylik va kasbiy maqsad sari yana bir pog'ona yuqoriga ko'tarildi.",
+      "Buxoro maktabi — ta'lim va tarbiya birlashgan maskan.",
+    ],
+  },
   { src: "https://images.unsplash.com/photo-1577896851231-70c1883b42e3?w=600&q=80", title: "Kutubxona", desc: "O'quvchilar sevimli mashg'ulotlaridan bahramand bo'lishmoqda" },
   { src: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&q=80", title: "Sport maydoni", desc: "Jismoniy tarbiya darsida o'quvchilar" },
   { src: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&q=80", title: "Dars jarayoni", desc: "Zamonaviy metodikalar bilan o'tilayotgan dars" },
