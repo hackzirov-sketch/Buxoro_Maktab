@@ -90,18 +90,69 @@ async function tgDoc(filePath, caption) {
   }
 }
 
-// ==================== EXCEL YARATISH ====================
-async function createExcel(data, title) {
-  const workbook = new ExcelJS.Workbook();
-  workbook.creator = "Buxoro Maktabi";
-  workbook.created = new Date();
+function getApplicationType(row) {
+  return row?.type === "job" ? "job" : "study";
+}
 
-  const sheet = workbook.addWorksheet("Arizalar");
+function getTodayKey() {
+  return new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Tashkent" });
+}
 
-  // Ustunlar — widths bilan, birlashib ketmasligi uchun
-  const colDefs = [
+function isSameTashkentDay(row, dayKey = getTodayKey()) {
+  if (!row?.createdAt) return false;
+  if (row.createdAt.startsWith(dayKey)) return true;
+  const parsed = new Date(row.createdAt);
+  if (Number.isNaN(parsed.getTime())) return false;
+  return parsed.toLocaleDateString("sv-SE", { timeZone: "Asia/Tashkent" }) === dayKey;
+}
+
+function filterApplications(data, type = "all", dayKey) {
+  return data.filter(row => {
+    const typeOk = type === "all" || getApplicationType(row) === type;
+    const dayOk = !dayKey || isSameTashkentDay(row, dayKey);
+    return typeOk && dayOk;
+  });
+}
+
+function getStats(data, dayKey = getTodayKey()) {
+  const todayStudy = filterApplications(data, "study", dayKey);
+  const todayJob = filterApplications(data, "job", dayKey);
+  return {
+    total: data.length,
+    study: filterApplications(data, "study").length,
+    job: filterApplications(data, "job").length,
+    today: todayStudy.length + todayJob.length,
+    todayStudy: todayStudy.length,
+    todayJob: todayJob.length,
+  };
+}
+
+function getExcelColumns(type) {
+  if (type === "job") {
+    return [
+      { header: "#", key: "id", width: 5 },
+      { header: "Sana", key: "date", width: 22 },
+      { header: "Manba", key: "source", width: 14 },
+      { header: "Ism familiya", key: "fullName", width: 24 },
+      { header: "Tug'ilgan sana", key: "birthDate", width: 18 },
+      { header: "Ma'lumoti", key: "education", width: 22 },
+      { header: "OTM", key: "university", width: 35 },
+      { header: "Mutaxassislik", key: "specialty", width: 25 },
+      { header: "Ish tajribasi", key: "experience", width: 35 },
+      { header: "Oxirgi ish joyi", key: "lastWorkplace", width: 40 },
+      { header: "Malaka toifasi", key: "qualification", width: 18 },
+      { header: "Munosib lavozim", key: "desiredPosition", width: 25 },
+      { header: "Yaxshi o'qituvchi", key: "goodTeacher", width: 45 },
+      { header: "Zamonaviy maktab 3 jihat", key: "modernSchool", width: 45 },
+      { header: "O'zi haqida", key: "about", width: 55 },
+      { header: "Telefon", key: "phone", width: 20 },
+    ];
+  }
+
+  return [
     { header: "#", key: "id", width: 5 },
     { header: "Sana", key: "date", width: 22 },
+    { header: "Manba", key: "source", width: 14 },
     { header: "Vasiy Ism", key: "firstName", width: 18 },
     { header: "Vasiy Familiya", key: "lastName", width: 18 },
     { header: "Telefon", key: "phone", width: 20 },
@@ -112,6 +163,56 @@ async function createExcel(data, title) {
     { header: "Qabul sinfi", key: "applyingClass", width: 16 },
     { header: "Hudud", key: "region", width: 18 },
   ];
+}
+
+function toExcelRow(row, i, type) {
+  if (type === "job") {
+    return {
+      id: i + 1,
+      date: row.createdAt,
+      source: row.source || "telegram",
+      fullName: row.fullName,
+      birthDate: row.birthDate,
+      education: row.education,
+      university: row.university,
+      specialty: row.specialty,
+      experience: row.experience,
+      lastWorkplace: row.lastWorkplace,
+      qualification: row.qualification,
+      desiredPosition: row.desiredPosition,
+      goodTeacher: row.goodTeacher,
+      modernSchool: row.modernSchool,
+      about: row.about,
+      phone: row.phone,
+    };
+  }
+
+  return {
+    id: i + 1,
+    date: row.createdAt,
+    source: row.source || "telegram",
+    firstName: row.firstName,
+    lastName: row.lastName,
+    phone: row.phone,
+    childFirstName: row.childFirstName,
+    childLastName: row.childLastName,
+    currentSchool: row.currentSchool,
+    graduatedClass: row.graduatedClass ? row.graduatedClass + "-sinf" : "",
+    applyingClass: row.applyingClass ? row.applyingClass + "-sinf" : "",
+    region: row.region,
+  };
+}
+
+// ==================== EXCEL YARATISH ====================
+async function createExcel(data, title, type = "study") {
+  const workbook = new ExcelJS.Workbook();
+  workbook.creator = "Buxoro Maktabi";
+  workbook.created = new Date();
+
+  const sheet = workbook.addWorksheet(type === "job" ? "Ish arizalari" : "O'qish arizalari");
+
+  // Ustunlar — widths bilan, birlashib ketmasligi uchun
+  const colDefs = getExcelColumns(type);
   sheet.columns = colDefs;
 
   // Sarlavha
@@ -132,21 +233,9 @@ async function createExcel(data, title) {
 
   // Ma'lumotlar
   data.forEach((row, i) => {
-    const r = sheet.addRow({
-      id: i + 1,
-      date: row.createdAt,
-      firstName: row.firstName,
-      lastName: row.lastName,
-      phone: row.phone,
-      childFirstName: row.childFirstName,
-      childLastName: row.childLastName,
-      currentSchool: row.currentSchool,
-      graduatedClass: row.graduatedClass + "-sinf",
-      applyingClass: row.applyingClass + "-sinf",
-      region: row.region,
-    });
-    r.height = 22;
-    r.alignment = { vertical: "middle", wrapText: false };
+    const r = sheet.addRow(toExcelRow(row, i, type));
+    r.height = type === "job" ? 42 : 22;
+    r.alignment = { vertical: "middle", wrapText: type === "job" };
 
     // Border har bir katakka
     r.eachCell(cell => {
@@ -176,15 +265,44 @@ async function createExcel(data, title) {
   };
 
   // Telefon ustunidagi matn formatini matn sifatida saqlash
-  sheet.getColumn(5).numFmt = "@";
+  const phoneColumn = colDefs.findIndex(col => col.key === "phone") + 1;
+  if (phoneColumn > 0) sheet.getColumn(phoneColumn).numFmt = "@";
 
   const filePath = path.join(__dirname, `${title}.xlsx`);
   await workbook.xlsx.writeFile(filePath);
   return filePath;
 }
 
+async function sendExcelReport(type, data, title, caption) {
+  if (data.length === 0) return false;
+  const filePath = await createExcel(data, title, type);
+  await tgDoc(filePath, caption);
+  try { fs.unlinkSync(filePath); } catch {}
+  return true;
+}
+
+async function sendDailyExcelReports(dayKey = getTodayKey()) {
+  const allData = loadData();
+  const studyData = filterApplications(allData, "study", dayKey);
+  const jobData = filterApplications(allData, "job", dayKey);
+
+  await tg("sendMessage", {
+    chat_id: CHAT_ID,
+    text: `📊 <b>Kunlik hisobot (${dayKey})</b>\n\n📚 O'qish arizalari: <b>${studyData.length}</b>\n💼 Ish arizalari: <b>${jobData.length}</b>`,
+    parse_mode: "HTML",
+    reply_markup: getKeyboard(true),
+  });
+
+  await sendExcelReport("study", studyData, `oqish_arizalari_${dayKey}`, `📚 O'qish arizalari — ${dayKey} (${studyData.length} ta)`);
+  await sendExcelReport("job", jobData, `ish_arizalari_${dayKey}`, `💼 Ish arizalari — ${dayKey} (${jobData.length} ta)`);
+
+  if (studyData.length === 0 && jobData.length === 0) {
+    await tg("sendMessage", { chat_id: CHAT_ID, text: "Bugun yangi o'qish yoki ish arizasi kelmadi.", reply_markup: getKeyboard(true) });
+  }
+}
+
 // ==================== BOT ORQALI ARIZA TOPSHIRISH ====================
-const questions = [
+const studyQuestions = [
   { key: "firstName", question: "👤 Vasiy Ismini kiriting:", validate: v => v.length >= 2 && v.length <= 50, error: "Ism 2-50 belgi orasida bo'lishi kerak" },
   { key: "lastName", question: "👤 Vasiy Familiyasini kiriting:", validate: v => v.length >= 2 && v.length <= 50, error: "Familiya 2-50 belgi orasida bo'lishi kerak" },
   { key: "phone", question: "📞 Telefon raqamingizni kiriting (+998xxxxxxxxx):", validate: v => /^\+998\d{9}$/.test(v), error: "❌ Noto'g'ri format. +998xxxxxxxxx" },
@@ -195,7 +313,28 @@ const questions = [
   { key: "applyingClass", question: "📚 Qabul qilinadigan sinfini tanlang:", validate: v => !isNaN(parseInt(v)) && parseInt(v) >= 0 && parseInt(v) <= 11, error: "0-11 orasida son kiriting", isClass: true },
   { key: "region", question: "📍 Hududni kiriting (masalan: Bekobod shahar):", validate: v => v.length >= 3 && v.length <= 100, error: "Hudud 3-100 belgi" },
 ];
-const TOTAL_STEPS = questions.length;
+
+const jobQuestions = [
+  { key: "fullName", question: "👤 Ism, familiyangizni kiriting:", validate: v => v.length >= 3 && v.length <= 100, error: "Ism va familiya 3-100 belgi orasida bo'lishi kerak" },
+  { key: "birthDate", question: "🎂 Tug'ilgan yil, oy va sanangizni kiriting (masalan: 1995-05-21):", validate: v => v.length >= 6 && v.length <= 40, error: "Tug'ilgan sanani kiriting" },
+  { key: "education", question: "🎓 Ma'lumotingizni yozing:", validate: v => v.length >= 3 && v.length <= 200, error: "Ma'lumotingizni to'liqroq yozing" },
+  { key: "university", question: "🏛 O'qigan oliy o'quv yurtingizni yozing (nomi, tamomlagan yili):", validate: v => v.length >= 5 && v.length <= 250, error: "Oliy o'quv yurti nomi va yilini yozing" },
+  { key: "specialty", question: "📚 Mutaxassisligingizni yozing:", validate: v => v.length >= 3 && v.length <= 150, error: "Mutaxassisligingizni yozing" },
+  { key: "experience", question: "💼 Ish tajribangizni yozing:", validate: v => v.length >= 2 && v.length <= 500, error: "Ish tajribangizni yozing. Tajribangiz bo'lmasa, 'yo'q' deb yozing" },
+  { key: "lastWorkplace", question: "🏢 Hozirgi va/yoki oxirgi ish joyingiz haqida yozing (joy nomi, lavozim, ishlagan yillar):", validate: v => v.length >= 3 && v.length <= 600, error: "Ish joyi, lavozim va yillarni yozing" },
+  { key: "qualification", question: "🏅 Malaka toifangizni tanlang:", validate: v => QUALIFICATION_OPTIONS.includes(v), error: "Malaka toifasini tugmalardan tanlang", isQualification: true },
+  { key: "desiredPosition", question: "🎯 O'zingizni qaysi lavozimga munosib ko'rasiz?", validate: v => v.length >= 3 && v.length <= 200, error: "Lavozimni yozing" },
+  { key: "goodTeacher", question: "👩‍🏫 Siz uchun yaxshi o'qituvchi qanday bo'lishi kerak?", validate: v => v.length >= 20 && v.length <= 600, error: "20-600 belgi orasida fikringizni yozing" },
+  { key: "modernSchool", question: "🏫 Sizningcha, zamonaviy maktabda eng muhim 3 ta jihat nima?", validate: v => v.length >= 20 && v.length <= 600, error: "20-600 belgi orasida eng muhim 3 ta jihatni yozing" },
+  { key: "about", question: "📝 O'zingiz haqingizda ma'lumot qoldiring (100 ta so'zdan kam bo'lmasin):", validate: v => v.trim().split(/\s+/).filter(Boolean).length >= 100 && v.length <= 1800, error: "Bu javob 100 ta so'zdan kam bo'lmasin va 1800 belgidan oshmasin" },
+  { key: "phone", question: "📞 Telefon raqamingizni kiriting (+998xxxxxxxxx):", validate: v => /^\+998\d{9}$/.test(v), error: "❌ Noto'g'ri format. +998xxxxxxxxx" },
+];
+
+const APPLICATION_TYPES = {
+  study: { label: "O'qish uchun", title: "O'qish uchun ariza", questions: studyQuestions },
+  job: { label: "Ishga kirish uchun", title: "Ishga kirish uchun ariza", questions: jobQuestions },
+};
+const QUALIFICATION_OPTIONS = ["Mutaxassis", "2 - toifa", "1 - toifa", "Oliy"];
 const REGION_OPTIONS = ["Bekobod shahar", "Shirin shahar", "Juma", "Xos", "Zafar"];
 
 const userSessions = {};
@@ -223,6 +362,28 @@ function cleanupExpiredSessions() {
 }
 setInterval(cleanupExpiredSessions, 60000);
 
+function getApplicationConfig(sessionOrType) {
+  const type = typeof sessionOrType === "string" ? sessionOrType : sessionOrType?.type;
+  return APPLICATION_TYPES[type] || APPLICATION_TYPES.study;
+}
+
+function getQuestions(sessionOrType) {
+  return getApplicationConfig(sessionOrType).questions;
+}
+
+function getTotalSteps(sessionOrType) {
+  return getQuestions(sessionOrType).length;
+}
+
+function applicationTypeKeyboard() {
+  return {
+    inline_keyboard: [
+      [{ text: "📚 O'qish uchun", callback_data: "application_type_study" }],
+      [{ text: "💼 Ishga kirish uchun", callback_data: "application_type_job" }],
+    ],
+  };
+}
+
 function classKeyboard(selected) {
   const rows = [];
   for (let i = 0; i < 12; i += 4) {
@@ -239,6 +400,17 @@ function classKeyboard(selected) {
 }
 
 function applicationReplyKeyboard(question) {
+  if (question?.isQualification) {
+    return {
+      keyboard: [
+        ...QUALIFICATION_OPTIONS.map(text => [{ text }]),
+        [{ text: "⬅️ Orqaga" }, { text: "❌ Bekor qilish" }],
+      ],
+      resize_keyboard: true,
+      is_persistent: true,
+    };
+  }
+
   if (question?.key === "region") {
     const regionRows = [];
     for (let i = 0; i < REGION_OPTIONS.length; i += 2) {
@@ -275,6 +447,7 @@ function confirmationKeyboard() {
 }
 
 function isCompleteApplication(session) {
+  const questions = getQuestions(session);
   return Boolean(
     session &&
     session.data &&
@@ -298,18 +471,63 @@ function isStartApplicationText(text) {
 }
 
 function applicationSummary(session) {
+  const config = getApplicationConfig(session);
+  const questions = getQuestions(session);
   return (
-    "📝 *Arizangizni tekshiring:*\n\n" +
+    `📝 *${config.title}*\n\nArizangizni tekshiring:\n\n` +
     questions.map((q, i) => {
       const val = session.data[q.key] || "";
-      return `*${i + 1}. ${q.question.replace(/[:].*/, "")}:* ${q.isClass ? val + "-sinf" : val}`;
+      return `*${i + 1}. ${q.question.replace(/[:].*/, "")}:* ${formatSummaryValue(q.isClass ? val + "-sinf" : val)}`;
     }).join("\n") +
     "\n\n✅ Tasdiqlash uchun pastdagi tugmani bosing.\n❌ Bekor qilish uchun bekor qilish tugmasini bosing."
   );
 }
 
+function formatSummaryValue(value) {
+  const text = value.toString();
+  return text.length > 500 ? text.slice(0, 500) + "..." : text;
+}
+
+function buildAdminApplicationMessage(application, count) {
+  if (application.type === "job") {
+    return `
+📩 <b>Yangi ish arizasi #${count}</b>
+
+📌 <b>Manba:</b> ${esc(application.source || "telegram")}
+👤 <b>Nomzod:</b> ${esc(application.fullName)}
+🎂 <b>Tug'ilgan sana:</b> ${esc(application.birthDate)}
+🎓 <b>Ma'lumoti:</b> ${esc(application.education)}
+🏛 <b>OTM:</b> ${esc(application.university)}
+📚 <b>Mutaxassisligi:</b> ${esc(application.specialty)}
+💼 <b>Ish tajribasi:</b> ${esc(application.experience)}
+🏢 <b>Oxirgi ish joyi:</b> ${esc(application.lastWorkplace)}
+🏅 <b>Malaka toifasi:</b> ${esc(application.qualification)}
+🎯 <b>Munosib lavozim:</b> ${esc(application.desiredPosition)}
+👩‍🏫 <b>Yaxshi o'qituvchi:</b> ${esc(application.goodTeacher)}
+🏫 <b>Zamonaviy maktabdagi 3 jihat:</b> ${esc(application.modernSchool)}
+📝 <b>O'zi haqida:</b> ${esc(application.about)}
+📞 <b>Telefon:</b> ${esc(application.phone)}
+🕐 <b>Vaqt:</b> ${application.createdAt}
+    `.trim();
+  }
+
+  return `
+📩 <b>Yangi o'qish arizasi #${count}</b>
+
+📌 <b>Manba:</b> ${esc(application.source || "telegram")}
+👤 <b>Ota-ona:</b> ${esc(application.firstName)} ${esc(application.lastName)}
+📞 <b>Telefon:</b> ${esc(application.phone)}
+👶 <b>Bola:</b> ${esc(application.childFirstName)} ${esc(application.childLastName)}
+🏫 <b>Hozirgi maktab:</b> ${esc(application.currentSchool)}
+📚 <b>Tugatgan sinf:</b> ${esc(application.graduatedClass)}-sinf
+🎯 <b>Qabul sinfi:</b> ${esc(application.applyingClass)}-sinf
+📍 <b>Hudud:</b> ${esc(application.region)}
+🕐 <b>Vaqt:</b> ${application.createdAt}
+  `.trim();
+}
+
 async function sendApplicationSummary(chatId, session, editMessageId) {
-  session.step = TOTAL_STEPS;
+  session.step = getTotalSteps(session);
   const payload = {
     chat_id: chatId,
     text: applicationSummary(session),
@@ -337,19 +555,33 @@ async function goBackApplication(chatId) {
     return;
   }
 
-  session.step = session.step >= TOTAL_STEPS ? TOTAL_STEPS - 1 : session.step - 1;
+  const totalSteps = getTotalSteps(session);
+  const questions = getQuestions(session);
+  session.step = session.step >= totalSteps ? totalSteps - 1 : session.step - 1;
   const q = questions[session.step];
   delete session.data[q.key];
   await sendCurrentQuestion(chatId);
 }
 
 async function startApplication(chatId) {
-  userSessions[chatId] = { step: 0, data: {}, startedAt: Date.now() };
+  delete userSessions[chatId];
+  await tg("sendMessage", {
+    chat_id: chatId,
+    text: "📝 Qaysi turdagi ariza topshirmoqchisiz?",
+    reply_markup: applicationTypeKeyboard(),
+  });
+}
+
+async function startApplicationType(chatId, type) {
+  const safeType = APPLICATION_TYPES[type] ? type : "study";
+  const config = getApplicationConfig(safeType);
+  userSessions[chatId] = { type: safeType, step: 0, data: {}, startedAt: Date.now() };
+  const questions = getQuestions(safeType);
   const q = questions[0];
   const extra = q.isClass ? { reply_markup: classKeyboard() } : { reply_markup: applicationReplyKeyboard(q) };
   await tg("sendMessage", {
     chat_id: chatId,
-    text: "📝 *Ariza topshirish*\n\nQuyidagi savollarga javob bering.\n/back — oldingi savolga qaytish\n/cancel — bekor qilish\n\n1/" + TOTAL_STEPS + ". " + q.question,
+    text: `📝 *${config.title}*\n\nQuyidagi savollarga javob bering.\n/back — oldingi savolga qaytish\n/cancel — bekor qilish\n\n1/${questions.length}. ${q.question}`,
     parse_mode: "Markdown",
     ...extra,
   });
@@ -359,11 +591,12 @@ async function sendCurrentQuestion(chatId) {
   const session = getUserSession(chatId);
   if (!session) return;
   const step = session.step;
+  const questions = getQuestions(session);
   const q = questions[step];
   const extra = q.isClass ? { reply_markup: classKeyboard(session.data[q.key]) } : { reply_markup: applicationReplyKeyboard(q) };
   await tg("sendMessage", {
     chat_id: chatId,
-    text: (step + 1) + "/" + TOTAL_STEPS + ". " + q.question,
+    text: (step + 1) + "/" + questions.length + ". " + q.question,
     parse_mode: "Markdown",
     ...extra,
   });
@@ -377,7 +610,8 @@ async function handleApplicationStep(chatId, text) {
   }
 
   const step = session.step;
-  if (step >= TOTAL_STEPS) return;
+  const questions = getQuestions(session);
+  if (step >= questions.length) return;
 
   const q = questions[step];
   let value = text.trim();
@@ -397,12 +631,12 @@ async function handleApplicationStep(chatId, text) {
   session.step++;
 
   // Keyingi savol
-  if (session.step < TOTAL_STEPS) {
+  if (session.step < questions.length) {
     const nextQ = questions[session.step];
     const extra = nextQ.isClass ? { reply_markup: classKeyboard() } : { reply_markup: applicationReplyKeyboard(nextQ) };
     await tg("sendMessage", {
       chat_id: chatId,
-      text: (session.step + 1) + "/" + TOTAL_STEPS + ". " + nextQ.question,
+      text: (session.step + 1) + "/" + questions.length + ". " + nextQ.question,
       parse_mode: "Markdown",
       ...extra,
     });
@@ -410,14 +644,6 @@ async function handleApplicationStep(chatId, text) {
   }
 
   // Barcha savollar tugadi — tasdiqlash
-  const summary =
-    "📝 *Arizangizni tekshiring:*\n\n" +
-    questions.map((q, i) => {
-      const val = session.data[q.key];
-      return `*${i + 1}. ${q.question.replace(/[:].*/, "")}:* ${q.isClass ? val + "-sinf" : val}`;
-    }).join("\n") +
-    "\n\n✅ *Tasdiqlash* uchun /submit\n❌ *Bekor qilish* uchun /cancel yozing.";
-
   await sendApplicationSummary(chatId, session);
 }
 
@@ -437,6 +663,8 @@ async function submitApplication(chatId) {
   try {
     const application = {
       id: Date.now(),
+      type: session.type || "study",
+      source: "telegram",
       ...session.data,
       createdAt: new Date().toLocaleString("uz-UZ", { timeZone: "Asia/Tashkent" }),
     };
@@ -444,26 +672,16 @@ async function submitApplication(chatId) {
     const allData = loadData();
     allData.push(application);
     saveData(allData);
+    const config = getApplicationConfig(session);
 
     await tg("sendMessage", {
       chat_id: chatId,
-      text: "✅ *Arizangiz qabul qilindi!*\n\nOperatorlarimiz tez orada siz bilan bog'lanishadi.\n\nRahmat! 🙏",
+      text: `✅ *${config.title} qabul qilindi!*\n\nOperatorlarimiz tez orada siz bilan bog'lanishadi.\n\nRahmat! 🙏`,
       parse_mode: "Markdown",
       reply_markup: getKeyboard(false),
     });
 
-    const msg = `
-📩 <b>Yangi ariza #${allData.length} (bot)</b>
-
-👤 <b>Ota-ona:</b> ${esc(application.firstName)} ${esc(application.lastName)}
-📞 <b>Telefon:</b> ${esc(application.phone)}
-👶 <b>Bola:</b> ${esc(application.childFirstName)} ${esc(application.childLastName)}
-🏫 <b>Hozirgi maktab:</b> ${esc(application.currentSchool)}
-📚 <b>Tugatgan sinf:</b> ${esc(application.graduatedClass)}-sinf
-🎯 <b>Qabul sinfi:</b> ${esc(application.applyingClass)}-sinf
-📍 <b>Hudud:</b> ${esc(application.region)}
-🕐 <b>Vaqt:</b> ${application.createdAt}
-  `.trim();
+    const msg = buildAdminApplicationMessage(application, allData.length);
     const adminResult = await tg("sendMessage", { chat_id: CHAT_ID, text: msg, parse_mode: "HTML", reply_markup: getKeyboard(true) });
     if (!adminResult.ok) {
       console.error("Admin xabar yuborilmadi:", JSON.stringify(adminResult));
@@ -491,8 +709,9 @@ function getKeyboard(isAdmin) {
   return {
     keyboard: isAdmin
       ? [
-          [{ text: "📊 Statistika" }, { text: "📥 Excel" }],
-          [{ text: "📝 Ariza topshirish" }, { text: "📅 Bugungi hisobot" }],
+          [{ text: "📊 Statistika" }, { text: "📥 O'qish Excel" }],
+          [{ text: "💼 Ish Excel" }, { text: "📅 Bugungi hisobot" }],
+          [{ text: "📝 Ariza topshirish" }],
           [{ text: "🔄 Yangilash" }],
         ]
       : [
@@ -506,17 +725,19 @@ function getKeyboard(isAdmin) {
 // ==================== BOT MENU ====================
 async function sendMainMenu(chatId, editMsgId) {
   const allData = loadData();
-  const today = new Date().toLocaleDateString("uz-UZ", { timeZone: "Asia/Tashkent" });
-  const todayData = allData.filter(a => a.createdAt && a.createdAt.startsWith(today.slice(0, 10)));
-  const regions = [...new Set(allData.map(a => a.region))];
+  const dayKey = getTodayKey();
+  const stats = getStats(allData, dayKey);
+  const regions = [...new Set(filterApplications(allData, "study").map(a => a.region).filter(Boolean))];
   const isAdmin = Number(chatId) === Number(CHAT_ID);
 
   const msg = `
 📊 <b>Buxoro Maktabi — Statistika</b>
 
-👥 <b>Jami arizalar:</b> ${allData.length}
-📅 <b>Bugun:</b> ${todayData.length} ta
-📍 <b>Hududlar:</b> ${regions.map(r => `\n  • ${r}: ${allData.filter(a => a.region === r).length} ta`).join("") || " yo'q"}
+👥 <b>Jami:</b> ${stats.total} ta
+📚 <b>O'qish:</b> ${stats.study} ta | bugun ${stats.todayStudy} ta
+💼 <b>Ish:</b> ${stats.job} ta | bugun ${stats.todayJob} ta
+📅 <b>Bugun jami:</b> ${stats.today} ta
+📍 <b>O'qish hududlari:</b> ${regions.map(r => `\n  • ${r}: ${filterApplications(allData, "study").filter(a => a.region === r).length} ta`).join("") || " yo'q"}
 🕐 <b>So'nggi yangilanish:</b> ${new Date().toLocaleString("uz-UZ", { timeZone: "Asia/Tashkent" })}
   `.trim();
 
@@ -524,8 +745,9 @@ async function sendMainMenu(chatId, editMsgId) {
     inline_keyboard: [
       [
         { text: "🔄 Yangilash", callback_data: "refresh" },
-        { text: "📥 Excel", callback_data: "get_excel" },
+        { text: "📚 O'qish Excel", callback_data: "get_excel_study" },
       ],
+      [{ text: "💼 Ish Excel", callback_data: "get_excel_job" }],
       [
         { text: "📅 Bugungi hisobot", callback_data: "today_report" },
         { text: "📊 Umumiy statistika", callback_data: "full_stats" },
@@ -536,7 +758,7 @@ async function sendMainMenu(chatId, editMsgId) {
   if (editMsgId) {
     await tg("editMessageText", { chat_id: chatId, message_id: editMsgId, text: msg, parse_mode: "HTML", reply_markup: keyboard });
   } else {
-    await tg("sendMessage", { chat_id: chatId, text: msg, parse_mode: "HTML", reply_markup: { inline_keyboard: keyboard.inline_keyboard, keyboard: getKeyboard(isAdmin).keyboard, resize_keyboard: true, is_persistent: true } });
+    await tg("sendMessage", { chat_id: chatId, text: msg, parse_mode: "HTML", reply_markup: keyboard });
   }
 }
 
@@ -552,7 +774,9 @@ async function handleUpdate(update) {
 
     // Ariza jarayoni buyruqlari
     if (session) {
-      const isClassQuestion = session.step < TOTAL_STEPS && questions[session.step].isClass;
+      const questions = getQuestions(session);
+      const totalSteps = questions.length;
+      const isClassQuestion = session.step < totalSteps && questions[session.step].isClass;
 
       if (isStartApplicationText(txt)) {
         await startApplication(chatId);
@@ -570,7 +794,7 @@ async function handleUpdate(update) {
         return;
       }
 
-      if (txt === "/submit" && session.step === TOTAL_STEPS) {
+      if (txt === "/submit" && session.step === totalSteps) {
         await submitApplication(chatId);
         return;
       }
@@ -582,13 +806,13 @@ async function handleUpdate(update) {
       }
 
       // Oddiy matnli javob
-      if (session.step < TOTAL_STEPS) {
+      if (session.step < totalSteps) {
         await handleApplicationStep(chatId, txt);
         return;
       }
 
       // Submit kutish holati
-      if (session.step === TOTAL_STEPS) {
+      if (session.step === totalSteps) {
         await sendApplicationSummary(chatId, session);
         return;
       }
@@ -597,6 +821,7 @@ async function handleUpdate(update) {
 
     if (txt === "/start") {
       if (Number(chatId) === Number(CHAT_ID)) {
+        await tg("sendMessage", { chat_id: chatId, text: "Admin panel tayyor.", reply_markup: getKeyboard(true) });
         await sendMainMenu(chatId);
       } else {
         await tg("sendMessage", { chat_id: chatId, text: "🤖 *Buxoro Maktabi botiga xush kelibsiz!*\n\nAriza topshirish uchun quyidagi tugmani bosing:", parse_mode: "Markdown", reply_markup: getKeyboard(false) });
@@ -604,24 +829,22 @@ async function handleUpdate(update) {
     } else if (txt === "/menu" || txt === "🔄 Yangilash" || txt === "📊 Statistika") {
       if (Number(chatId) !== Number(CHAT_ID)) return;
       await sendMainMenu(chatId);
-    } else if (txt === "/excel" || txt === "📥 Excel") {
+    } else if (txt === "/excel" || txt === "📥 O'qish Excel") {
       if (Number(chatId) !== Number(CHAT_ID)) return;
-      const allData = loadData();
-      if (allData.length === 0) return await tg("sendMessage", { chat_id: chatId, text: "❌ Ma'lumot yo'q" });
+      const studyData = filterApplications(loadData(), "study");
+      if (studyData.length === 0) return await tg("sendMessage", { chat_id: chatId, text: "❌ O'qish arizalari yo'q" });
       await tg("sendMessage", { chat_id: chatId, text: "⏳ Fayl tayyorlanmoqda..." });
-      const filePath = await createExcel(allData, `barcha_arizalar_${new Date().toISOString().slice(0, 10)}`);
-      await tgDoc(filePath, `📊 Barcha arizalar (${allData.length} ta)`);
-      fs.unlinkSync(filePath);
+      await sendExcelReport("study", studyData, `oqish_arizalari_${getTodayKey()}`, `📚 Barcha o'qish arizalari (${studyData.length} ta)`);
+    } else if (txt === "💼 Ish Excel") {
+      if (Number(chatId) !== Number(CHAT_ID)) return;
+      const jobData = filterApplications(loadData(), "job");
+      if (jobData.length === 0) return await tg("sendMessage", { chat_id: chatId, text: "❌ Ish arizalari yo'q" });
+      await tg("sendMessage", { chat_id: chatId, text: "⏳ Fayl tayyorlanmoqda..." });
+      await sendExcelReport("job", jobData, `ish_arizalari_${getTodayKey()}`, `💼 Barcha ish arizalari (${jobData.length} ta)`);
     } else if (txt === "📅 Bugungi hisobot") {
       if (Number(chatId) !== Number(CHAT_ID)) return;
-      const allData = loadData();
-      const today = new Date().toLocaleDateString("uz-UZ", { timeZone: "Asia/Tashkent" });
-      const todayData = allData.filter(a => a.createdAt && a.createdAt.startsWith(today.slice(0, 10)));
-      if (todayData.length === 0) return await tg("sendMessage", { chat_id: chatId, text: "📅 Bugun ariza yo'q" });
       await tg("sendMessage", { chat_id: chatId, text: "⏳ Hisobot tayyorlanmoqda..." });
-      const filePath = await createExcel(todayData, `kunlik_${new Date().toISOString().slice(0, 10)}`);
-      await tgDoc(filePath, `📅 Bugungi hisobot — ${todayData.length} ta ariza`);
-      fs.unlinkSync(filePath);
+      await sendDailyExcelReports(getTodayKey());
     } else if (isStartApplicationText(txt)) {
       await startApplication(chatId);
     } else if (isCancelText(txt)) {
@@ -637,6 +860,13 @@ async function handleUpdate(update) {
   const chatId = cb.message.chat.id;
   const msgId = cb.message.message_id;
   const data = cb.data;
+
+  if (data.startsWith("application_type_")) {
+    const type = data.replace("application_type_", "");
+    await tg("answerCallbackQuery", { callback_query_id: cb.id });
+    await startApplicationType(chatId, type);
+    return;
+  }
 
   if (data === "submit_application") {
     await tg("answerCallbackQuery", { callback_query_id: cb.id, text: "Yuborilmoqda..." });
@@ -665,17 +895,18 @@ async function handleUpdate(update) {
   if (data.startsWith("class_")) {
     const classVal = data.replace("class_", "");
     const session = getUserSession(chatId);
-    if (session && session.step < TOTAL_STEPS && questions[session.step].isClass) {
+    const questions = getQuestions(session);
+    if (session && session.step < questions.length && questions[session.step].isClass) {
       session.data[questions[session.step].key] = classVal;
       session.step++;
 
-      if (session.step < TOTAL_STEPS) {
+      if (session.step < questions.length) {
         const nextQ = questions[session.step];
-        const extra = nextQ.isClass ? { reply_markup: classKeyboard() } : { reply_markup: { remove_keyboard: true } };
+        const extra = nextQ.isClass ? { reply_markup: classKeyboard() } : { reply_markup: applicationReplyKeyboard(nextQ) };
         await tg("editMessageText", {
           chat_id: chatId,
           message_id: msgId,
-          text: "✅ " + classVal + "-sinf tanlandi.\n\n" + (session.step + 1) + "/" + TOTAL_STEPS + ". " + nextQ.question,
+          text: "✅ " + classVal + "-sinf tanlandi.\n\n" + (session.step + 1) + "/" + questions.length + ". " + nextQ.question,
           parse_mode: "Markdown",
           ...extra,
         });
@@ -690,42 +921,47 @@ async function handleUpdate(update) {
 
   if (data === "refresh") {
     await sendMainMenu(chatId, msgId);
-  } else if (data === "get_excel") {
-    const allData = loadData();
-    if (allData.length === 0) {
-      return await tg("answerCallbackQuery", { callback_query_id: cb.id, text: "❌ Ma'lumot yo'q!", show_alert: true });
+  } else if (data === "get_excel_study" || data === "get_excel") {
+    const studyData = filterApplications(loadData(), "study");
+    if (studyData.length === 0) {
+      return await tg("answerCallbackQuery", { callback_query_id: cb.id, text: "❌ O'qish arizalari yo'q!", show_alert: true });
     }
     await tg("editMessageText", { chat_id: chatId, message_id: msgId, text: "⏳ Excel fayl tayyorlanmoqda...", parse_mode: "HTML" });
-    const filePath = await createExcel(allData, `barcha_arizalar_${new Date().toISOString().slice(0, 10)}`);
-    await tgDoc(filePath, `📊 Barcha arizalar (${allData.length} ta)`);
-    fs.unlinkSync(filePath);
+    await sendExcelReport("study", studyData, `oqish_arizalari_${getTodayKey()}`, `📚 Barcha o'qish arizalari (${studyData.length} ta)`);
+    await sendMainMenu(chatId, msgId);
+  } else if (data === "get_excel_job") {
+    const jobData = filterApplications(loadData(), "job");
+    if (jobData.length === 0) {
+      return await tg("answerCallbackQuery", { callback_query_id: cb.id, text: "❌ Ish arizalari yo'q!", show_alert: true });
+    }
+    await tg("editMessageText", { chat_id: chatId, message_id: msgId, text: "⏳ Excel fayl tayyorlanmoqda...", parse_mode: "HTML" });
+    await sendExcelReport("job", jobData, `ish_arizalari_${getTodayKey()}`, `💼 Barcha ish arizalari (${jobData.length} ta)`);
     await sendMainMenu(chatId, msgId);
   } else if (data === "today_report") {
-    const allData = loadData();
-    const today = new Date().toLocaleDateString("uz-UZ", { timeZone: "Asia/Tashkent" });
-    const todayData = allData.filter(a => a.createdAt && a.createdAt.startsWith(today.slice(0, 10)));
-    if (todayData.length === 0) {
+    const stats = getStats(loadData());
+    if (stats.today === 0) {
       return await tg("answerCallbackQuery", { callback_query_id: cb.id, text: "📅 Bugun ariza yo'q!", show_alert: true });
     }
     await tg("editMessageText", { chat_id: chatId, message_id: msgId, text: "⏳ Hisobot tayyorlanmoqda...", parse_mode: "HTML" });
-    const filePath = await createExcel(todayData, `kunlik_${new Date().toISOString().slice(0, 10)}`);
-    await tgDoc(filePath, `📅 Bugungi hisobot — ${todayData.length} ta ariza`);
-    fs.unlinkSync(filePath);
+    await sendDailyExcelReports(getTodayKey());
     await sendMainMenu(chatId, msgId);
   } else if (data === "full_stats") {
     const allData = loadData();
-    const today = new Date().toLocaleDateString("uz-UZ", { timeZone: "Asia/Tashkent" });
-    const todayData = allData.filter(a => a.createdAt && a.createdAt.startsWith(today.slice(0, 10)));
-    const regions = [...new Set(allData.map(a => a.region))];
+    const stats = getStats(allData);
+    const regions = [...new Set(filterApplications(allData, "study").map(a => a.region).filter(Boolean))];
     const msg = `
 📊 <b>UMUMIY STATISTIKA</b>
 ━━━━━━━━━━━━━━━━
-👥 <b>Jami:</b> ${allData.length} ta
-📅 <b>Bugun:</b> ${todayData.length} ta
+👥 <b>Jami:</b> ${stats.total} ta
+📚 <b>O'qish:</b> ${stats.study} ta
+💼 <b>Ish:</b> ${stats.job} ta
+📅 <b>Bugun:</b> ${stats.today} ta
+  • O'qish: ${stats.todayStudy} ta
+  • Ish: ${stats.todayJob} ta
 📆 <b>Kunlik o'rtacha:</b> ${allData.length > 0 ? Math.round(allData.length / Math.max(1, (Date.now() - new Date(allData[0]?.createdAt).getTime()) / 86400000)) : 0} ta
 ━━━━━━━━━━━━━━━━
-📍 <b>Hududlar bo'yicha:</b>
-${regions.map(r => `  • ${r}: ${allData.filter(a => a.region === r).length} ta`).join("\n") || "  Ma'lumot yo'q"}
+📍 <b>O'qish hududlari bo'yicha:</b>
+${regions.map(r => `  • ${r}: ${filterApplications(allData, "study").filter(a => a.region === r).length} ta`).join("\n") || "  Ma'lumot yo'q"}
     `.trim();
     await tg("sendMessage", { chat_id: chatId, text: msg, parse_mode: "HTML" });
   }
@@ -774,6 +1010,10 @@ async function startPolling() {
 }
 
 (async () => {
+  if (!BOT_TOKEN || !CHAT_ID) {
+    console.error("BOT_TOKEN yoki CHAT_ID yo'q. Telegram bot va bildirishnomalar ishlamaydi.");
+    return;
+  }
   // Avval webhook ni o'chirish (polling bilan konflikt bo'lmasligi uchun)
   await tg("deleteWebhook", { drop_pending_updates: true });
   startPolling();
@@ -796,6 +1036,8 @@ app.post("/api/applications", async (req, res) => {
 
     const application = {
       id: Date.now(),
+      type: "study",
+      source: "website",
       firstName: data.firstName.trim().slice(0, 50),
       lastName: data.lastName.trim().slice(0, 50),
       phone: data.phone.trim(),
@@ -812,18 +1054,7 @@ app.post("/api/applications", async (req, res) => {
     allData.push(application);
     saveData(allData);
 
-    const msg = `
-📩 <b>Yangi ariza #${allData.length}</b>
-
-👤 <b>Ota-ona:</b> ${esc(application.firstName)} ${esc(application.lastName)}
-📞 <b>Telefon:</b> ${esc(application.phone)}
-👶 <b>Bola:</b> ${esc(application.childFirstName)} ${esc(application.childLastName)}
-🏫 <b>Hozirgi maktab:</b> ${esc(application.currentSchool)}
-📚 <b>Tugatgan sinf:</b> ${esc(application.graduatedClass)}-sinf
-🎯 <b>Qabul sinfi:</b> ${esc(application.applyingClass)}-sinf
-📍 <b>Hudud:</b> ${esc(application.region)}
-🕐 <b>Vaqt:</b> ${application.createdAt}
-    `.trim();
+    const msg = buildAdminApplicationMessage(application, allData.length);
 
     await tg("sendMessage", { chat_id: CHAT_ID, text: msg, parse_mode: "HTML", reply_markup: getKeyboard(true) });
     res.json({ success: true, id: application.id });
@@ -837,8 +1068,10 @@ app.post("/api/applications", async (req, res) => {
 app.get("/api/applications/excel", async (req, res) => {
   try {
     const allData = loadData();
-    if (allData.length === 0) return res.status(404).json({ error: "Ma'lumot yo'q" });
-    const filePath = await createExcel(allData, `barcha_arizalar_${new Date().toISOString().slice(0, 10)}`);
+    const type = req.query.type === "job" ? "job" : "study";
+    const rows = filterApplications(allData, type);
+    if (rows.length === 0) return res.status(404).json({ error: "Ma'lumot yo'q" });
+    const filePath = await createExcel(rows, `${type === "job" ? "ish" : "oqish"}_arizalari_${getTodayKey()}`, type);
     res.download(filePath, (err) => { if (!err) fs.unlinkSync(filePath); });
   } catch (err) {
     res.status(500).json({ error: "Excel xatosi" });
@@ -847,16 +1080,13 @@ app.get("/api/applications/excel", async (req, res) => {
 
 app.get("/api/applications/today", (req, res) => {
   const allData = loadData();
-  const today = new Date().toLocaleDateString("uz-UZ", { timeZone: "Asia/Tashkent" });
-  res.json({ count: allData.filter(a => a.createdAt && a.createdAt.startsWith(today.slice(0, 10))).length });
+  const stats = getStats(allData);
+  res.json({ count: stats.today, study: stats.todayStudy, job: stats.todayJob });
 });
 
 app.get("/api/applications/stats", (req, res) => {
   const allData = loadData();
-  res.json({
-    total: allData.length,
-    today: allData.filter(a => a.createdAt && a.createdAt.startsWith(new Date().toLocaleDateString("uz-UZ", { timeZone: "Asia/Tashkent" }).slice(0, 10))).length,
-  });
+  res.json(getStats(allData));
 });
 
 // ==================== HEALTH CHECK ====================
@@ -875,25 +1105,15 @@ app.use((req, res, next) => {
 // ==================== AUTO-HISOBOT (soat 21:00) ====================
 let lastReportDate = "";
 cron.schedule("0 21 * * *", async () => {
-  const allData = loadData();
-  const today = new Date().toLocaleDateString("uz-UZ", { timeZone: "Asia/Tashkent" });
-  const todayData = allData.filter(a => a.createdAt && a.createdAt.startsWith(today.slice(0, 10)));
+  const today = getTodayKey();
 
-  if (todayData.length === 0 && lastReportDate === today) {
+  if (lastReportDate === today) {
     return console.log("⏭ Yangi ariza yo'q, hisobot tashlanmadi");
   }
 
-  if (todayData.length === 0) {
-    await tg("sendMessage", { chat_id: CHAT_ID, text: `📊 <b>Kunlik hisobot</b>\n\nBugun hech qanday ariza kelmadi.`, parse_mode: "HTML", reply_markup: getKeyboard(true) });
-    lastReportDate = today;
-    return;
-  }
-
-  const filePath = await createExcel(todayData, `kunlik_${new Date().toISOString().slice(0, 10)}`);
-  await tgDoc(filePath, `📊 <b>Kunlik hisobot</b>\n\nBugun ${todayData.length} ta ariza keldi.`);
-  fs.unlinkSync(filePath);
+  await sendDailyExcelReports(today);
   lastReportDate = today;
-  console.log(`✅ Kunlik hisobot yuborildi: ${todayData.length} ta ariza`);
+  console.log(`✅ Kunlik hisobot yuborildi: ${today}`);
 });
 
 // ==================== SERVERNI ISHGA TUSHIRISH ====================
@@ -907,15 +1127,30 @@ app.listen(PORT, () => {
   console.log(`💚 GET  /api/healthz — sog'liqni tekshirish`);
   console.log(`🤖 Bot: @BuxoroMaktabi_EDU777_bot`);
   console.log(`⏰ Kunlik hisobot: soat 21:00`);
+
+  if (BOT_TOKEN && CHAT_ID) {
+    tg("sendMessage", {
+      chat_id: CHAT_ID,
+      text: `✅ <b>Server ishga tushdi</b>\n\n🌐 Port: ${PORT}\n📚 O'qish arizalari va 💼 ish arizalari alohida saqlanadi.\n📊 Kunlik Excel hisobot: 21:00`,
+      parse_mode: "HTML",
+      reply_markup: getKeyboard(true),
+    });
+  }
 });
 
 // ==================== XATOLIKLARNI USHLASH ====================
 process.on("uncaughtException", (err) => {
   console.error("Critical error:", err.message);
+  if (BOT_TOKEN && CHAT_ID) {
+    tg("sendMessage", { chat_id: CHAT_ID, text: `🚨 Server xatosi: ${esc(err.message)}`, parse_mode: "HTML" });
+  }
 });
 
 process.on("unhandledRejection", (err) => {
   console.error("Unhandled rejection:", err.message);
+  if (BOT_TOKEN && CHAT_ID) {
+    tg("sendMessage", { chat_id: CHAT_ID, text: `🚨 Promise xatosi: ${esc(err?.message || String(err))}`, parse_mode: "HTML" });
+  }
 });
 
 // Har 10 daqiqada JSON fayl zaxirasi

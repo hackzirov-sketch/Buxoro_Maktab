@@ -69,6 +69,8 @@ if (!preg_match('/^(0|1|2|3|4|5|6|7|8|9|10|11)$/', $clean['applyingClass'])) {
 
 $application = array_merge([
     'id' => (int)round(microtime(true) * 1000),
+    'type' => 'study',
+    'source' => 'website',
     'createdAt' => tashkent_now(),
     'ip' => $_SERVER['REMOTE_ADDR'] ?? '',
 ], $clean);
@@ -130,7 +132,8 @@ function send_telegram(array $config, array $application, int $count): array
         return ['ok' => false, 'error' => 'BOT_TOKEN yoki CHAT_ID kiritilmagan'];
     }
 
-    $text = '<b>Yangi ariza #' . $count . "</b>\n\n"
+    $text = '<b>Yangi o\'qish arizasi #' . $count . "</b>\n\n"
+        . '<b>Manba:</b> website' . "\n"
         . '<b>Ota-ona:</b> ' . h($application['firstName'] . ' ' . $application['lastName']) . "\n"
         . '<b>Telefon:</b> ' . h($application['phone']) . "\n"
         . '<b>Bola:</b> ' . h($application['childFirstName'] . ' ' . $application['childLastName']) . "\n"
