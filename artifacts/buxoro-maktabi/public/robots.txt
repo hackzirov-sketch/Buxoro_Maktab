@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://buxoromaktabi.uz/sitemap.xml
+Sitemap: https://buxoromaktabibekobod.uz/sitemap.xml

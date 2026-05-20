@@ -46,6 +46,8 @@ server/.env
 server/backups/
 server/applications.json
 server/*.xlsx
+artifacts/buxoro-maktabi/public/api/config.php
+artifacts/buxoro-maktabi/public/data/applications.json
 
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
