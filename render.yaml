@@ -10,5 +10,5 @@ services:
         value: 22.14.0
       - key: BOT_TOKEN
         sync: false
-      - key: CHAT_ID
+      - key: CHAT_IDS
         sync: false
