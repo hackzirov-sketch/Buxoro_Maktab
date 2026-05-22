@@ -9,6 +9,7 @@ interface Props {
 
 export default function CardViewer({ items, className = "", perPage = 4 }: Props) {
   const [page, setPage] = useState(0);
+  const trackRef = useRef<HTMLDivElement>(null);
   const startX = useRef(0);
   const isSwiping = useRef(false);
   const totalPages = Math.ceil(items.length / perPage);
@@ -23,7 +24,7 @@ export default function CardViewer({ items, className = "", perPage = 4 }: Props
   };
 
   useEffect(() => {
-    const el = document.getElementById("card-viewer-track");
+    const el = trackRef.current;
     if (!el) return;
     const onTouchStart = (e: TouchEvent) => { startX.current = e.touches[0].clientX; isSwiping.current = false; };
     const onTouchMove = (e: TouchEvent) => {
@@ -48,7 +49,7 @@ export default function CardViewer({ items, className = "", perPage = 4 }: Props
 
   return (
     <div className={`relative ${className}`}>
-      <div id="card-viewer-track" className="overflow-hidden select-none">
+      <div ref={trackRef} className="overflow-hidden select-none">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
           {pageItems.map((item, i) => (
             <div key={i}>{item}</div>

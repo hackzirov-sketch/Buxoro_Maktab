@@ -98,7 +98,7 @@ export default function Hero() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-200 drop-shadow-[0_0_15px_rgba(34,197,94,0.3)]">
                 zamonaviy
               </span>{" "}
-              va sifatli ta'lim markazi
+              va sifatli xususiy maktab
             </motion.h1>
 
             <motion.div
@@ -106,7 +106,7 @@ export default function Hero() {
               className="max-w-2xl"
             >
               <p className="text-lg sm:text-xl md:text-xl text-white/95 md:text-foreground/75 leading-relaxed font-semibold md:font-medium drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)] md:drop-shadow-none">
-                Bekoboddagi zamonaviy maktab: kuchli ustozlar, nazoratli ta'lim va ota-onalar uchun ochiq aloqa.
+                Bekoboddagi zamonaviy maktab: 2007-yildan buyon minglab o'quvchilar va ota-onalar ishonchini qozongan, kuchli ustozlar, nazoratli ta'lim va ochiq aloqa.
               </p>
             </motion.div>
 

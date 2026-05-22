@@ -1,31 +1,31 @@
 import { motion } from "framer-motion";
-import { GraduationCap, BookOpen, Users, Award, Sparkles, Star } from "lucide-react";
+import { GraduationCap, BookOpen, Award, Sparkles, Star, PencilRuler } from "lucide-react";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 const steps = [
   {
     year: "0-sinf",
-    title: "Maktabga tayyorlov",
-    desc: "Bolalarni maktab hayotiga tayyorlash. Alifbo, raqamlar va ijtimoiy ko'nikmalar bilan tanishtirish.",
-    icon: Star, gradient: "from-pink-400 to-rose-500", color: "#e11d48",
+    title: "Maktabgacha tayyorlov",
+    desc: "Maktabga ilk qadam qo'yayotgan bolalar uchun savodxonlik, hisob, nutq, diqqat va ijtimoiy moslashuv ko'nikmalari bosqichma-bosqich shakllantiriladi.",
+    icon: PencilRuler, gradient: "from-lime-400 to-emerald-500", color: "#16a34a",
   },
   {
     year: "1–4-sinflar",
-    title: "Boshlang'ich ta'lim",
-    desc: "O'qish, yozish va hisoblash asoslari. Ijodiy fikrlash va mustaqil o'rganish ko'nikmalari shakllantiriladi.",
-    icon: BookOpen, gradient: "from-emerald-400 to-teal-500", color: "#059669",
+    title: "Prezident maktabiga tayyorlov",
+    desc: "Boshlang'ich sinf o'quvchilari uchun Prezident maktablariga tayyorgarlik. O'qish, yozish, mantiqiy fikrlash va ijodiy ko'nikmalar shakllantiriladi.",
+    icon: Star, gradient: "from-emerald-400 to-teal-500", color: "#059669",
   },
   {
-    year: "5–9-sinflar",
-    title: "Asosiy o'rta ta'lim",
-    desc: "Fanlar bo'yicha chuqur bilim beriladi. Xorijiy tillar, aniq fanlar va texnologiyalarga alohida e'tibor.",
-    icon: Users, gradient: "from-sky-400 to-blue-500", color: "#0284c7",
+    year: "5–8-sinflar",
+    title: "Ixtisoslashtirilgan maktablarga tayyorlov",
+    desc: "Ixtisoslashtirilgan maktablarga tayyorgarlik. Aniq fanlar, xorijiy tillar va texnologiyalarga chuqur e'tibor qaratiladi.",
+    icon: BookOpen, gradient: "from-sky-400 to-blue-500", color: "#0284c7",
   },
   {
-    year: "10–11-sinflar",
-    title: "Yuqori bosqich",
-    desc: "Oliy ta'lim muassasalariga tayyorgarlik. Ixtisoslashtirilgan fanlar va ilmiy loyihalar bilan shug'ullanish.",
+    year: "9–11-sinflar",
+    title: "Oliy ta'limga tayyorlov",
+    desc: "O'z sohalarida oliy ta'lim muassasalariga tayyorgarlik ko'rish. Ixtisoslashtirilgan fanlar va ilmiy loyihalar bilan shug'ullanish.",
     icon: GraduationCap, gradient: "from-purple-400 to-violet-600", color: "#7c3aed",
   },
   {

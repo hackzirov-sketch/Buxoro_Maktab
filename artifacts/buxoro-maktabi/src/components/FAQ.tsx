@@ -7,27 +7,27 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 const faqs = [
   {
     q: "Maktabga qabul qanday amalga oshiriladi?",
-    a: "Qabul jarayoni yil davomida ochiq. Siz 'Ariza topshirish' bo'limi orqali onlayn ariza qoldirishingiz yoki maktabga shaxsan tashrif buyurishingiz mumkin. Ariza qabul qilingandan so'ng, siz bilan bog'lanib suhbat va ekskursiya vaqtini belgilaymiz.",
+    a: "Qabul jarayoni yil davomida ochiq. Siz 'Ariza topshirish' bo'limi orqali onlayn ariza qoldirishingiz yoki maktabga shaxsan tashrif buyurishingiz mumkin. Ariza qabul qilingandan so'ng, siz bilan bog'lanib suhbat va ekskursiya vaqtini belgilaymiz. O'qituvchilarning 80% Buxoro va Toshkent shaharlaridan, 20% viloyat shaharlaridan 3-bosqichli imtihon bilan saralab olinadi.",
+  },
+  {
+    q: "Ta'lim narxlari qanday?",
+    a: "1-3-sinflar uchun o'quv to'lovi 1.8 mln so'm, 4-10-sinflar uchun 1.9 mln so'mni tashkil etadi. Narxga 2 mahal ovqat, darsliklar va zamonaviy sinfxonalardan foydalanish kiradi.",
   },
   {
     q: "Maktabda ovqatlanish qanday tashkil etilgan?",
-    a: "Maktab oshxonamizda malakali oshpazlar tomonidan har kuni yangi va sog'lom taomlar tayyorlanadi. Menyu bolalarning yosh xususiyatlariga mos ravishda tuzilgan bo'lib, haftalik menyuni oshxona bo'limida ko'rishingiz mumkin.",
+    a: "Maktab oshxonamizda malakali oshpazlar tomonidan har kuni yangi va sog'lom taomlar tayyorlanadi. To'lovga 2 mahal ovqat (tushlik va tushki ovqat) kiritilgan. Menyu bolalarning yosh xususiyatlariga mos ravishda tuzilgan.",
   },
   {
-    q: "Darsdan tashqari qanday to'garaklar mavjud?",
-    a: "Maktabimizda sport (futbol, basketbol, voleybol), san'at (rasm, musiqa, raqs), texnik (robototexnika, IT) va til to'garaklari faoliyat yuritadi. To'garaklarga qatnashish ixtiyoriy va bepul.",
+    q: "Qanday ta'lim yo'nalishlari mavjud?",
+    a: "O'qitish 3 yo'nalishda olib boriladi: 1-4-sinflar uchun Prezident maktabiga tayyorlov, 5-8-sinflar uchun ixtisoslashtirilgan maktablarga tayyorlov, 9-11-sinflar uchun o'z sohalarida oliy ta'limga tayyorlov.",
   },
   {
-    q: "Maktabga qabul uchun qanday hujjatlar kerak?",
-    a: "Qabul uchun bolaning tug'ilganlik haqidagi guvohnomasi, ota-onaning pasporti, 3x4 o'lchamdagi 2 ta rasm va tibbiy ma'lumotnoma talab qilinadi. Batafsil ma'lumotni Ariza bo'limida olishingiz mumkin.",
-  },
-  {
-    q: "Maktabda xavfsizlik qanday ta'minlanadi?",
-    a: "Maktab hududi 24/7 videokuzatuv ostida. Kirish joyida avtomatlashtirilgan o'tkazish tizimi mavjud. Har bir o'quvchi va xodim maxsus plastik karta orqali o'tadi. Maktabda doimiy ravishda sog'liqni saqlash punkti faoliyat yuritadi.",
+    q: "Maktab qachon va qayerda tashkil etilgan?",
+    a: "Buxoro maktabi o'z faoliyatini dastavval 2007-yilda Toshkent viloyatining O'rta Chirchiq, Angren va Toshkent shaharlarida boshlagan. 2021-yilda Toshkent viloyatida birinchilardan bo'lib o'z xususiy maktabini ochdi. Hozirda 8 ta filial, o'quv markazi va xususiy bog'cha faoliyat yuritmoqda.",
   },
   {
     q: "O'quvchilarning individual xususiyatlari qanday hisobga olinadi?",
-    a: "Har bir o'quvchiga individual yondashish asosiy tamoyillarimizdan. Kichik sinflardagi guruhlar (15-20 o'quvchi) o'qituvchiga har bir bola bilan alohida shug'ullanish imkonini beradi. Psixologik xizmat ham doimiy faoliyat yuritadi.",
+    a: "Har bir o'quvchiga individual yondashish asosiy tamoyillarimizdan. Kichik sinflardagi guruhlar (15-20 o'quvchi) o'qituvchiga har bir bola bilan alohida shug'ullanish imkonini beradi. Maktabda psixologik xizmat va doimiy monitoring tizimi faoliyat yuritadi.",
   },
 ];
 

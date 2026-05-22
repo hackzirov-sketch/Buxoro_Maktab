@@ -1,28 +1,77 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Phone, MapPin, GraduationCap, Send, CheckCircle2, AlertCircle, User, BookOpen, School } from "lucide-react";
+import { Phone, MapPin, GraduationCap, Send, CheckCircle2, AlertCircle, User, BookOpen, School, Award, Trophy } from "lucide-react";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 
+const normalizeSchoolName = (value: string) =>
+  value.toLowerCase().replace(/[''`.\-\s_]/g, "").replace(/x/g, "h");
+
 const formSchema = z.object({
+  applicationType: z.enum(["study", "grant"]),
   firstName: z.string().min(2, "Ismingizni kiriting").max(50, "Ism 50 belgidan oshmasligi kerak"),
   lastName: z.string().min(2, "Familiyangizni kiriting").max(50, "Familiya 50 belgidan oshmasligi kerak"),
   phone: z.string().regex(/^\+998\d{9}$/, "Telefon raqam +998xxxxxxxxx formatida bo'lishi kerak"),
   childFirstName: z.string().min(2, "Bola ismini kiriting").max(50, "Bola ismi 50 belgidan oshmasligi kerak"),
   childLastName: z.string().min(2, "Bola familiyasini kiriting").max(50, "Bola familiyasi 50 belgidan oshmasligi kerak"),
-  currentSchool: z.string().min(2, "Hozirgi maktabni kiriting").max(100, "Maktab nomi 100 belgidan oshmasligi kerak"),
+  currentSchool: z.string().min(2, "Hozirgi maktabni kiriting").max(100, "Maktab nomi 100 belgidan oshmasligi kerak")
+    .refine(value => !normalizeSchoolName(value).includes("buhoromaktabi"), "Hozirgi maktab sifatida Buxoro Maktabi yozilmasin"),
   graduatedClass: z.string().min(1, "Sinfni tanlang"),
   applyingClass: z.string().min(1, "Sinfni tanlang"),
   region: z.string().min(1, "Hududni tanlang"),
 });
+type ApplicationPayload = z.infer<typeof formSchema>;
 
 const grades = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"];
 const regions = ["Bekobod shahar", "Shirin shahar", "Juma", "Xos", "Zafar"];
+const applicationTypes = [
+  { value: "study", label: "O'qishga kirish uchun", desc: "Farzandingizni maktabga qabul qilish arizasi", icon: GraduationCap },
+  { value: "grant", label: "Grantga qatnashish uchun", desc: "Grant imtihoni va saralash uchun ariza", icon: Trophy },
+] as const;
+const applicationEndpoints = ["/api/applications", "/api/applications.php"];
+const requestTimeoutMs = 12000;
 
-function Field({ label, icon: Icon, children, error }: { label: string; icon: any; children: React.ReactNode; error?: string }) {
+async function submitApplication(payload: ApplicationPayload) {
+  let lastError = "Serverga ulanishda muammo";
+
+  for (const endpoint of applicationEndpoints) {
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), requestTimeoutMs);
+
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      });
+      const contentType = res.headers.get("content-type") ?? "";
+      const data = contentType.includes("application/json") ? await res.json() : null;
+
+      if (res.ok && data) {
+        return data;
+      }
+
+      lastError = data?.error || "Xatolik yuz berdi";
+      if (![404, 405].includes(res.status) && data) {
+        throw new Error(lastError);
+      }
+    } catch (error) {
+      lastError = error instanceof DOMException && error.name === "AbortError"
+        ? "Server javobi kechikdi. Iltimos, bir ozdan keyin tekshirib ko'ring."
+        : error instanceof Error ? error.message : lastError;
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
+  }
+
+  throw new Error(lastError);
+}
+
+function Field({ label, htmlFor, icon: Icon, children, error }: { label: string; htmlFor?: string; icon: any; children: React.ReactNode; error?: string }) {
   return (
     <div className="space-y-2">
-      <label className="text-sm font-medium text-white/80 ml-1">{label}</label>
+      <label htmlFor={htmlFor} className="text-sm font-medium text-white/80 ml-1">{label}</label>
       <div className="relative">
         <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none z-10">
           <Icon className="w-5 h-5" />
@@ -36,6 +85,8 @@ function Field({ label, icon: Icon, children, error }: { label: string; icon: an
 
 export default function ApplicationForm() {
   const [formData, setFormData] = useState({
+    applicationType: "study" as ApplicationPayload["applicationType"],
+    website: "",
     firstName: "", lastName: "", phone: "+998",
     childFirstName: "", childLastName: "",
     currentSchool: "", graduatedClass: "", applyingClass: "", region: "",
@@ -43,6 +94,7 @@ export default function ApplicationForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [successId, setSuccessId] = useState("");
   const { toast } = useToast();
 
   const update = (field: string, val: string) => {
@@ -59,21 +111,21 @@ export default function ApplicationForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
     try {
       formSchema.parse(formData);
       setErrors({});
       setIsSubmitting(true);
-      const res = await fetch("/api/applications", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      if (!res.ok) throw new Error("Xatolik yuz berdi");
+      const result = await submitApplication(formData);
       setIsSubmitting(false);
+      setSuccessId(String(result?.id ?? ""));
       setIsSuccess(true);
       setTimeout(() => {
         setIsSuccess(false);
+        setSuccessId("");
         setFormData({
+          applicationType: "study",
+          website: "",
           firstName: "", lastName: "", phone: "+998",
           childFirstName: "", childLastName: "",
           currentSchool: "", graduatedClass: "", applyingClass: "", region: "",
@@ -87,9 +139,10 @@ export default function ApplicationForm() {
         });
         setErrors(newErrors);
       } else {
+        const message = error instanceof Error ? error.message : "Serverga ulanishda muammo.";
         toast({
           title: "Xatolik yuz berdi",
-          description: "Serverga ulanishda muammo. Iltimos, qaytadan urinib ko'ring yoki +998 94 835 66 66 raqamiga qo'ng'iroq qiling.",
+          description: `${message} Iltimos, qaytadan urinib ko'ring yoki +998 94 835 66 66 raqamiga qo'ng'iroq qiling.`,
           variant: "destructive",
         });
       }
@@ -127,55 +180,85 @@ export default function ApplicationForm() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
+              <input type="text" tabIndex={-1} autoComplete="off" value={(formData as any).website}
+                onChange={e => update("website", e.target.value)} className="hidden" aria-hidden="true" />
+
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm font-medium text-white/80 ml-1">
+                  <Award className="w-4 h-4 text-primary" />
+                  Ariza turini tanlang
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {applicationTypes.map(type => {
+                    const Icon = type.icon;
+                    const selected = formData.applicationType === type.value;
+                    return (
+                      <button
+                        key={type.value}
+                        type="button"
+                        onClick={() => update("applicationType", type.value)}
+                        className={`min-h-[116px] text-left rounded-xl border p-4 transition-all ${selected ? "bg-primary/20 border-primary/70 ring-2 ring-primary/25" : "bg-black/35 border-white/10 hover:border-primary/40 hover:bg-white/10"}`}
+                      >
+                        <span className={`w-10 h-10 rounded-lg flex items-center justify-center mb-3 ${selected ? "bg-primary text-black" : "bg-white/10 text-primary"}`}>
+                          <Icon className="w-5 h-5" />
+                        </span>
+                        <span className="block text-white font-bold text-sm md:text-base leading-tight">{type.label}</span>
+                        <span className="block text-white/55 text-xs leading-relaxed mt-1">{type.desc}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Field label="Ismingiz" icon={User} error={errors.firstName}>
-                  <motion.input animate={shake("firstName")} type="text" value={formData.firstName}
+                <Field label="Ismingiz" htmlFor="firstName" icon={User} error={errors.firstName}>
+                  <motion.input id="firstName" animate={shake("firstName")} type="text" value={formData.firstName}
                     onChange={e => update("firstName", e.target.value)}
                     className={inputClass("firstName")} placeholder="Ismingiz" />
                 </Field>
-                <Field label="Familiyangiz" icon={User} error={errors.lastName}>
-                  <motion.input animate={shake("lastName")} type="text" value={formData.lastName}
+                <Field label="Familiyangiz" htmlFor="lastName" icon={User} error={errors.lastName}>
+                  <motion.input id="lastName" animate={shake("lastName")} type="text" value={formData.lastName}
                     onChange={e => update("lastName", e.target.value)}
                     className={inputClass("lastName")} placeholder="Familiyangiz" />
                 </Field>
               </div>
 
-              <Field label="Telefon raqam" icon={Phone} error={errors.phone}>
-                <motion.input animate={shake("phone")} type="tel" value={formData.phone}
+              <Field label="Telefon raqam" htmlFor="phone" icon={Phone} error={errors.phone}>
+                <motion.input id="phone" animate={shake("phone")} type="tel" value={formData.phone}
                   onChange={handlePhoneChange}
                   className={inputClass("phone")} placeholder="+998 90 123 45 67" />
               </Field>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Field label="Bolaning ismi" icon={GraduationCap} error={errors.childFirstName}>
-                  <motion.input animate={shake("childFirstName")} type="text" value={formData.childFirstName}
+                <Field label="Bolaning ismi" htmlFor="childFirstName" icon={GraduationCap} error={errors.childFirstName}>
+                  <motion.input id="childFirstName" animate={shake("childFirstName")} type="text" value={formData.childFirstName}
                     onChange={e => update("childFirstName", e.target.value)}
                     className={inputClass("childFirstName")} placeholder="Bola ismi" />
                 </Field>
-                <Field label="Bolaning familiyasi" icon={GraduationCap} error={errors.childLastName}>
-                  <motion.input animate={shake("childLastName")} type="text" value={formData.childLastName}
+                <Field label="Bolaning familiyasi" htmlFor="childLastName" icon={GraduationCap} error={errors.childLastName}>
+                  <motion.input id="childLastName" animate={shake("childLastName")} type="text" value={formData.childLastName}
                     onChange={e => update("childLastName", e.target.value)}
                     className={inputClass("childLastName")} placeholder="Bola familiyasi" />
                 </Field>
               </div>
 
-              <Field label="Hozirgi o'qish joyi (maktab)" icon={School} error={errors.currentSchool}>
-                <motion.input animate={shake("currentSchool")} type="text" value={formData.currentSchool}
+              <Field label="Hozirgi o'qish joyi (maktab)" htmlFor="currentSchool" icon={School} error={errors.currentSchool}>
+                <motion.input id="currentSchool" animate={shake("currentSchool")} type="text" value={formData.currentSchool}
                   onChange={e => update("currentSchool", e.target.value)}
                   className={inputClass("currentSchool")} placeholder="Maktab nomi" />
               </Field>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Field label="Tugatgan sinfi" icon={BookOpen} error={errors.graduatedClass}>
-                  <motion.select animate={shake("graduatedClass")} value={formData.graduatedClass}
+                <Field label="Tugatgan sinfi" htmlFor="graduatedClass" icon={BookOpen} error={errors.graduatedClass}>
+                  <motion.select id="graduatedClass" animate={shake("graduatedClass")} value={formData.graduatedClass}
                     onChange={e => update("graduatedClass", e.target.value)}
                     className={selectClass("graduatedClass")}>
                     <option value="" disabled className="text-gray-500">Sinfni tanlang</option>
                     {grades.map(g => <option key={g} value={g} className="bg-gray-900 text-white">{g}-sinf</option>)}
                   </motion.select>
                 </Field>
-                <Field label="Qabul qilinadigan sinf" icon={GraduationCap} error={errors.applyingClass}>
-                  <motion.select animate={shake("applyingClass")} value={formData.applyingClass}
+                <Field label="Qabul qilinadigan sinf" htmlFor="applyingClass" icon={GraduationCap} error={errors.applyingClass}>
+                  <motion.select id="applyingClass" animate={shake("applyingClass")} value={formData.applyingClass}
                     onChange={e => update("applyingClass", e.target.value)}
                     className={selectClass("applyingClass")}>
                     <option value="" disabled className="text-gray-500">Sinfni tanlang</option>
@@ -184,8 +267,8 @@ export default function ApplicationForm() {
                 </Field>
               </div>
 
-              <Field label="Hudud" icon={MapPin} error={errors.region}>
-                <motion.select animate={shake("region")} value={formData.region}
+              <Field label="Hudud" htmlFor="region" icon={MapPin} error={errors.region}>
+                <motion.select id="region" animate={shake("region")} value={formData.region}
                   onChange={e => update("region", e.target.value)}
                   className={selectClass("region")}>
                   <option value="" disabled className="text-gray-500">Hududni tanlang</option>
@@ -222,6 +305,7 @@ export default function ApplicationForm() {
                     <CheckCircle2 className="w-10 h-10 text-primary" />
                   </motion.div>
                   <h3 className="text-2xl font-bold text-white mb-2">Arizangiz qabul qilindi!</h3>
+                  {successId && <p className="text-primary text-sm font-bold mb-2">Ariza ID: {successId}</p>}
                   <p className="text-white/70 text-sm">Operatorlarimiz tez orada siz bilan bog'lanishadi.</p>
                 </motion.div>
               )}

@@ -9,15 +9,31 @@ const ExcelJS = require("exceljs");
 const app = express();
 const BOT_TOKEN = process.env.BOT_TOKEN;
 const CHAT_ID = process.env.CHAT_ID;
+const CHAT_IDS = (process.env.CHAT_IDS || CHAT_ID || "")
+  .split(",")
+  .map(id => id.trim())
+  .filter(Boolean);
 const DATA_FILE = path.join(__dirname, "applications.json");
 const PORT = process.env.PORT || 4000;
-const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "https://buxoromaktabi.uz";
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "https://buxoromaktabibekobod.uz,https://buxoromaktabi.uz";
+const ALLOWED_ORIGINS = ALLOWED_ORIGIN
+  .split(",")
+  .map(origin => origin.trim())
+  .filter(Boolean);
 
 // Security middleware
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 app.use(helmet({ contentSecurityPolicy: false }));
-app.use(cors({ origin: ALLOWED_ORIGIN, methods: ["GET", "POST"] }));
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin || ALLOWED_ORIGINS.includes("*") || ALLOWED_ORIGINS.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(null, false);
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+}));
 app.use(express.json({ limit: "10kb" }));
 
 // Rate limit: POST /api/applications — 5 ta/daqiqa/IP
@@ -71,20 +87,36 @@ async function tg(method, payload) {
   }
 }
 
+async function sendToAdmins(method, payload) {
+  const ids = CHAT_IDS.length > 0 ? CHAT_IDS : [CHAT_ID].filter(Boolean);
+  const results = [];
+  for (const chatId of ids) {
+    results.push(await tg(method, { ...payload, chat_id: chatId }));
+  }
+  return results;
+}
+
+function isAdminChat(chatId) {
+  return CHAT_IDS.some(id => Number(id) === Number(chatId));
+}
+
 async function tgDoc(filePath, caption) {
   try {
+    const ids = CHAT_IDS.length > 0 ? CHAT_IDS : [CHAT_ID].filter(Boolean);
     const buffer = fs.readFileSync(filePath);
     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-    const form = new FormData();
-    form.append("chat_id", CHAT_ID);
-    form.append("document", blob, path.basename(filePath));
-    form.append("caption", caption);
-    const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {
-      method: "POST",
-      body: form,
-    });
-    const result = await res.json();
-    if (!result.ok) console.error("Telegram fayl xatosi:", JSON.stringify(result));
+    for (const chatId of ids) {
+      const form = new FormData();
+      form.append("chat_id", chatId);
+      form.append("document", blob, path.basename(filePath));
+      form.append("caption", caption);
+      const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {
+        method: "POST",
+        body: form,
+      });
+      const result = await res.json();
+      if (!result.ok) console.error("Telegram fayl xatosi:", JSON.stringify(result));
+    }
   } catch (err) {
     console.error("Telegram fayl xatosi:", err.message);
   }
@@ -92,6 +124,18 @@ async function tgDoc(filePath, caption) {
 
 function getApplicationType(row) {
   return row?.type === "job" ? "job" : "study";
+}
+
+function applicationTypeLabel(type) {
+  return type === "grant" ? "Grantga qatnashish" : "O'qishga qabul";
+}
+
+function normalizeSchoolName(value) {
+  return value.toString().toLowerCase().replace(/[''`.\-\s_]/g, "").replace(/x/g, "h");
+}
+
+function isBuxoroMaktabi(value) {
+  return normalizeSchoolName(value).includes("buhoromaktabi");
 }
 
 function getTodayKey() {
@@ -142,9 +186,6 @@ function getExcelColumns(type) {
       { header: "Oxirgi ish joyi", key: "lastWorkplace", width: 40 },
       { header: "Malaka toifasi", key: "qualification", width: 18 },
       { header: "Munosib lavozim", key: "desiredPosition", width: 25 },
-      { header: "Yaxshi o'qituvchi", key: "goodTeacher", width: 45 },
-      { header: "Zamonaviy maktab 3 jihat", key: "modernSchool", width: 45 },
-      { header: "O'zi haqida", key: "about", width: 55 },
       { header: "Telefon", key: "phone", width: 20 },
     ];
   }
@@ -153,6 +194,7 @@ function getExcelColumns(type) {
     { header: "#", key: "id", width: 5 },
     { header: "Sana", key: "date", width: 22 },
     { header: "Manba", key: "source", width: 14 },
+    { header: "Ariza turi", key: "applicationTypeLabel", width: 22 },
     { header: "Vasiy Ism", key: "firstName", width: 18 },
     { header: "Vasiy Familiya", key: "lastName", width: 18 },
     { header: "Telefon", key: "phone", width: 20 },
@@ -180,9 +222,6 @@ function toExcelRow(row, i, type) {
       lastWorkplace: row.lastWorkplace,
       qualification: row.qualification,
       desiredPosition: row.desiredPosition,
-      goodTeacher: row.goodTeacher,
-      modernSchool: row.modernSchool,
-      about: row.about,
       phone: row.phone,
     };
   }
@@ -191,6 +230,7 @@ function toExcelRow(row, i, type) {
     id: i + 1,
     date: row.createdAt,
     source: row.source || "telegram",
+    applicationTypeLabel: row.applicationTypeLabel || applicationTypeLabel(row.applicationType),
     firstName: row.firstName,
     lastName: row.lastName,
     phone: row.phone,
@@ -286,8 +326,7 @@ async function sendDailyExcelReports(dayKey = getTodayKey()) {
   const studyData = filterApplications(allData, "study", dayKey);
   const jobData = filterApplications(allData, "job", dayKey);
 
-  await tg("sendMessage", {
-    chat_id: CHAT_ID,
+  await sendToAdmins("sendMessage", {
     text: `📊 <b>Kunlik hisobot (${dayKey})</b>\n\n📚 O'qish arizalari: <b>${studyData.length}</b>\n💼 Ish arizalari: <b>${jobData.length}</b>`,
     parse_mode: "HTML",
     reply_markup: getKeyboard(true),
@@ -297,7 +336,7 @@ async function sendDailyExcelReports(dayKey = getTodayKey()) {
   await sendExcelReport("job", jobData, `ish_arizalari_${dayKey}`, `💼 Ish arizalari — ${dayKey} (${jobData.length} ta)`);
 
   if (studyData.length === 0 && jobData.length === 0) {
-    await tg("sendMessage", { chat_id: CHAT_ID, text: "Bugun yangi o'qish yoki ish arizasi kelmadi.", reply_markup: getKeyboard(true) });
+    await sendToAdmins("sendMessage", { text: "Bugun yangi o'qish yoki ish arizasi kelmadi.", reply_markup: getKeyboard(true) });
   }
 }
 
@@ -308,30 +347,28 @@ const studyQuestions = [
   { key: "phone", question: "📞 Telefon raqamingizni kiriting (+998xxxxxxxxx):", validate: v => /^\+998\d{9}$/.test(v), error: "❌ Noto'g'ri format. +998xxxxxxxxx" },
   { key: "childFirstName", question: "👶 Bolaning ismini kiriting:", validate: v => v.length >= 2 && v.length <= 50, error: "Bola ismi 2-50 belgi" },
   { key: "childLastName", question: "👶 Bolaning familiyasini kiriting:", validate: v => v.length >= 2 && v.length <= 50, error: "Bola familiyasi 2-50 belgi" },
-  { key: "currentSchool", question: "🏫 Hozirgi o'qish joyini (maktab) kiriting:", validate: v => v.length >= 2 && v.length <= 100, error: "Maktab nomi 2-100 belgi" },
+  { key: "currentSchool", question: "🏫 Hozirgi o'qish joyini (maktab) kiriting:", validate: v => v.length >= 2 && v.length <= 100 && !isBuxoroMaktabi(v), error: "Hozirgi maktab sifatida Buxoro Maktabi yozilmasin" },
   { key: "graduatedClass", question: "📚 Tugatgan sinfini tanlang:", validate: v => !isNaN(parseInt(v)) && parseInt(v) >= 0 && parseInt(v) <= 11, error: "0-11 orasida son kiriting", isClass: true },
   { key: "applyingClass", question: "📚 Qabul qilinadigan sinfini tanlang:", validate: v => !isNaN(parseInt(v)) && parseInt(v) >= 0 && parseInt(v) <= 11, error: "0-11 orasida son kiriting", isClass: true },
   { key: "region", question: "📍 Hududni kiriting (masalan: Bekobod shahar):", validate: v => v.length >= 3 && v.length <= 100, error: "Hudud 3-100 belgi" },
 ];
 
 const jobQuestions = [
-  { key: "fullName", question: "👤 Ism, familiyangizni kiriting:", validate: v => v.length >= 3 && v.length <= 100, error: "Ism va familiya 3-100 belgi orasida bo'lishi kerak" },
+  { key: "fullName", question: "👤 Ism, familiyangizni kiriting (masalan: Aliyev Vali):", validate: v => v.length >= 3 && v.length <= 100, error: "Ism va familiya 3-100 belgi orasida bo'lishi kerak" },
   { key: "birthDate", question: "🎂 Tug'ilgan yil, oy va sanangizni kiriting (masalan: 1995-05-21):", validate: v => v.length >= 6 && v.length <= 40, error: "Tug'ilgan sanani kiriting" },
-  { key: "education", question: "🎓 Ma'lumotingizni yozing:", validate: v => v.length >= 3 && v.length <= 200, error: "Ma'lumotingizni to'liqroq yozing" },
+  { key: "education", question: "🎓 Ma'lumotingizni yozing (masalan: Oliy, bakalavr):", validate: v => v.length >= 3 && v.length <= 200, error: "Ma'lumotingizni to'liqroq yozing" },
   { key: "university", question: "🏛 O'qigan oliy o'quv yurtingizni yozing (nomi, tamomlagan yili):", validate: v => v.length >= 5 && v.length <= 250, error: "Oliy o'quv yurti nomi va yilini yozing" },
-  { key: "specialty", question: "📚 Mutaxassisligingizni yozing:", validate: v => v.length >= 3 && v.length <= 150, error: "Mutaxassisligingizni yozing" },
-  { key: "experience", question: "💼 Ish tajribangizni yozing:", validate: v => v.length >= 2 && v.length <= 500, error: "Ish tajribangizni yozing. Tajribangiz bo'lmasa, 'yo'q' deb yozing" },
-  { key: "lastWorkplace", question: "🏢 Hozirgi va/yoki oxirgi ish joyingiz haqida yozing (joy nomi, lavozim, ishlagan yillar):", validate: v => v.length >= 3 && v.length <= 600, error: "Ish joyi, lavozim va yillarni yozing" },
+  { key: "specialty", question: "📚 Mutaxassisligingizni yozing (masalan: Boshlang'ich ta'lim / Matematika / Ingliz tili):", validate: v => v.length >= 3 && v.length <= 150, error: "Mutaxassisligingizni yozing" },
+  { key: "experience", question: "💼 Ish tajribangizni yozing (masalan: 5 yil maktabda matematika o'qituvchisi):", validate: v => v.length >= 2 && v.length <= 500, error: "Ish tajribangizni yozing. Tajribangiz bo'lmasa, 'yo'q' deb yozing" },
+  { key: "lastWorkplace", question: "🏢 Hozirgi va/yoki oxirgi ish joyingiz haqida yozing (masalan: 12-maktab, matematika o'qituvchisi, 2020-2025):", validate: v => v.length >= 3 && v.length <= 600, error: "Ish joyi, lavozim va yillarni yozing" },
   { key: "qualification", question: "🏅 Malaka toifangizni tanlang:", validate: v => QUALIFICATION_OPTIONS.includes(v), error: "Malaka toifasini tugmalardan tanlang", isQualification: true },
-  { key: "desiredPosition", question: "🎯 O'zingizni qaysi lavozimga munosib ko'rasiz?", validate: v => v.length >= 3 && v.length <= 200, error: "Lavozimni yozing" },
-  { key: "goodTeacher", question: "👩‍🏫 Siz uchun yaxshi o'qituvchi qanday bo'lishi kerak?", validate: v => v.length >= 20 && v.length <= 600, error: "20-600 belgi orasida fikringizni yozing" },
-  { key: "modernSchool", question: "🏫 Sizningcha, zamonaviy maktabda eng muhim 3 ta jihat nima?", validate: v => v.length >= 20 && v.length <= 600, error: "20-600 belgi orasida eng muhim 3 ta jihatni yozing" },
-  { key: "about", question: "📝 O'zingiz haqingizda ma'lumot qoldiring (100 ta so'zdan kam bo'lmasin):", validate: v => v.trim().split(/\s+/).filter(Boolean).length >= 100 && v.length <= 1800, error: "Bu javob 100 ta so'zdan kam bo'lmasin va 1800 belgidan oshmasin" },
+  { key: "desiredPosition", question: "🎯 O'zingizni qaysi lavozimga munosib ko'rasiz? (masalan: Ona tili o'qituvchisi):", validate: v => v.length >= 3 && v.length <= 200, error: "Lavozimni yozing" },
   { key: "phone", question: "📞 Telefon raqamingizni kiriting (+998xxxxxxxxx):", validate: v => /^\+998\d{9}$/.test(v), error: "❌ Noto'g'ri format. +998xxxxxxxxx" },
 ];
 
 const APPLICATION_TYPES = {
-  study: { label: "O'qish uchun", title: "O'qish uchun ariza", questions: studyQuestions },
+  study: { label: "O'qishga qabul", title: "O'qishga qabul arizasi", questions: studyQuestions },
+  grant: { label: "Grantga qatnashish", title: "Grantga qatnashish arizasi", questions: studyQuestions },
   job: { label: "Ishga kirish uchun", title: "Ishga kirish uchun ariza", questions: jobQuestions },
 };
 const QUALIFICATION_OPTIONS = ["Mutaxassis", "2 - toifa", "1 - toifa", "Oliy"];
@@ -378,7 +415,8 @@ function getTotalSteps(sessionOrType) {
 function applicationTypeKeyboard() {
   return {
     inline_keyboard: [
-      [{ text: "📚 O'qish uchun", callback_data: "application_type_study" }],
+      [{ text: "📚 O'qishga qabul", callback_data: "application_type_study" }],
+      [{ text: "🏆 Grantga qatnashish", callback_data: "application_type_grant" }],
       [{ text: "💼 Ishga kirish uchun", callback_data: "application_type_job" }],
     ],
   };
@@ -503,9 +541,6 @@ function buildAdminApplicationMessage(application, count) {
 🏢 <b>Oxirgi ish joyi:</b> ${esc(application.lastWorkplace)}
 🏅 <b>Malaka toifasi:</b> ${esc(application.qualification)}
 🎯 <b>Munosib lavozim:</b> ${esc(application.desiredPosition)}
-👩‍🏫 <b>Yaxshi o'qituvchi:</b> ${esc(application.goodTeacher)}
-🏫 <b>Zamonaviy maktabdagi 3 jihat:</b> ${esc(application.modernSchool)}
-📝 <b>O'zi haqida:</b> ${esc(application.about)}
 📞 <b>Telefon:</b> ${esc(application.phone)}
 🕐 <b>Vaqt:</b> ${application.createdAt}
     `.trim();
@@ -515,6 +550,7 @@ function buildAdminApplicationMessage(application, count) {
 📩 <b>Yangi o'qish arizasi #${count}</b>
 
 📌 <b>Manba:</b> ${esc(application.source || "telegram")}
+🏷 <b>Ariza turi:</b> ${esc(application.applicationTypeLabel || applicationTypeLabel(application.applicationType))}
 👤 <b>Ota-ona:</b> ${esc(application.firstName)} ${esc(application.lastName)}
 📞 <b>Telefon:</b> ${esc(application.phone)}
 👶 <b>Bola:</b> ${esc(application.childFirstName)} ${esc(application.childLastName)}
@@ -605,7 +641,7 @@ async function sendCurrentQuestion(chatId) {
 async function handleApplicationStep(chatId, text) {
   const session = getUserSession(chatId);
   if (!session) {
-    await tg("sendMessage", { chat_id: chatId, text: "⏳ Vaqt tugadi. Qaytadan /start yozing.", reply_markup: getKeyboard(Number(chatId) === Number(CHAT_ID)) });
+    await tg("sendMessage", { chat_id: chatId, text: "⏳ Vaqt tugadi. Qaytadan /start yozing.", reply_markup: getKeyboard(isAdminChat(chatId)) });
     return;
   }
 
@@ -664,6 +700,8 @@ async function submitApplication(chatId) {
     const application = {
       id: Date.now(),
       type: session.type || "study",
+      applicationType: session.type === "grant" ? "grant" : "study",
+      applicationTypeLabel: applicationTypeLabel(session.type),
       source: "telegram",
       ...session.data,
       createdAt: new Date().toLocaleString("uz-UZ", { timeZone: "Asia/Tashkent" }),
@@ -682,9 +720,9 @@ async function submitApplication(chatId) {
     });
 
     const msg = buildAdminApplicationMessage(application, allData.length);
-    const adminResult = await tg("sendMessage", { chat_id: CHAT_ID, text: msg, parse_mode: "HTML", reply_markup: getKeyboard(true) });
-    if (!adminResult.ok) {
-      console.error("Admin xabar yuborilmadi:", JSON.stringify(adminResult));
+    const adminResults = await sendToAdmins("sendMessage", { text: msg, parse_mode: "HTML", reply_markup: getKeyboard(true) });
+    if (!adminResults.some(result => result?.ok)) {
+      console.error("Admin xabar yuborilmadi:", JSON.stringify(adminResults));
       await tg("sendMessage", {
         chat_id: chatId,
         text: "Ariza saqlandi, lekin operatorga Telegram xabari yetib bormagan bo'lishi mumkin. Iltimos, telefon orqali ham bog'laning: +998 94 835 66 66",
@@ -728,7 +766,7 @@ async function sendMainMenu(chatId, editMsgId) {
   const dayKey = getTodayKey();
   const stats = getStats(allData, dayKey);
   const regions = [...new Set(filterApplications(allData, "study").map(a => a.region).filter(Boolean))];
-  const isAdmin = Number(chatId) === Number(CHAT_ID);
+  const isAdmin = isAdminChat(chatId);
 
   const msg = `
 📊 <b>Buxoro Maktabi — Statistika</b>
@@ -785,7 +823,7 @@ async function handleUpdate(update) {
 
       if (isCancelText(txt)) {
         delete userSessions[chatId];
-        await tg("sendMessage", { chat_id: chatId, text: "❌ Ariza bekor qilindi.", reply_markup: getKeyboard(Number(chatId) === Number(CHAT_ID)) });
+        await tg("sendMessage", { chat_id: chatId, text: "❌ Ariza bekor qilindi.", reply_markup: getKeyboard(isAdminChat(chatId)) });
         return;
       }
 
@@ -820,29 +858,29 @@ async function handleUpdate(update) {
     }
 
     if (txt === "/start") {
-      if (Number(chatId) === Number(CHAT_ID)) {
+      if (isAdminChat(chatId)) {
         await tg("sendMessage", { chat_id: chatId, text: "Admin panel tayyor.", reply_markup: getKeyboard(true) });
         await sendMainMenu(chatId);
       } else {
         await tg("sendMessage", { chat_id: chatId, text: "🤖 *Buxoro Maktabi botiga xush kelibsiz!*\n\nAriza topshirish uchun quyidagi tugmani bosing:", parse_mode: "Markdown", reply_markup: getKeyboard(false) });
       }
     } else if (txt === "/menu" || txt === "🔄 Yangilash" || txt === "📊 Statistika") {
-      if (Number(chatId) !== Number(CHAT_ID)) return;
+      if (!isAdminChat(chatId)) return;
       await sendMainMenu(chatId);
     } else if (txt === "/excel" || txt === "📥 O'qish Excel") {
-      if (Number(chatId) !== Number(CHAT_ID)) return;
+      if (!isAdminChat(chatId)) return;
       const studyData = filterApplications(loadData(), "study");
       if (studyData.length === 0) return await tg("sendMessage", { chat_id: chatId, text: "❌ O'qish arizalari yo'q" });
       await tg("sendMessage", { chat_id: chatId, text: "⏳ Fayl tayyorlanmoqda..." });
       await sendExcelReport("study", studyData, `oqish_arizalari_${getTodayKey()}`, `📚 Barcha o'qish arizalari (${studyData.length} ta)`);
     } else if (txt === "💼 Ish Excel") {
-      if (Number(chatId) !== Number(CHAT_ID)) return;
+      if (!isAdminChat(chatId)) return;
       const jobData = filterApplications(loadData(), "job");
       if (jobData.length === 0) return await tg("sendMessage", { chat_id: chatId, text: "❌ Ish arizalari yo'q" });
       await tg("sendMessage", { chat_id: chatId, text: "⏳ Fayl tayyorlanmoqda..." });
       await sendExcelReport("job", jobData, `ish_arizalari_${getTodayKey()}`, `💼 Barcha ish arizalari (${jobData.length} ta)`);
     } else if (txt === "📅 Bugungi hisobot") {
-      if (Number(chatId) !== Number(CHAT_ID)) return;
+      if (!isAdminChat(chatId)) return;
       await tg("sendMessage", { chat_id: chatId, text: "⏳ Hisobot tayyorlanmoqda..." });
       await sendDailyExcelReports(getTodayKey());
     } else if (isStartApplicationText(txt)) {
@@ -850,7 +888,7 @@ async function handleUpdate(update) {
     } else if (isCancelText(txt)) {
       if (userSessions[chatId]) {
         delete userSessions[chatId];
-        await tg("sendMessage", { chat_id: chatId, text: "❌ Ariza bekor qilindi.", reply_markup: getKeyboard(Number(chatId) === Number(CHAT_ID)) });
+        await tg("sendMessage", { chat_id: chatId, text: "❌ Ariza bekor qilindi.", reply_markup: getKeyboard(isAdminChat(chatId)) });
       }
     }
     return;
@@ -1010,8 +1048,8 @@ async function startPolling() {
 }
 
 (async () => {
-  if (!BOT_TOKEN || !CHAT_ID) {
-    console.error("BOT_TOKEN yoki CHAT_ID yo'q. Telegram bot va bildirishnomalar ishlamaydi.");
+  if (!BOT_TOKEN || CHAT_IDS.length === 0) {
+    console.error("BOT_TOKEN yoki CHAT_ID/CHAT_IDS yo'q. Telegram bot va bildirishnomalar ishlamaydi.");
     return;
   }
   // Avval webhook ni o'chirish (polling bilan konflikt bo'lmasligi uchun)
@@ -1033,10 +1071,16 @@ app.post("/api/applications", async (req, res) => {
     if (!/^\+998\d{9}$/.test(data.phone.toString().trim())) {
       return res.status(400).json({ error: "Telefon +998xxxxxxxxx formatida bo'lishi kerak" });
     }
+    const applicationType = data.applicationType === "grant" ? "grant" : "study";
+    if (isBuxoroMaktabi(data.currentSchool)) {
+      return res.status(400).json({ error: "Hozirgi maktab sifatida Buxoro Maktabi yozilmasin" });
+    }
 
     const application = {
       id: Date.now(),
       type: "study",
+      applicationType,
+      applicationTypeLabel: applicationTypeLabel(applicationType),
       source: "website",
       firstName: data.firstName.trim().slice(0, 50),
       lastName: data.lastName.trim().slice(0, 50),
@@ -1056,8 +1100,14 @@ app.post("/api/applications", async (req, res) => {
 
     const msg = buildAdminApplicationMessage(application, allData.length);
 
-    await tg("sendMessage", { chat_id: CHAT_ID, text: msg, parse_mode: "HTML", reply_markup: getKeyboard(true) });
-    res.json({ success: true, id: application.id });
+    res.json({ success: true, id: application.id, telegramQueued: true });
+    sendToAdmins("sendMessage", { text: msg, parse_mode: "HTML", reply_markup: getKeyboard(true) })
+      .then(results => {
+        if (!results.some(result => result?.ok)) {
+          console.error("Website arizasi adminlarga yuborilmadi:", JSON.stringify(results));
+        }
+      })
+      .catch(error => console.error("Website arizasi Telegram xatosi:", error.message));
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server xatosi" });
@@ -1128,9 +1178,8 @@ app.listen(PORT, () => {
   console.log(`🤖 Bot: @BuxoroMaktabi_EDU777_bot`);
   console.log(`⏰ Kunlik hisobot: soat 21:00`);
 
-  if (BOT_TOKEN && CHAT_ID) {
-    tg("sendMessage", {
-      chat_id: CHAT_ID,
+  if (BOT_TOKEN && CHAT_IDS.length > 0) {
+    sendToAdmins("sendMessage", {
       text: `✅ <b>Server ishga tushdi</b>\n\n🌐 Port: ${PORT}\n📚 O'qish arizalari va 💼 ish arizalari alohida saqlanadi.\n📊 Kunlik Excel hisobot: 21:00`,
       parse_mode: "HTML",
       reply_markup: getKeyboard(true),
@@ -1141,15 +1190,15 @@ app.listen(PORT, () => {
 // ==================== XATOLIKLARNI USHLASH ====================
 process.on("uncaughtException", (err) => {
   console.error("Critical error:", err.message);
-  if (BOT_TOKEN && CHAT_ID) {
-    tg("sendMessage", { chat_id: CHAT_ID, text: `🚨 Server xatosi: ${esc(err.message)}`, parse_mode: "HTML" });
+  if (BOT_TOKEN && CHAT_IDS.length > 0) {
+    sendToAdmins("sendMessage", { text: `🚨 Server xatosi: ${esc(err.message)}`, parse_mode: "HTML" });
   }
 });
 
 process.on("unhandledRejection", (err) => {
   console.error("Unhandled rejection:", err.message);
-  if (BOT_TOKEN && CHAT_ID) {
-    tg("sendMessage", { chat_id: CHAT_ID, text: `🚨 Promise xatosi: ${esc(err?.message || String(err))}`, parse_mode: "HTML" });
+  if (BOT_TOKEN && CHAT_IDS.length > 0) {
+    sendToAdmins("sendMessage", { text: `🚨 Promise xatosi: ${esc(err?.message || String(err))}`, parse_mode: "HTML" });
   }
 });
 

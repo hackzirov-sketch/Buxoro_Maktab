@@ -6,6 +6,7 @@ import { Route, Switch, useLocation } from "wouter";
 import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PwaUpdatePrompt from "@/components/PwaUpdatePrompt";
 import HomePage from "@/pages/HomePage";
 import TeamPage from "@/pages/TeamPage";
 import ClassroomsPage from "@/pages/ClassroomsPage";
@@ -57,6 +58,7 @@ function App() {
               <PageShell><ArizaPage /></PageShell>
             </Route>
           </Switch>
+          <PwaUpdatePrompt />
           <Toaster />
         </TooltipProvider>
       </ThemeProvider>

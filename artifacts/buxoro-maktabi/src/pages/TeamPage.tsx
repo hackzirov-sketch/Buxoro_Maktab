@@ -8,17 +8,20 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 const EASE = [0.4, 0, 0.2, 1] as const;
 
 const members = [
-  { name: "Saydullayev Abdumumin", role: "Matematika o'qituvchisi", short: "Milliy sertifikat A+, SAT 900", full: "Milliy sertifikat darajasi A+. SAT dan Matematika qismi 700, Ingliz tili 200, umumiy SAT bali 900. 5 dan ortiq o'quvchini muvaffaqiyatli natijaga olib chiqqan.", grad: "from-lime-400 to-green-400", image: "/Math.jpg" },
-  { name: "Mamadaliyev Abdulaziz", role: "Jismoniy tarbiya o'qituvchisi", short: "10 yillik tajriba", full: "Sport ustasi. Basketbol, voleybol va yengil atletika bo'yicha murabbiy.", grad: "from-sky-400 to-blue-400", image: "/GYM.jpg" },
-  { name: "Xojimuratov Bekzod", role: "Milliy sertifikat o'qituvchisi", short: "A+ natija", full: "Milliy sertifikat natijasi A+. 10 dan oshiq o'quvchilarni yuqori natijalarga olib chiqqan.", grad: "from-primary to-emerald-400", image: "/History.jpg" },
-  { name: "Umarov Zamira", role: "Boshlang'ich sinf ingliz tili o'qituvchisi", short: "Boshlang'ich ta'lim", full: "Ingliz tili fanidan boshlang'ich o'quvchilar uchun dars berishadi.", grad: "from-amber-400 to-orange-400", image: "/English 2.jpg" },
-  { name: "Shodmatova Nozima", role: "Boshlang'ich sinf o'qituvchisi", short: "Boshlang'ich ta'lim", full: "Boshlang'ich o'quvchilar uchun o'qituvchi.", grad: "from-pink-400 to-rose-400", image: "/Boshlangich1.jpg" },
-  { name: "Anorkulov Kamronbek", role: "Ingliz tili o'qituvchisi", short: "IELTS 8.0", full: "O'rta sinflar uchun ingliz tili fanidan dars berishadi. IELTS darajasi 8 bo'lgan yuqori malumotli o'qituvchilarimizdan biri.", grad: "from-primary to-emerald-400", image: "/English.jpg" },
-  { name: "Mirzayeva Mohidil Abdunaviyevna", role: "Boshlang'ich sinf o'qituvchisi", short: "Oliy ma'lumotli, 1-malaka toifali", full: "Oliy ma'lumotli. 1- malaka toifasiga ega. Ta'lim sohasida 8- yillik ish tajribasiga ega.", grad: "from-teal-400 to-cyan-400", image: "/Boshlangich.jpg" },
-  { name: "Otaboyeva Shaxnoza", role: "Rus tili o'qituvchisi", short: "Rus tili fani", full: "Rus tili fanidan dars berishadi.", grad: "from-purple-400 to-violet-400", image: "/Rus Tili.jpg" },
-  { name: "Raxmatkulova Saboat Berdikulovna", role: "Oliy toifali boshlang'ich sinf o'qituvchisi", short: "Oliy toifali", full: "Oliy toifali boshlang'ich sinf o'qituvchisi.", grad: "from-sky-400 to-blue-400", image: "/Boshlangich3.jpg" },
-  { name: "Mr. Sherzod", role: "Ingliz tili o'qituvchisi", short: "IELTS 7.5", full: "Yuqori sinflarni CEFR va IELTS imtihoniga tayyorlaydi. CEFR natijasi C1, IELTS 7.5.", grad: "from-primary to-emerald-400", image: "/Mr.Sherzod.JPEG" },
-  { name: "Hakimbek Gʻulomjonov", role: "Huquq va ingliz tili fani oʻqituvchisi", short: "IELTS 7.0", full: "Toshkent davlat yuridik universiteti (2025). “Adolat-advokat” advokatlik firmasi advokat yordamchisi. Xitoy, Chongching shahrida stajirovka.", grad: "from-amber-400 to-orange-400", image: "/LawXuquq.jpg" },
+  { name: "Saydullayev Abdumumin", role: "Matematika o'qituvchisi", short: "Milliy sertifikat A+, SAT 900", full: "Milliy sertifikat darajasi A+. SAT dan Matematika qismi 700, Ingliz tili 200, umumiy SAT bali 900. 5 dan ortiq o'quvchini muvaffaqiyatli natijaga olib chiqqan.", grad: "from-lime-400 to-green-400", image: "/Math.webp" },
+  { name: "Mamadaliyev Abdulaziz", role: "Jismoniy tarbiya o'qituvchisi", short: "10 yillik tajriba", full: "Sport ustasi. Basketbol, voleybol va yengil atletika bo'yicha murabbiy.", grad: "from-sky-400 to-blue-400", image: "/GYM.webp" },
+  { name: "Xojimuratov Bekzod", role: "Milliy sertifikat o'qituvchisi", short: "A+ natija", full: "Milliy sertifikat natijasi A+. 10 dan oshiq o'quvchilarni yuqori natijalarga olib chiqqan.", grad: "from-primary to-emerald-400", image: "/History.webp" },
+  { name: "Umarov Zamira", role: "Boshlang'ich sinf ingliz tili o'qituvchisi", short: "Boshlang'ich ta'lim", full: "Ingliz tili fanidan boshlang'ich o'quvchilar uchun dars berishadi.", grad: "from-amber-400 to-orange-400", image: "/English 2.webp" },
+  { name: "Shodmatova Nozima", role: "Boshlang'ich sinf o'qituvchisi", short: "Boshlang'ich ta'lim", full: "Boshlang'ich o'quvchilar uchun o'qituvchi.", grad: "from-pink-400 to-rose-400", image: "/Boshlangich1.webp" },
+  { name: "Anorkulov Kamronbek", role: "Ingliz tili o'qituvchisi", short: "IELTS 8.0", full: "O'rta sinflar uchun ingliz tili fanidan dars berishadi. IELTS darajasi 8 bo'lgan yuqori malumotli o'qituvchilarimizdan biri.", grad: "from-primary to-emerald-400", image: "/English.webp" },
+  { name: "Mirzayeva Mohidil Abdunaviyevna", role: "Boshlang'ich sinf o'qituvchisi", short: "Oliy ma'lumotli, 1-malaka toifali", full: "Oliy ma'lumotli. 1- malaka toifasiga ega. Ta'lim sohasida 8- yillik ish tajribasiga ega.", grad: "from-teal-400 to-cyan-400", image: "/Boshlangich.webp" },
+  { name: "Otaboyeva Shaxnoza", role: "Rus tili o'qituvchisi", short: "Rus tili fani", full: "Rus tili fanidan dars berishadi.", grad: "from-purple-400 to-violet-400", image: "/Rus Tili.webp" },
+  { name: "Raxmatkulova Saboat Berdikulovna", role: "Oliy toifali boshlang'ich sinf o'qituvchisi", short: "Oliy toifali", full: "Oliy toifali boshlang'ich sinf o'qituvchisi.", grad: "from-sky-400 to-blue-400", image: "/Boshlangich3.webp" },
+  { name: "Mr. Sherzod", role: "Ingliz tili o'qituvchisi", short: "IELTS 7.5", full: "Yuqori sinflarni CEFR va IELTS imtihoniga tayyorlaydi. CEFR natijasi C1, IELTS 7.5.", grad: "from-primary to-emerald-400", image: "/Mr.Sherzod.webp" },
+  { name: "Hakimbek Gʻulomjonov", role: "Huquq va ingliz tili fani oʻqituvchisi", short: "IELTS 7.0", full: "Toshkent davlat yuridik universiteti (2025). “Adolat-advokat” advokatlik firmasi advokat yordamchisi. Xitoy, Chongching shahrida stajirovka.", grad: "from-amber-400 to-orange-400", image: "/LawXuquq.webp" },
+  { name: "Haqberdiyev Asadbek", role: "Ona tili o'qituvchisi", short: "Oliy darajadagi mutaxassis", full: "Oliy darajadagi ona tili o'qituvchisi. 10 ga yaqin o'quvchilarni ona tili milliy sertifikatidan yuqori natijalarga olib chiqqan.", grad: "from-primary to-emerald-400", image: "/Asadbek-Haqberdiyev.webp" },
+  { name: "Teshayev Feruzbek", role: "Matematika o'qituvchisi", short: "Prezident va ixtisoslashtirilgan maktablar", full: "Prezident, Al-Xorazmiy va ixtisoslashtirilgan maktablariga matematika fanidan tayyorlaydigan mutaxassis.", grad: "from-lime-400 to-green-400", image: "/Teshayev-Feruzbek.webp" },
+  { name: "Islom Qahhoraliyev", role: "Fizika va matematika o'qituvchisi", short: "Matematika A daraja", full: "Farg'ona universitetini bitirgan. Mutaxassisligi sof fizika. Matematikadan A darajadagi sertifikatlari bor.", grad: "from-sky-400 to-blue-400", image: "/Islom%20Qahhoraliyev.webp" },
 ];
 
 function Card({ m, idx }: { m: typeof members[0]; idx: number }) {
@@ -37,7 +40,7 @@ function Card({ m, idx }: { m: typeof members[0]; idx: number }) {
           <div className={`absolute inset-0 bg-gradient-to-br ${m.grad} opacity-[0.15] z-[1]`} />
           <div className="aspect-[4/5] relative overflow-hidden">
             {(m as any).image ? (
-              <img src={(m as any).image} alt={m.name} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+              <img src={(m as any).image} alt={m.name} title={m.full} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-gray-800 to-black flex items-center justify-center">
                 <span className="text-5xl md:text-6xl font-bold text-white/15 select-none">{m.name.charAt(0)}</span>
@@ -67,7 +70,7 @@ export default function TeamPage() {
         <PageHeader title={<>Bizning <span className="text-primary">Jamoa</span></>} subtitle="Tajribali mutaxassislar jamoasi farzandingiz ta'limi va tarbiyasi uchun mas'uldir." />
         <div className="mb-8 md:mb-12 -mx-4 sm:-mx-6 md:-mx-8 md:mx-0 overflow-hidden md:rounded-2xl flex justify-center bg-emerald-50/30 dark:bg-emerald-900/10 py-4 md:py-6 px-4">
           <img
-            src="/all.JPEG"
+            src="/all.webp"
             alt="Jamoa"
             className="w-full max-w-md h-auto rounded-xl border border-transparent animate-neon-border"
           />

@@ -3,15 +3,15 @@ import Autoplay from "embla-carousel-autoplay";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 
 const certificates = [
-  { name: "Abdulloh", image: "/results/abdulloh.jpg" },
-  { name: "Axmadbek", image: "/results/axmadbek.jpg" },
-  { name: "Azizbek", image: "/results/Azizbek_page-0001.jpg" },
-  { name: "Durdona", image: "/results/Durdona_page-0001.jpg" },
-  { name: "Ezoz", image: "/results/Ezoz_page-0001.jpg" },
-  { name: "Ibrohim", image: "/results/Ibrohim_page-0001.jpg" },
-  { name: "Kamron", image: "/results/Kamron_page-0001.jpg" },
-  { name: "Rashida", image: "/results/rashida.jpg" },
-  { name: "Ulug'bek", image: "/results/Ulug_page-0001.jpg" },
+  { name: "Abdulloh", image: "/results/abdulloh.webp" },
+  { name: "Axmadbek", image: "/results/axmadbek.webp" },
+  { name: "Azizbek", image: "/results/Azizbek_page-0001.webp" },
+  { name: "Durdona", image: "/results/Durdona_page-0001.webp" },
+  { name: "Ezoz", image: "/results/Ezoz_page-0001.webp" },
+  { name: "Ibrohim", image: "/results/Ibrohim_page-0001.webp" },
+  { name: "Kamron", image: "/results/Kamron_page-0001.webp" },
+  { name: "Rashida", image: "/results/rashida.webp" },
+  { name: "Ulug'bek", image: "/results/Ulug_page-0001.webp" },
 ];
 
 export default function CertificatesPage() {

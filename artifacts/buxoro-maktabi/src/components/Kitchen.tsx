@@ -18,7 +18,7 @@ const chapters = [
     dotClass: "bg-amber-400",
     barClass: "bg-gradient-to-r from-amber-400 to-orange-400",
     items: [
-      { name: "Sutli Bo'tqa", desc: "Sariq yog' va mavsumiy mevalar", img: "/sutli-botqa.png" },
+      { name: "Sutli Bo'tqa", desc: "Sariq yog' va mavsumiy mevalar", img: "/sutli-botqa.webp" },
       { name: "Tuxum va Sosiska", desc: "Pishloq, qaynatilgan tuxum", img: "https://images.unsplash.com/photo-1510693206972-df098062cb71?w=120&q=80" },
       { name: "Kruassan va Choy", desc: "Issiq tandir noni, yashil choy", img: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=120&q=80" },
     ],
@@ -141,7 +141,7 @@ export default function Kitchen() {
           className="mb-6 md:mb-10 mx-auto max-w-[200px] sm:max-w-sm"
         >
           <img
-            src="/oshxona-logo.png"
+            src="/oshxona-logo.webp"
             alt="Buxoro Maktabi Oshxonasi"
             className="w-full h-auto object-contain drop-shadow-[0_0_40px_rgba(74,222,128,0.35)] rounded-tl-[110px] rounded-tr-[110px] rounded-br-[110px] rounded-bl-[110px]"
           />

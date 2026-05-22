@@ -1,0 +1,11 @@
+<Files "config.php">
+Require all denied
+Order allow,deny
+Deny from all
+</Files>
+
+<Files "config.example.php">
+Require all denied
+Order allow,deny
+Deny from all
+</Files>

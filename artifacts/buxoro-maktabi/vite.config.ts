@@ -10,7 +10,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
-      registerType: "autoUpdate",
+      registerType: "prompt",
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "logo.png"],
       manifest: {
         name: "Buxoro Maktabi",
@@ -26,9 +26,19 @@ export default defineConfig({
           { src: "/logo.png", sizes: "512x512", type: "image/png" },
         ],
       },
-  workbox: {
-    globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
-    maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+      workbox: {
+        globPatterns: [
+          "**/*.{js,css,html,svg,ico,webp}",
+          "logo.png",
+          "school-bg.png",
+          "favicon-16x16.png",
+          "favicon-32x32.png",
+          "apple-touch-icon.png",
+          "android-chrome-192x192.png",
+          "android-chrome-512x512.png",
+          "manifest.webmanifest",
+        ],
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

@@ -5,7 +5,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 
 const moments = [
   {
-    src: "/photo_2026-05-18_16-57-24.jpg",
+    src: "/photo_2026-05-18_16-57-24.webp",
     title: "Bright Minds 2026",
     desc: "Buxoro maktabi 6-sinf o'quvchilari xalqaro musobaqada yuqori natija qayd etdi.",
     badge: "Xalqaro yutuq",
@@ -16,7 +16,7 @@ const moments = [
     ],
   },
   {
-    src: "/photo_2026-05-18_17-03-45.jpg",
+    src: "/photo_2026-05-18_17-03-45.webp",
     title: "Tarixdan super natija",
     desc: "6-sinf o'quvchimiz G'aibulloyev Shoxijahon tarix fanidan navbatdagi yuqori natijani qo'lga kiritdi.",
     badge: "O'quvchi yutug'i",
@@ -27,7 +27,7 @@ const moments = [
     ],
   },
   {
-    src: "/photo_2026-04-26_14-22-25.jpg",
+    src: "/photo_2026-04-26_14-22-25.webp",
     title: "Tibbiyot o'quvchilari",
     desc: "Bir necha kunlik sayohat o'quvchilarimiz uchun katta tajriba va yangi maqsadlar manbai bo'ldi.",
     badge: "Tajriba safari",

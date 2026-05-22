@@ -35,7 +35,7 @@ export default function Footer() {
               </span>
             </a>
             <p className="text-foreground/50 text-sm leading-relaxed max-w-xs">
-              Zamonaviy texnologiyalar va ilg'or metodikalar asosida ta'lim beruvchi Buxorodagi yetakchi xususiy maktab.
+              2007-yildan buyon faoliyat yuritib, hozirgi kunda 8 ta filial, o'quv markazi va xususiy bog'chaga ega bo'lgan yetakchi xususiy maktab.
             </p>
             <div className="flex items-center gap-3">
               <motion.a
