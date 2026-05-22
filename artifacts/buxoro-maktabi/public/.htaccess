@@ -4,6 +4,7 @@ DirectoryIndex index.html
 RewriteEngine On
 RewriteBase /
 
+RewriteRule ^(robots\.txt|sitemap\.xml)$ - [L]
 RewriteRule ^api/applications/?$ api/applications.php [L,QSA]
 RewriteRule ^api/applications/excel/?$ api/applications.php?excel=1 [L,QSA]
 RewriteRule ^api/health/?$ api/applications.php?health=1 [L,QSA]

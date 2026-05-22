@@ -2,6 +2,7 @@ import { PageWrapper, PageHeader } from "./Layout";
 import SectionNav from "@/components/SectionNav";
 import CardViewer from "@/components/CardViewer";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 const staff = [
   { name: "Shoira Rahmatullayevna", role: "Bosh oshpaz", desc: "Buxoro Maktabi bosh oshpazi. 33 yillik ish tajribasiga ega malakali oshpaz.", grad: "from-primary to-emerald-400", image: "/Shoira-Rahmatullayevna.webp" },
@@ -14,67 +15,31 @@ const staff = [
   { name: "Madina Rahmonova", role: "Sutli mahsulotlar bo'yicha oshpaz", desc: "6 yillik tajriba. Sutli taomlar va desertlar tayyorlash ustasi.", grad: "from-teal-400 to-cyan-400" },
 ];
 
+const makeFoodImages = (prefix: string, count: number, label: string, firstName?: string) =>
+  Array.from({ length: count }, (_, index) => {
+    const number = index + 1;
+    const fileName = number === 1 && firstName ? firstName : `${prefix}${number}.webp`;
+    return {
+      title: `${label} ${number}`,
+      src: `/ovqatlar/${fileName}`,
+    };
+  });
+
 const foodGalleries = [
   {
     title: "Maktabgacha tayyorlov nonushtasi",
     subtitle: "Nolavoylar uchun nonushta lavhalari",
-    images: [
-      { title: "Sutli bo'tqa va shokoladli pishiriq", src: "/Nolavoylarga%20Nonushta%20uchun/photo_2026-05-21_16-34-34%20(2).webp" },
-      { title: "Sutli bo'tqa, bulochka va ichimliklar", src: "/Nolavoylarga%20Nonushta%20uchun/photo_2026-05-21_16-34-36.webp" },
-      { title: "Suli bo'tqa va nonushta nonlari", src: "/Nolavoylarga%20Nonushta%20uchun/photo_2026-05-21_16-34-42.webp" },
-      { title: "Sutli nonushta va issiq choy", src: "/Nolavoylarga%20Nonushta%20uchun/photo_2026-05-21_16-34-50.webp" },
-      { title: "Bo'tqa va shirin ichimliklar", src: "/Nolavoylarga%20Nonushta%20uchun/photo_2026-05-21_16-34-57.webp" },
-      { title: "Sharbat va keksli nonushta", src: "/Nolavoylarga%20Nonushta%20uchun/photo_2026-05-21_16-34-59.webp" },
-      { title: "Sutli bo'tqa va bulochka assortisi", src: "/Nolavoylarga%20Nonushta%20uchun/photo_2026-05-21_16-37-12.webp" },
-    ],
+    images: makeFoodImages("nonushta", 6, "Nonushta"),
   },
   {
     title: "Tushlik",
     subtitle: "Issiq taom va kunlik tushliklar",
-    images: [
-      { title: "Sho'rva, salat va nonli tushlik", src: "/Tushlik/photo_2026-05-21_16-34-33.webp" },
-      { title: "Go'shtli taom va sabzavotli garnir", src: "/Tushlik/photo_2026-05-21_16-34-35.webp" },
-      { title: "Kartoshkali sho'rva va salat", src: "/Tushlik/photo_2026-05-21_16-34-37.webp" },
-      { title: "Mastava, qatiq va salat", src: "/Tushlik/photo_2026-05-21_16-34-39.webp" },
-      { title: "Issiq sho'rva va vitaminli salat", src: "/Tushlik/photo_2026-05-21_16-34-41.webp" },
-      { title: "Makaronli tushlik va ichimliklar", src: "/Tushlik/photo_2026-05-21_16-34-44.webp" },
-      { title: "Go'shtli taom va non", src: "/Tushlik/photo_2026-05-21_16-34-45.webp" },
-      { title: "Tovuq sho'rva va ko'katli salat", src: "/Tushlik/photo_2026-05-21_16-34-47.webp" },
-      { title: "Grechka, qatiq va foydali salat", src: "/Tushlik/photo_2026-05-21_16-34-48.webp" },
-      { title: "Sabzavotli sho'rva va salat", src: "/Tushlik/photo_2026-05-21_16-34-49.webp" },
-      { title: "Kartoshkali issiq taom va non", src: "/Tushlik/photo_2026-05-21_16-34-51.webp" },
-      { title: "Palov, salat va non assortisi", src: "/Tushlik/photo_2026-05-21_16-34-53.webp" },
-      { title: "Guruchli taom va sho'rva", src: "/Tushlik/photo_2026-05-21_16-34-55.webp" },
-      { title: "Rang-barang tushlik to'plami", src: "/Tushlik/photo_2026-05-21_16-34-56.webp" },
-      { title: "Makaronli garnir va ko'k choy", src: "/Tushlik/photo_2026-05-21_16-35-00.webp" },
-      { title: "Sho'rva va sabzavotli likopcha", src: "/Tushlik/photo_2026-05-21_16-35-03.webp" },
-      { title: "Grechkali tushlik va non", src: "/Tushlik/photo_2026-05-21_16-35-04.webp" },
-      { title: "Sho'rva, qatiq va salat", src: "/Tushlik/photo_2026-05-21_16-35-06.webp" },
-      { title: "Kartoshkali sho'rva va sabzavotlar", src: "/Tushlik/photo_2026-05-21_16-35-24.webp" },
-      { title: "Issiq tushlik va mevali ichimlik", src: "/Tushlik/photo_2026-05-21_16-36-52.webp" },
-    ],
+    images: makeFoodImages("obed", 22, "Tushlik"),
   },
   {
     title: "Poldnik",
     subtitle: "Tushdan keyingi yengil ovqatlar",
-    images: [
-      { title: "Shokoladli desert va choy", src: "/Poldnik/photo_2026-05-21_16-34-34.webp" },
-      { title: "Yumshoq bulochkalar", src: "/Poldnik/photo_2026-05-21_16-34-38.webp" },
-      { title: "Jemli shirin pishiriqlar", src: "/Poldnik/photo_2026-05-21_16-34-41.webp" },
-      { title: "Qatlama va issiq ichimlik", src: "/Poldnik/photo_2026-05-21_16-34-43.webp" },
-      { title: "Uy uslubidagi bulochkalar", src: "/Poldnik/photo_2026-05-21_16-34-44.webp" },
-      { title: "Shakar sepilgan qatlama", src: "/Poldnik/photo_2026-05-21_16-34-46.webp" },
-      { title: "Somsa va rangli choylar", src: "/Poldnik/photo_2026-05-21_16-34-49.webp" },
-      { title: "Tvorogli shirin bulochka", src: "/Poldnik/photo_2026-05-21_16-34-52%20(2).webp" },
-      { title: "Tvorogli bulochkalar", src: "/Poldnik/photo_2026-05-21_16-34-52.webp" },
-      { title: "Mevali rulet va choy", src: "/Poldnik/photo_2026-05-21_16-34-54.webp" },
-      { title: "Bulochka va mevali ichimlik", src: "/Poldnik/photo_2026-05-21_16-35-01.webp" },
-      { title: "Shirin ruletchalar assortisi", src: "/Poldnik/photo_2026-05-21_16-35-02.webp" },
-      { title: "Burgercha va issiq choy", src: "/Poldnik/photo_2026-05-21_16-37-09.webp" },
-      { title: "Shokoladli pirog", src: "/Poldnik/photo_2026-05-21_16-37-15.webp" },
-      { title: "Suli yormali poldnik", src: "/Poldnik/photo_2026-05-21_16-37-18.webp" },
-      { title: "Lavash va choy", src: "/Poldnik/photo_2026-05-21_16-41-43.webp" },
-    ],
+    images: makeFoodImages("poldnik", 24, "Poldnik", "Poldnik1.webp"),
   },
 ];
 
@@ -123,6 +88,35 @@ function FoodPhotoCard({ image }: { image: typeof foodGalleries[0]["images"][0] 
   );
 }
 
+function MobileFoodCarousel({ images }: { images: typeof foodGalleries[0]["images"] }) {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    const timer = window.setInterval(() => {
+      setCurrent((value) => (value + 1) % images.length);
+    }, 1220);
+    return () => window.clearInterval(timer);
+  }, [images.length]);
+
+  return (
+    <div className="md:hidden">
+      <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.05]">
+        <div
+          className="flex transition-transform duration-500 ease-out"
+          style={{ transform: `translateX(-${current * 100}%)` }}
+        >
+          {images.map((image) => (
+            <div key={image.src} className="w-full shrink-0">
+              <FoodPhotoCard image={image} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function FoodGalleryRow({ gallery }: { gallery: typeof foodGalleries[0] }) {
   return (
     <div className="mb-12 md:mb-14">
@@ -130,12 +124,15 @@ function FoodGalleryRow({ gallery }: { gallery: typeof foodGalleries[0] }) {
         <h3 className="text-xl md:text-2xl font-bold font-poppins text-white">{gallery.title}</h3>
         <p className="mt-1 text-xs md:text-sm text-white/45">{gallery.subtitle}</p>
       </div>
-      <CardViewer
-        perPage={4}
-        items={gallery.images.map((image) => (
-          <FoodPhotoCard key={image.src} image={image} />
-        ))}
-      />
+      <MobileFoodCarousel images={gallery.images} />
+      <div className="hidden md:block">
+        <CardViewer
+          perPage={4}
+          items={gallery.images.map((image) => (
+            <FoodPhotoCard key={image.src} image={image} />
+          ))}
+        />
+      </div>
     </div>
   );
 }

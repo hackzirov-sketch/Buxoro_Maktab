@@ -19,6 +19,7 @@ type CarouselProps = {
   setApi?: (api: CarouselApi) => void
   autoPlay?: boolean
   autoPlayInterval?: number
+  autoPlayPaused?: boolean
 }
 
 type CarouselContextProps = {
@@ -54,6 +55,7 @@ const Carousel = React.forwardRef<
       plugins,
       autoPlay = false,
       autoPlayInterval = 4000,
+      autoPlayPaused = false,
       className,
       children,
       ...props
@@ -131,14 +133,14 @@ const Carousel = React.forwardRef<
     }, [api, onSelect])
 
     React.useEffect(() => {
-      if (!api || !autoPlay || isPaused || (plugins && plugins.length > 0)) return
+      if (!api || !autoPlay || autoPlayPaused || isPaused || (plugins && plugins.length > 0)) return
 
       const interval = setInterval(() => {
         api.scrollNext()
       }, autoPlayInterval)
 
       return () => clearInterval(interval)
-    }, [api, autoPlay, autoPlayInterval, isPaused])
+    }, [api, autoPlay, autoPlayInterval, autoPlayPaused, isPaused])
 
     return (
       <CarouselContext.Provider
